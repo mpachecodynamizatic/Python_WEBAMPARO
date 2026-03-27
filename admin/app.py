@@ -695,6 +695,97 @@ def allowed_file(filename):
     """Verificar si el archivo tiene extensión permitida"""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+def get_pagination_params():
+    """Obtener parámetros de paginación, ordenamiento y búsqueda desde request.args"""
+    page = max(1, request.args.get('page', 1, type=int))
+    per_page = request.args.get('per_page', 20, type=int)
+    per_page = min(max(10, per_page), 100)  # Entre 10 y 100
+    sort_by = request.args.get('sort_by', '')
+    sort_order = request.args.get('sort_order', 'desc')
+    if sort_order not in ['asc', 'desc']:
+        sort_order = 'desc'
+    search = request.args.get('search', '').strip()
+    return {
+        'page': page,
+        'per_page': per_page,
+        'sort_by': sort_by,
+        'sort_order': sort_order,
+        'search': search
+    }
+
+def build_query_with_filters(base_query, search_columns, search_term, allowed_sort_columns, sort_by, sort_order, default_sort='id'):
+    """
+    Construir query SQL con búsqueda y ordenamiento
+
+    Args:
+        base_query: Query base SQL (ej: 'SELECT * FROM animals WHERE status = ?')
+        search_columns: Lista de columnas donde buscar (ej: ['name', 'description'])
+        search_term: Término de búsqueda
+        allowed_sort_columns: Columnas permitidas para ordenar
+        sort_by: Columna para ordenar
+        sort_order: 'asc' o 'desc'
+        default_sort: Columna por defecto si sort_by no es válido
+
+    Returns:
+        tuple: (query_modificada, params_adicionales)
+    """
+    params = []
+    query = base_query
+
+    # Agregar búsqueda
+    if search_term and search_columns:
+        search_conditions = ' OR '.join([f"{col} LIKE ?" for col in search_columns])
+        # Si el query ya tiene WHERE, usar AND, sino agregar WHERE
+        if 'WHERE' in query.upper():
+            query += f' AND ({search_conditions})'
+        else:
+            query += f' WHERE ({search_conditions})'
+        # Agregar parámetros de búsqueda
+        params.extend([f'%{search_term}%'] * len(search_columns))
+
+    # Agregar ordenamiento
+    if sort_by and sort_by in allowed_sort_columns:
+        query += f' ORDER BY {sort_by} {sort_order.upper()}'
+    else:
+        query += f' ORDER BY {default_sort} {sort_order.upper()}'
+
+    return query, params
+
+def paginate_query(db, count_query, data_query, count_params, data_params, page, per_page):
+    """
+    Ejecutar query con paginación
+
+    Args:
+        db: Conexión a base de datos
+        count_query: Query para contar total de registros
+        data_query: Query para obtener datos
+        count_params: Parámetros para count_query
+        data_params: Parámetros para data_query
+        page: Número de página
+        per_page: Registros por página
+
+    Returns:
+        dict con 'items', 'total', 'page', 'per_page', 'total_pages'
+    """
+    # Contar total
+    total = db.execute(count_query, count_params).fetchone()['count']
+
+    # Obtener datos paginados
+    offset = (page - 1) * per_page
+    data_query += f' LIMIT ? OFFSET ?'
+    data_params.extend([per_page, offset])
+    items = db.execute(data_query, data_params).fetchall()
+
+    total_pages = (total + per_page - 1) // per_page if total > 0 else 1
+
+    return {
+        'items': items,
+        'total': total,
+        'page': page,
+        'per_page': per_page,
+        'total_pages': total_pages
+    }
+
 # ============================================
 # RUTAS DE AUTENTICACIÓN
 # ============================================
@@ -793,19 +884,75 @@ def dashboard():
 @app.route('/admin/animals')
 @login_required
 def list_animals():
-    """Listar animales con paginación"""
+    """Listar animales con paginación, búsqueda y ordenamiento"""
     db = get_db()
-    page = max(1, request.args.get('page', 1, type=int))
-    per_page = 20
-    offset = (page - 1) * per_page
-    total = db.execute('SELECT COUNT(*) as n FROM animals').fetchone()['n']
-    animals = db.execute(
-        'SELECT * FROM animals ORDER BY created_at DESC LIMIT ? OFFSET ?',
-        (per_page, offset)
-    ).fetchall()
-    total_pages = (total + per_page - 1) // per_page
-    return render_template('animals.html', animals=animals,
-                           page=page, total_pages=total_pages, total=total)
+    params = get_pagination_params()
+
+    # Filtro por estado
+    status_filter = request.args.get('status', '')
+
+    # Construir query base
+    base_query = 'SELECT * FROM animals'
+    count_query = 'SELECT COUNT(*) as count FROM animals'
+    query_params = []
+
+    if status_filter:
+        where_clause = ' WHERE status = ?'
+        base_query += where_clause
+        count_query += where_clause
+        query_params.append(status_filter)
+
+    # Columnas donde buscar
+    search_columns = ['name', 'description', 'age', 'gender', 'size', 'type']
+    allowed_sort_columns = ['id', 'name', 'type', 'age', 'gender', 'size', 'status', 'created_at', 'updated_at']
+
+    # Construir query con búsqueda y ordenamiento
+    data_query, search_params = build_query_with_filters(
+        base_query,
+        search_columns,
+        params['search'],
+        allowed_sort_columns,
+        params['sort_by'],
+        params['sort_order'],
+        default_sort='created_at'
+    )
+
+    # Si hay búsqueda, actualizar también el count_query
+    if params['search']:
+        count_query, _ = build_query_with_filters(
+            count_query,
+            search_columns,
+            params['search'],
+            [],  # No necesitamos sort en count
+            '',
+            '',
+            ''
+        )
+
+    # Combinar parámetros
+    all_params = query_params + search_params
+
+    # Paginar
+    result = paginate_query(
+        db,
+        count_query,
+        data_query,
+        query_params + search_params,  # Para count
+        all_params.copy(),  # Para data
+        params['page'],
+        params['per_page']
+    )
+
+    return render_template('animals.html',
+                           animals=result['items'],
+                           page=result['page'],
+                           per_page=result['per_page'],
+                           total_pages=result['total_pages'],
+                           total=result['total'],
+                           sort_by=params['sort_by'],
+                           sort_order=params['sort_order'],
+                           search=params['search'],
+                           status_filter=status_filter)
 
 @app.route('/admin/animals/new', methods=['GET', 'POST'])
 @login_required
