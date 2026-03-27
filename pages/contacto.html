@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Contacta con Protectora de Animales Burjassot">
     <title>Contacto - Protectora de Animales Burjassot</title>
-    <meta name="api-base" content="http://localhost:5000">
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Protectora de Animales Burjassot">
@@ -282,7 +281,7 @@
     // Cargar datos de contacto desde la API de configuración del sitio
     (async function loadContactSettings() {
         try {
-            const res = await fetch('http://localhost:5000/api/settings');
+            const res = await fetch(`${window.location.origin}/api/settings`);
             if (!res.ok) return;
             const s = await res.json();
 

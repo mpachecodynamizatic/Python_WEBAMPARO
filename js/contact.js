@@ -152,7 +152,7 @@ function showMessage(message, type) {
 
 // Enviar formulario al backend
 async function sendContactForm(formData) {
-    const apiBase = document.querySelector('meta[name="api-base"]')?.content || 'http://localhost:5000';
+    const apiBase = document.querySelector('meta[name="api-base"]')?.content || window.location.origin;
     const response = await fetch(`${apiBase}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

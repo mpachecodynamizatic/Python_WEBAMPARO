@@ -2,7 +2,8 @@
 // Configuración y variables globales
 // ===================================
 // API base leída desde <meta name="api-base"> para soportar distintos entornos
-const API_BASE = document.querySelector('meta[name="api-base"]')?.content || 'http://localhost:5000';
+// En producción usa el origin actual, en desarrollo usa localhost
+const API_BASE = document.querySelector('meta[name="api-base"]')?.content || window.location.origin;
 const API_URL = API_BASE + '/api';
 
 // Traducciones (básicas)

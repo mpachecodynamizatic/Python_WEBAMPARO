@@ -192,7 +192,7 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:5000/api';
+        const API_URL = `${window.location.origin}/api`;
 
         function clearResults() {
             document.getElementById('results').innerHTML = '';
@@ -215,7 +215,7 @@
             results.appendChild(section);
 
             try {
-                const response = await fetch('http://localhost:5000/');
+                const response = await fetch(window.location.origin);
 
                 if (response.ok || response.status === 302) {
                     section.innerHTML = `
