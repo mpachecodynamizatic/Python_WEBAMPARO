@@ -320,25 +320,122 @@ function showAnimalDetails(animalId) {
 
         <div style="margin-top: 2rem; border-top: 2px solid #f0f0f0; padding-top: 1.5rem;">
             <h3 style="color: #F4A460; margin-bottom: 1rem;">
-                <i class="fas fa-paw"></i> Solicitar adopción
+                <i class="fas fa-paw"></i> Formulario de pre-adopción
             </h3>
-            <div id="adopt-form-${animal.id}">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
-                    <input type="text" id="adopt-name-${animal.id}" placeholder="Tu nombre completo *"
-                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box;">
-                    <input type="email" id="adopt-email-${animal.id}" placeholder="Tu email *"
-                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box;">
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">
+                Por favor, completa este formulario para que podamos conocerte mejor y asegurarnos de que ${animal.name} encontrará el hogar perfecto.
+            </p>
+            <form id="adopt-form-${animal.id}">
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #F4A460; font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-user"></i> Información personal</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <input type="text" id="name-${animal.id}" placeholder="Nombre completo *" required
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                        <input type="number" id="age-${animal.id}" placeholder="Edad *" required
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <input type="email" id="email-${animal.id}" placeholder="Email *" required
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                        <input type="tel" id="phone-${animal.id}" placeholder="Teléfono *" required
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                    </div>
+                    <input type="text" id="address-${animal.id}" placeholder="Dirección *" required
+                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box; margin-bottom:0.75rem;">
+                    <input type="text" id="city-${animal.id}" placeholder="Ciudad *" required
+                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
                 </div>
-                <input type="tel" id="adopt-phone-${animal.id}" placeholder="Teléfono (opcional)"
-                       style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box; margin-bottom:0.75rem;">
-                <textarea id="adopt-msg-${animal.id}" placeholder="Cuéntanos sobre ti: tu hogar, estilo de vida, experiencia con animales..."
-                          style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box; height:90px; resize:vertical; margin-bottom:0.75rem;"></textarea>
-                <button onclick="submitAdoptRequest(${animal.id})"
-                        style="background:#F4A460; color:white; border:none; padding:0.8rem 2rem; border-radius:8px; font-size:1rem; cursor:pointer; font-weight:600;">
-                    <i class="fas fa-paper-plane"></i> Enviar solicitud
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #F4A460; font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-home"></i> Situación del hogar</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <select id="living-${animal.id}" required style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                            <option value="">Tipo de vivienda *</option>
+                            <option value="Casa">Casa</option>
+                            <option value="Apartamento">Apartamento</option>
+                            <option value="Chalet">Chalet</option>
+                        </select>
+                        <select id="own-rent-${animal.id}" required style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                            <option value="">¿Propio o alquilado? *</option>
+                            <option value="Propio">Propio</option>
+                            <option value="Alquilado">Alquilado</option>
+                        </select>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <select id="yard-${animal.id}" style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                            <option value="">¿Tienes jardín/patio?</option>
+                            <option value="Sí">Sí</option>
+                            <option value="No">No</option>
+                        </select>
+                        <select id="landlord-${animal.id}" style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                            <option value="">¿Permiso del propietario? (si aplica)</option>
+                            <option value="Sí">Sí</option>
+                            <option value="No">No</option>
+                            <option value="No aplica">No aplica</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #F4A460; font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-users"></i> Composición del hogar</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <input type="number" id="household-${animal.id}" placeholder="Nº de personas en casa" min="1"
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                        <select id="children-${animal.id}" style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                            <option value="">¿Hay niños en casa?</option>
+                            <option value="No">No</option>
+                            <option value="Sí">Sí</option>
+                        </select>
+                    </div>
+                    <input type="text" id="children-ages-${animal.id}" placeholder="Si hay niños, ¿qué edades tienen?"
+                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #F4A460; font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-paw"></i> Experiencia con animales</h4>
+                    <textarea id="current-pets-${animal.id}" placeholder="¿Tienes mascotas actualmente? Descríbelas (tipo, edad, esterilizadas, vacunadas...)"
+                              style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box; height:60px; resize:vertical; margin-bottom:0.75rem;"></textarea>
+                    <textarea id="pet-exp-${animal.id}" placeholder="¿Qué experiencia tienes con animales? ¿Has tenido mascotas antes?"
+                              style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box; height:60px; resize:vertical;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #F4A460; font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-briefcase"></i> Estilo de vida</h4>
+                    <input type="text" id="work-${animal.id}" placeholder="¿Cuál es tu horario de trabajo/estudio?"
+                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box; margin-bottom:0.75rem;">
+                    <input type="text" id="hours-home-${animal.id}" placeholder="¿Cuántas horas al día estarás en casa?"
+                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box; margin-bottom:0.75rem;">
+                    <textarea id="why-${animal.id}" placeholder="¿Por qué quieres adoptar a ${animal.name}? *" required
+                              style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box; height:70px; resize:vertical;"></textarea>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: #F4A460; font-size: 1rem; margin-bottom: 0.75rem;"><i class="fas fa-stethoscope"></i> Referencias (opcional)</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <input type="text" id="vet-name-${animal.id}" placeholder="Nombre de tu veterinario"
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                        <input type="tel" id="vet-phone-${animal.id}" placeholder="Teléfono del veterinario"
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                        <input type="text" id="ref-name-${animal.id}" placeholder="Referencia personal (nombre)"
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                        <input type="tel" id="ref-phone-${animal.id}" placeholder="Teléfono de referencia"
+                               style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <textarea id="comments-${animal.id}" placeholder="Comentarios adicionales o información que quieras compartir..."
+                              style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.9rem; width:100%; box-sizing:border-box; height:70px; resize:vertical;"></textarea>
+                </div>
+
+                <button type="button" onclick="submitAdoptRequest(${animal.id}, '${animal.name}')"
+                        style="background:#F4A460; color:white; border:none; padding:0.8rem 2rem; border-radius:8px; font-size:1rem; cursor:pointer; font-weight:600; width:100%;">
+                    <i class="fas fa-paper-plane"></i> Enviar solicitud de pre-adopción
                 </button>
                 <p id="adopt-feedback-${animal.id}" style="display:none; margin-top:0.75rem; padding:0.6rem 1rem; border-radius:6px; font-weight:500;"></p>
-            </div>
+            </form>
         </div>
     `;
 
@@ -353,18 +450,50 @@ function showAnimalDetails(animalId) {
     });
 }
 
-async function submitAdoptRequest(animalId) {
-    const name = document.getElementById('adopt-name-' + animalId).value.trim();
-    const email = document.getElementById('adopt-email-' + animalId).value.trim();
-    const phone = document.getElementById('adopt-phone-' + animalId).value.trim();
-    const message = document.getElementById('adopt-msg-' + animalId).value.trim();
+async function submitAdoptRequest(animalId, animalName) {
+    // Recoger todos los campos del formulario
+    const name = document.getElementById('name-' + animalId).value.trim();
+    const email = document.getElementById('email-' + animalId).value.trim();
+    const phone = document.getElementById('phone-' + animalId).value.trim();
+    const age = document.getElementById('age-' + animalId).value.trim();
+    const address = document.getElementById('address-' + animalId).value.trim();
+    const city = document.getElementById('city-' + animalId).value.trim();
+    const living_situation = document.getElementById('living-' + animalId).value;
+    const own_or_rent = document.getElementById('own-rent-' + animalId).value;
+    const has_yard = document.getElementById('yard-' + animalId).value;
+    const landlord_permission = document.getElementById('landlord-' + animalId).value;
+    const household_members = document.getElementById('household-' + animalId).value.trim();
+    const has_children = document.getElementById('children-' + animalId).value;
+    const children_ages = document.getElementById('children-ages-' + animalId).value.trim();
+    const current_pets = document.getElementById('current-pets-' + animalId).value.trim();
+    const pet_experience = document.getElementById('pet-exp-' + animalId).value.trim();
+    const work_schedule = document.getElementById('work-' + animalId).value.trim();
+    const hours_home_per_day = document.getElementById('hours-home-' + animalId).value.trim();
+    const why_adopt = document.getElementById('why-' + animalId).value.trim();
+    const vet_name = document.getElementById('vet-name-' + animalId).value.trim();
+    const vet_phone = document.getElementById('vet-phone-' + animalId).value.trim();
+    const reference_name = document.getElementById('ref-name-' + animalId).value.trim();
+    const reference_phone = document.getElementById('ref-phone-' + animalId).value.trim();
+    const comments = document.getElementById('comments-' + animalId).value.trim();
+
     const feedback = document.getElementById('adopt-feedback-' + animalId);
 
-    if (!name || !email) {
+    // Validar campos obligatorios
+    if (!name || !email || !phone || !age || !address || !city || !living_situation || !own_or_rent || !why_adopt) {
         feedback.style.display = 'block';
         feedback.style.background = '#fdecea';
         feedback.style.color = '#e74c3c';
-        feedback.textContent = 'Por favor, completa tu nombre y email.';
+        feedback.textContent = 'Por favor, completa todos los campos marcados con * (asterisco).';
+        return;
+    }
+
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        feedback.style.display = 'block';
+        feedback.style.background = '#fdecea';
+        feedback.style.color = '#e74c3c';
+        feedback.textContent = 'Por favor, introduce un email válido.';
         return;
     }
 
@@ -373,32 +502,61 @@ async function submitAdoptRequest(animalId) {
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
 
     try {
-        const res = await fetch(`${API_BASE}/api/animals/` + animalId + '/adopt', {
+        const res = await fetch(`${API_BASE}/api/adoption-request`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email, phone, message })
+            body: JSON.stringify({
+                animal_id: animalId,
+                animal_name: animalName,
+                name,
+                email,
+                phone,
+                age: age ? parseInt(age) : null,
+                address,
+                city,
+                living_situation,
+                own_or_rent,
+                has_yard,
+                landlord_permission,
+                household_members: household_members ? parseInt(household_members) : null,
+                has_children,
+                children_ages,
+                current_pets,
+                pet_experience,
+                work_schedule,
+                hours_home_per_day,
+                why_adopt,
+                vet_name,
+                vet_phone,
+                reference_name,
+                reference_phone,
+                comments,
+                message: '' // campo legacy
+            })
         });
         const data = await res.json();
         feedback.style.display = 'block';
         if (res.ok) {
             feedback.style.background = '#eafaf1';
             feedback.style.color = '#27ae60';
-            feedback.textContent = '¡Solicitud enviada! Nos pondremos en contacto contigo pronto.';
+            feedback.innerHTML = '<i class="fas fa-check-circle"></i> ¡Solicitud enviada con éxito! Nos pondremos en contacto contigo pronto para continuar con el proceso de adopción.';
             btn.style.display = 'none';
+            // Scroll al feedback
+            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } else {
             feedback.style.background = '#fdecea';
             feedback.style.color = '#e74c3c';
             feedback.textContent = data.error || 'Error al enviar la solicitud. Inténtalo de nuevo.';
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud';
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud de pre-adopción';
         }
     } catch(e) {
         feedback.style.display = 'block';
         feedback.style.background = '#fdecea';
         feedback.style.color = '#e74c3c';
-        feedback.textContent = 'Error de conexión. Por favor, inténtalo de nuevo.';
+        feedback.textContent = 'Error de conexión. Por favor, verifica tu conexión a internet e inténtalo de nuevo.';
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud';
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud de pre-adopción';
     }
 }
 

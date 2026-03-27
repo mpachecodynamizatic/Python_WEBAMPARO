@@ -450,3 +450,110 @@ function acceptCookies() {
 }
 
 setTimeout(checkCookieConsent, 1000);
+
+// ===================================
+// Newsletter Form Handler
+// ===================================
+document.addEventListener('DOMContentLoaded', function() {
+    const newsletterForm = document.getElementById('newsletterForm');
+
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const emailInput = document.getElementById('newsletterEmail');
+            const messageDiv = document.getElementById('newsletterMessage');
+            const submitBtn = newsletterForm.querySelector('button[type="submit"]');
+            const email = emailInput.value.trim();
+
+            if (!email) {
+                showNewsletterMessage('Por favor, introduce tu email', 'error');
+                return;
+            }
+
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNewsletterMessage('Por favor, introduce un email válido', 'error');
+                return;
+            }
+
+            // Deshabilitar botón y mostrar loading
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showNewsletterMessage(data.message || '¡Suscripción exitosa!', 'success');
+                    emailInput.value = '';
+                } else {
+                    showNewsletterMessage(data.error || 'Error al suscribirse', 'error');
+                }
+            } catch (error) {
+                showNewsletterMessage('Error de conexión. Inténtalo de nuevo.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
+            }
+        });
+    }
+});
+
+function showNewsletterMessage(message, type) {
+    const messageDiv = document.getElementById('newsletterMessage');
+    if (!messageDiv) return;
+
+    messageDiv.textContent = message;
+    messageDiv.style.display = 'block';
+    messageDiv.style.background = type === 'success' ? '#d4edda' : '#f8d7da';
+    messageDiv.style.color = type === 'success' ? '#155724' : '#721c24';
+    messageDiv.style.border = `1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'}`;
+
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        messageDiv.style.display = 'none';
+    }, 5000);
+}
+
+// Cargar datos de contacto en el footer desde la API
+(async function loadFooterContactInfo() {
+    try {
+        const res = await fetch(`${window.location.origin}/api/settings`);
+        if (!res.ok) return;
+        const settings = await res.json();
+
+        // Actualizar email en footer
+        const footerEmail = document.getElementById('footer-email');
+        if (footerEmail && settings.contact_email) {
+            footerEmail.textContent = settings.contact_email;
+            // Si es un enlace, actualizar también el href
+            if (footerEmail.tagName === 'A') {
+                footerEmail.href = 'mailto:' + settings.contact_email;
+            }
+        }
+
+        // Actualizar teléfono en footer
+        const footerPhone = document.getElementById('footer-phone');
+        if (footerPhone && settings.contact_phone) {
+            footerPhone.textContent = settings.contact_phone;
+        }
+
+        // Actualizar dirección en footer
+        const footerAddress = document.getElementById('footer-address');
+        if (footerAddress && settings.contact_address) {
+            footerAddress.textContent = settings.contact_address;
+        }
+    } catch (e) {
+        // Servidor no disponible: se mantienen los valores por defecto
+        console.log('No se pudieron cargar los datos de contacto desde el servidor');
+    }
+})();

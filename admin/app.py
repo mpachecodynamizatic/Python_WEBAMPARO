@@ -426,6 +426,18 @@ def init_db():
             )
         ''')
 
+        # Tabla de suscriptores al newsletter
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+                id {auto_id},
+                email TEXT NOT NULL UNIQUE,
+                name TEXT,
+                subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_active {bool_default_true},
+                unsubscribe_token TEXT
+            )
+        ''')
+
         # Tabla de colaboradores (socios, voluntarios, padrinos, acogida, empresa)
         cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS collaborators (
@@ -451,6 +463,26 @@ def init_db():
                 email TEXT NOT NULL,
                 phone TEXT,
                 message TEXT,
+                age INTEGER,
+                address TEXT,
+                city TEXT,
+                living_situation TEXT,
+                own_or_rent TEXT,
+                has_yard TEXT,
+                landlord_permission TEXT,
+                household_members INTEGER,
+                has_children TEXT,
+                children_ages TEXT,
+                current_pets TEXT,
+                pet_experience TEXT,
+                work_schedule TEXT,
+                hours_home_per_day TEXT,
+                why_adopt TEXT,
+                vet_name TEXT,
+                vet_phone TEXT,
+                reference_name TEXT,
+                reference_phone TEXT,
+                comments TEXT,
                 status TEXT DEFAULT 'pendiente',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 {',' if USE_POSTGRES else ', FOREIGN KEY (animal_id) REFERENCES animals(id)'}
@@ -471,23 +503,31 @@ def init_db():
 
         # Insertar configuración del sitio por defecto (solo si no existe)
         default_settings = [
-            ('shelter_name', 'Protectora de Animales Burjassot'),
-            ('shelter_description', 'Somos una protectora de animales sin ánimo de lucro. Rescatamos, cuidamos y buscamos hogares para animales heridos o abandonados.'),
-            ('contact_email', 'info@protectoraburjassot.com'),
-            ('contact_phone', '+34 XXX XXX XXX'),
-            ('contact_address', 'Burjassot, Valencia'),
-            ('contact_hours', 'Lunes a Viernes 10:00-14:00 y 17:00-20:00'),
+            ('shelter_name', 'Protectora de Animales de Burjassot'),
+            ('shelter_description', 'Somos una asociación sin ánimo de lucro dedicada al rescate, cuidado y adopción de animales abandonados en Burjassot y alrededores. Trabajamos cada día para darles una segunda oportunidad y encontrarles el hogar que merecen.'),
+            ('contact_email', 'info@protectoraburjassot.org'),
+            ('contact_phone', '+34 963 123 456'),
+            ('contact_address', 'Calle de la Solidaridad, 12, 46100 Burjassot, Valencia'),
+            ('contact_hours', 'Lunes a Viernes: 10:00-14:00 y 17:00-20:00 | Sábados: 10:00-14:00 | Domingos: Cerrado'),
             ('social_facebook', 'https://www.facebook.com/protectoraburjassot'),
             ('social_instagram', 'https://www.instagram.com/protectoraburjassot'),
             ('social_twitter', 'https://www.twitter.com/protectoraburjassot'),
-            ('maps_embed_url', ''),
+            ('maps_embed_url', 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3079.8419858906537!2d-0.4196547!3d39.5076769!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDMwJzI3LjYiTiAwwroyNScxMC42Ilc!5e0!3m2!1ses!2ses!4v1234567890123'),
             ('store_images_in_db', '0'),  # Almacenar imágenes comprimidas en BD (0=no, 1=sí)
+            ('donation_bizum', ''),  # Código Bizum para donaciones
+            ('donation_iban', 'ES00 0000 0000 00 0000000000'),  # IBAN para transferencias
+            ('donation_paypal', ''),  # Email de PayPal para donaciones
+            ('donation_teaming_url', 'https://www.teaming.net/protectoraburjassot'),
+            ('donation_amazon_wishlist', 'https://www.amazon.es/hz/wishlist/ls/XXXXXXXXX'),
+            ('donation_wallapop_url', 'https://es.wallapop.com/u/protectoraburjassot'),
         ]
+        # Insertar settings por defecto solo si no existen (INSERT ... ON CONFLICT)
         for key, value in default_settings:
-            try:
-                cursor.execute(f'INSERT INTO site_settings (key, value) VALUES ({placeholder}, {placeholder})', (key, value))
-            except Exception:
-                pass  # ya existe
+            cursor.execute(
+                f'INSERT INTO site_settings (key, value) VALUES ({placeholder}, {placeholder}) '
+                f'ON CONFLICT(key) DO NOTHING',
+                (key, value)
+            )
 
         # Insertar datos de ejemplo si la base de datos está vacía
         cursor.execute('SELECT COUNT(*) as count FROM animals')
@@ -495,42 +535,88 @@ def init_db():
         if animal_count == 0:
             # Datos de ejemplo de animales
             animales_ejemplo = [
+                # EN ADOPCIÓN - Perros
                 ('Luna', 'perro', '2 años', 'Hembra', 'Mediano',
-                 'Luna es una perrita muy cariñosa que busca un hogar donde le den todo el amor que merece. Es tranquila, obediente y se lleva bien con otros perros.',
+                 'Luna es una perra mestiza muy cariñosa que busca un hogar lleno de amor. Es tranquila, obediente y se lleva bien con otros perros y niños.',
                  'images/animales/luna.jpg', 'adoption'),
                 ('Max', 'perro', '3 años', 'Macho', 'Grande',
-                 'Max es un perro juguetón y lleno de energía. Le encanta pasear y jugar con otros perros. Ideal para familias activas.',
+                 'Max es un pastor alemán cruzado muy juguetón y enérgico. Le encanta pasear, correr y jugar. Ideal para familias activas con jardín.',
                  'images/animales/max.jpg', 'adoption'),
-                ('Misi', 'gato', '1 año', 'Hembra', 'Pequeño',
-                 'Misi es una gatita muy tranquila y mimosa. Perfecta para un hogar acogedor. Le encanta dormir al sol y recibir caricias.',
-                 'images/animales/misi.jpg', 'adoption'),
-                ('Simba', 'gato', '4 años', 'Macho', 'Mediano',
-                 'Simba es un gato independiente pero cariñoso. Le gusta su espacio pero también los mimos. Perfecto compañero de hogar.',
-                 'images/animales/simba.jpg', 'adoption'),
                 ('Rocky', 'perro', '5 años', 'Macho', 'Grande',
-                 'Rocky es un perro muy leal y protector. Necesita un hogar con experiencia en perros grandes. Es cariñoso con su familia.',
+                 'Rocky es un mastín muy leal y protector. Necesita una familia con experiencia en perros grandes. Es muy cariñoso y tranquilo en casa.',
                  'images/animales/rocky.jpg', 'adoption'),
                 ('Bella', 'perro', '1 año', 'Hembra', 'Pequeño',
-                 'Bella es una perrita pequeña y juguetona. Perfecta para pisos o casas pequeñas. Muy sociable y cariñosa.',
+                 'Bella es una chihuahua mix pequeña y juguetona. Perfecta para pisos o casas pequeñas. Muy sociable, cariñosa y le encantan los mimos.',
                  'images/animales/bella.jpg', 'adoption'),
-                ('Nala', 'gato', '2 años', 'Hembra', 'Pequeño',
-                 'Nala es una gatita muy elegante y cariñosa. Le encanta jugar y explorar. Se adapta bien a la vida en interior.',
-                 'images/animales/nala.jpg', 'adoption'),
                 ('Toby', 'perro', '6 años', 'Macho', 'Mediano',
-                 'Toby es un perro adulto muy tranquilo. Ideal para personas mayores o familias que buscan un compañero calmado.',
+                 'Toby es un beagle adulto muy tranquilo y equilibrado. Ideal para personas mayores o familias que buscan un compañero calmado.',
                  'images/animales/toby.jpg', 'adoption'),
-                ('Mía', 'gato', '3 años', 'Hembra', 'Mediano',
-                 'Mía es una gata muy cariñosa que busca un hogar tranquilo. Le gusta la rutina y los ambientes relajados.',
-                 'images/animales/mia.jpg', 'adoption'),
                 ('Bruno', 'perro', '4 años', 'Macho', 'Grande',
-                 'Bruno es un perro muy noble y cariñoso. Le encanta estar con su familia y es muy protector con los niños.',
+                 'Bruno es un golden retriever muy noble y cariñoso. Le encanta estar con su familia y es excelente con los niños. Muy educado y obediente.',
                  'images/animales/bruno.jpg', 'adoption'),
+                ('Coco', 'perro', '8 meses', 'Macho', 'Mediano',
+                 'Coco es un cachorro de bodeguero muy activo y juguetón. Necesita una familia que pueda dedicarle tiempo para adiestramiento y juegos.',
+                 'images/animales/coco.jpg', 'adoption'),
+                ('Nina', 'perro', '7 años', 'Hembra', 'Pequeño',
+                 'Nina es una yorkshire senior muy tranquila y mimosa. Busca un hogar donde pasar sus últimos años rodeada de amor y cuidados.',
+                 'images/animales/nina.jpg', 'adoption'),
+                ('Thor', 'perro', '2 años', 'Macho', 'Grande',
+                 'Thor es un husky siberiano muy enérgico. Necesita mucho ejercicio diario y una familia activa. Es muy sociable con perros y personas.',
+                 'images/animales/thor.jpg', 'adoption'),
+                ('Lola', 'perro', '3 años', 'Hembra', 'Mediano',
+                 'Lola es una cocker spaniel muy dulce y cariñosa. Le encanta jugar y dar paseos. Perfecta para familias con niños.',
+                 'images/animales/lola.jpg', 'adoption'),
+
+                # EN ADOPCIÓN - Gatos
+                ('Misi', 'gato', '1 año', 'Hembra', 'Pequeño',
+                 'Misi es una gatita joven muy tranquila y mimosa. Perfecta para un hogar acogedor. Le encanta dormir al sol y recibir caricias.',
+                 'images/animales/misi.jpg', 'adoption'),
+                ('Simba', 'gato', '4 años', 'Macho', 'Mediano',
+                 'Simba es un gato naranja independiente pero cariñoso. Le gusta su espacio pero también los mimos. Perfecto compañero de hogar.',
+                 'images/animales/simba.jpg', 'adoption'),
+                ('Nala', 'gato', '2 años', 'Hembra', 'Pequeño',
+                 'Nala es una gatita siamesa muy elegante y cariñosa. Le encanta jugar y explorar. Se adapta bien a la vida en interior.',
+                 'images/animales/nala.jpg', 'adoption'),
+                ('Mía', 'gato', '3 años', 'Hembra', 'Mediano',
+                 'Mía es una gata tricolor muy cariñosa que busca un hogar tranquilo. Le gusta la rutina y los ambientes relajados.',
+                 'images/animales/mia.jpg', 'adoption'),
+                ('Bigotes', 'gato', '5 años', 'Macho', 'Mediano',
+                 'Bigotes es un gato blanco y negro muy tranquilo. Es perfecto para personas que buscan compañía sin mucho alboroto. Muy independiente.',
+                 'images/animales/bigotes.jpg', 'adoption'),
+                ('Canela', 'gato', '6 meses', 'Hembra', 'Pequeño',
+                 'Canela es una gatita bebé muy juguetona y curiosa. Necesita una familia paciente que le enseñe buenos hábitos. Muy sociable.',
+                 'images/animales/canela.jpg', 'adoption'),
+                ('Felix', 'gato', '8 años', 'Macho', 'Mediano',
+                 'Felix es un gato senior muy tranquilo y cariñoso. Busca un hogar donde vivir sus últimos años con paz y confort.',
+                 'images/animales/felix.jpg', 'adoption'),
+                ('Luna Gata', 'gato', '2 años', 'Hembra', 'Pequeño',
+                 'Luna es una gatita negra muy juguetona y activa. Le encanta trepar y explorar. Ideal para hogares con espacio.',
+                 'images/animales/luna_gata.jpg', 'adoption'),
+
+                # EN ACOGIDA - Casa de acogida temporal
+                ('Chispa', 'perro', '4 meses', 'Hembra', 'Pequeño',
+                 'Chispa es una cachorra que se está recuperando de un rescate. Necesita acogida temporal mientras encuentra familia definitiva.',
+                 'images/animales/chispa.jpg', 'foster'),
+                ('Mora', 'gato', '3 meses', 'Hembra', 'Pequeño',
+                 'Mora es una gatita bebé que necesita familia de acogida. Es muy juguetona y está aprendiendo a socializar.',
+                 'images/animales/mora.jpg', 'foster'),
+                ('Dante', 'perro', '1 año', 'Macho', 'Mediano',
+                 'Dante está en acogida recuperándose de una operación. Es muy cariñoso y necesita un hogar temporal con cuidados especiales.',
+                 'images/animales/dante.jpg', 'foster'),
+
+                # ADOPTADOS - Historias de éxito
                 ('Pelusa', 'gato', '2 años', 'Hembra', 'Pequeño',
-                 'Pelusa ya encontró su hogar! Es una gatita muy feliz con su nueva familia.',
+                 'Pelusa encontró su hogar definitivo! Ahora es una gatita muy feliz que disfruta de su nueva familia.',
                  'images/animales/pelusa.jpg', 'adopted'),
                 ('Rex', 'perro', '3 años', 'Macho', 'Grande',
-                 'Rex fue adoptado por una familia maravillosa. Ahora disfruta de largos paseos diarios.',
+                 'Rex fue adoptado por una familia maravillosa. Ahora disfruta de largos paseos diarios y tiene un gran jardín donde jugar.',
                  'images/animales/rex.jpg', 'adopted'),
+                ('Cleo', 'gato', '4 años', 'Hembra', 'Mediano',
+                 'Cleo encontró un hogar perfecto donde es la reina de la casa. Su familia la adora y ella es muy feliz.',
+                 'images/animales/cleo.jpg', 'adopted'),
+                ('Bobby', 'perro', '5 años', 'Macho', 'Grande',
+                 'Bobby fue adoptado hace 6 meses. Su familia nos cuenta que es un perro maravilloso y están muy contentos juntos.',
+                 'images/animales/bobby.jpg', 'adopted'),
             ]
 
             for animal in animales_ejemplo:
@@ -1020,6 +1106,88 @@ def delete_contact(contact_id):
 
 
 # ============================================
+# NEWSLETTER
+# ============================================
+
+@app.route('/admin/newsletter')
+@login_required
+def list_newsletter_subscribers():
+    """Listar suscriptores del newsletter"""
+    db = get_db()
+    active_filter = request.args.get('active')
+
+    query = 'SELECT * FROM newsletter_subscribers'
+    params = []
+
+    if active_filter == '1':
+        query += ' WHERE is_active = ' + ('TRUE' if USE_POSTGRES else '1')
+    elif active_filter == '0':
+        query += ' WHERE is_active = ' + ('FALSE' if USE_POSTGRES else '0')
+
+    query += ' ORDER BY subscribed_at DESC'
+
+    subscribers = db.execute(query, params).fetchall()
+    return render_template('newsletter.html', subscribers=subscribers, active_filter=active_filter)
+
+
+@app.route('/admin/newsletter/<int:subscriber_id>/toggle', methods=['POST'])
+@login_required
+def toggle_newsletter_subscriber(subscriber_id):
+    """Activar/desactivar suscriptor"""
+    validate_csrf()
+    db = get_db()
+    placeholder = get_placeholder()
+
+    cursor = db.execute(f'SELECT is_active FROM newsletter_subscribers WHERE id = {placeholder}', (subscriber_id,))
+    row = cursor.fetchone()
+
+    if row:
+        new_status = not row[0]
+        db.execute(f'UPDATE newsletter_subscribers SET is_active = {placeholder} WHERE id = {placeholder}',
+                  (new_status if USE_POSTGRES else (1 if new_status else 0), subscriber_id))
+        db.commit()
+        flash('Estado del suscriptor actualizado.', 'success')
+
+    return redirect(url_for('list_newsletter_subscribers'))
+
+
+@app.route('/admin/newsletter/<int:subscriber_id>/delete', methods=['POST'])
+@login_required
+def delete_newsletter_subscriber(subscriber_id):
+    """Eliminar suscriptor"""
+    validate_csrf()
+    db = get_db()
+    placeholder = get_placeholder()
+    db.execute(f'DELETE FROM newsletter_subscribers WHERE id = {placeholder}', (subscriber_id,))
+    db.commit()
+    flash('Suscriptor eliminado.', 'success')
+    return redirect(url_for('list_newsletter_subscribers'))
+
+
+@app.route('/admin/newsletter/export')
+@login_required
+def export_newsletter_csv():
+    """Exportar suscriptores a CSV"""
+    db = get_db()
+    rows = db.execute(
+        'SELECT email, name, subscribed_at, is_active '
+        'FROM newsletter_subscribers WHERE is_active = ' + ('TRUE' if USE_POSTGRES else '1') +
+        ' ORDER BY subscribed_at DESC'
+    ).fetchall()
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Email', 'Nombre', 'Fecha suscripción'])
+    for r in rows:
+        writer.writerow([r['email'], r['name'] or '', r['subscribed_at']])
+
+    response = make_response(output.getvalue())
+    response.headers['Content-Disposition'] = 'attachment; filename=newsletter_subscribers.csv'
+    response.headers['Content-Type'] = 'text/csv; charset=utf-8'
+    return response
+
+
+# ============================================
 # CONFIGURACIÓN
 # ============================================
 
@@ -1068,6 +1236,8 @@ def admin_settings():
             'contact_email', 'contact_phone', 'contact_address', 'contact_hours',
             'social_facebook', 'social_instagram', 'social_twitter',
             'maps_embed_url',
+            'donation_bizum', 'donation_iban', 'donation_paypal',
+            'donation_teaming_url', 'donation_amazon_wishlist', 'donation_wallapop_url',
         ]
         for key in keys:
             value = request.form.get(key, '').strip()
@@ -1330,6 +1500,144 @@ def api_contact():
     db.commit()
 
     return jsonify({'success': True, 'message': 'Mensaje recibido correctamente'})
+
+@app.route('/api/adoption-request', methods=['POST'])
+@limiter.limit('3 per minute; 10 per day')
+def api_adoption_request():
+    """API para recibir solicitudes de adopción"""
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'Datos inválidos'}), 400
+
+    # Campos obligatorios
+    animal_id = data.get('animal_id')
+    animal_name = data.get('animal_name', '').strip()
+    name = data.get('name', '').strip()
+    email = data.get('email', '').strip()
+    phone = data.get('phone', '').strip()
+
+    if not animal_id or not name or not email or not phone:
+        return jsonify({'error': 'Animal, nombre, email y teléfono son obligatorios'}), 400
+    if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
+        return jsonify({'error': 'Email no válido'}), 400
+
+    # Campos opcionales pero importantes
+    age = data.get('age')
+    address = data.get('address', '').strip()
+    city = data.get('city', '').strip()
+    living_situation = data.get('living_situation', '').strip()
+    own_or_rent = data.get('own_or_rent', '').strip()
+    has_yard = data.get('has_yard', '').strip()
+    landlord_permission = data.get('landlord_permission', '').strip()
+    household_members = data.get('household_members')
+    has_children = data.get('has_children', '').strip()
+    children_ages = data.get('children_ages', '').strip()
+    current_pets = data.get('current_pets', '').strip()
+    pet_experience = data.get('pet_experience', '').strip()
+    work_schedule = data.get('work_schedule', '').strip()
+    hours_home_per_day = data.get('hours_home_per_day', '').strip()
+    why_adopt = data.get('why_adopt', '').strip()
+    vet_name = data.get('vet_name', '').strip()
+    vet_phone = data.get('vet_phone', '').strip()
+    reference_name = data.get('reference_name', '').strip()
+    reference_phone = data.get('reference_phone', '').strip()
+    comments = data.get('comments', '').strip()
+    message = data.get('message', '').strip()
+
+    db = get_db()
+    placeholder = get_placeholder()
+    db.execute(f'''
+        INSERT INTO adoption_requests (
+            animal_id, animal_name, name, email, phone, message,
+            age, address, city, living_situation, own_or_rent, has_yard,
+            landlord_permission, household_members, has_children, children_ages,
+            current_pets, pet_experience, work_schedule, hours_home_per_day,
+            why_adopt, vet_name, vet_phone, reference_name, reference_phone,
+            comments
+        ) VALUES (
+            {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder},
+            {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder},
+            {placeholder}, {placeholder}, {placeholder}, {placeholder},
+            {placeholder}, {placeholder}, {placeholder}, {placeholder},
+            {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder},
+            {placeholder}
+        )
+    ''', (
+        animal_id, animal_name, name, email, phone, message,
+        age, address, city, living_situation, own_or_rent, has_yard,
+        landlord_permission, household_members, has_children, children_ages,
+        current_pets, pet_experience, work_schedule, hours_home_per_day,
+        why_adopt, vet_name, vet_phone, reference_name, reference_phone,
+        comments
+    ))
+    db.commit()
+
+    return jsonify({'success': True, 'message': 'Solicitud de adopción recibida correctamente'})
+
+@app.route('/api/newsletter/subscribe', methods=['POST'])
+@limiter.limit('3 per minute; 10 per hour')
+def api_newsletter_subscribe():
+    """API para suscribirse al newsletter"""
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'Datos inválidos'}), 400
+
+    email = data.get('email', '').strip().lower()
+    name = data.get('name', '').strip()
+
+    if not email:
+        return jsonify({'error': 'El email es obligatorio'}), 400
+    if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
+        return jsonify({'error': 'Email no válido'}), 400
+
+    db = get_db()
+    placeholder = get_placeholder()
+
+    # Generar token único para desuscribirse
+    import secrets
+    unsubscribe_token = secrets.token_urlsafe(32)
+
+    try:
+        # Intentar insertar nuevo suscriptor
+        db.execute(f'''
+            INSERT INTO newsletter_subscribers (email, name, unsubscribe_token, is_active)
+            VALUES ({placeholder}, {placeholder}, {placeholder}, {placeholder})
+        ''', (email, name, unsubscribe_token, True if USE_POSTGRES else 1))
+        db.commit()
+        return jsonify({'success': True, 'message': 'Suscripción confirmada. ¡Gracias por unirte a nuestra newsletter!'})
+    except (sqlite3.IntegrityError if not USE_POSTGRES else psycopg2.IntegrityError):
+        # Email ya existe
+        # Reactivar suscripción si estaba inactiva
+        cursor = db.execute(f'SELECT is_active FROM newsletter_subscribers WHERE email = {placeholder}', (email,))
+        row = cursor.fetchone()
+        if row:
+            is_active = row[0]
+            if not is_active:
+                db.execute(f'UPDATE newsletter_subscribers SET is_active = {placeholder}, name = {placeholder} WHERE email = {placeholder}',
+                          (True if USE_POSTGRES else 1, name, email))
+                db.commit()
+                return jsonify({'success': True, 'message': 'Suscripción reactivada. ¡Bienvenido de nuevo!'})
+            else:
+                return jsonify({'error': 'Este email ya está suscrito a la newsletter'}), 400
+        return jsonify({'error': 'Error al procesar la suscripción'}), 500
+
+@app.route('/api/newsletter/unsubscribe/<token>', methods=['POST', 'GET'])
+def api_newsletter_unsubscribe(token):
+    """API para darse de baja del newsletter"""
+    db = get_db()
+    placeholder = get_placeholder()
+
+    cursor = db.execute(f'SELECT email FROM newsletter_subscribers WHERE unsubscribe_token = {placeholder}', (token,))
+    row = cursor.fetchone()
+
+    if not row:
+        return jsonify({'error': 'Token inválido'}), 404
+
+    db.execute(f'UPDATE newsletter_subscribers SET is_active = {placeholder} WHERE unsubscribe_token = {placeholder}',
+              (False if USE_POSTGRES else 0, token))
+    db.commit()
+
+    return jsonify({'success': True, 'message': 'Te has dado de baja correctamente. Lamentamos verte partir.'})
 
 @app.route('/api/upload', methods=['POST'])
 @login_required

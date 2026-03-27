@@ -44,7 +44,8 @@
     flex-wrap: wrap;
 }
 
-.filter-btn {
+.filter-btn,
+.size-btn {
     padding: 0.75rem 1.5rem;
     border: 2px solid var(--primary-color);
     background: var(--bg-white);
@@ -87,14 +88,16 @@
     box-shadow: var(--shadow-md);
 }
 
-.filter-btn:hover {
+.filter-btn:hover,
+.size-btn:hover {
     background: var(--primary-color);
     color: var(--text-white);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
-.filter-btn.active {
+.filter-btn.active,
+.size-btn.active {
     background: linear-gradient(135deg, var(--primary-color), #FF8C42);
     color: var(--text-white);
     box-shadow: var(--shadow-md);
@@ -315,7 +318,8 @@
 }
 
 @media (max-width: 480px) {
-    .filter-btn {
+    .filter-btn,
+    .size-btn {
         padding: 0.6rem 1rem;
         font-size: 0.9rem;
     }

@@ -119,7 +119,7 @@
         </div>
     </section>
 
-    <section id="teaming" class="donation-section">
+    <section id="teaming" class="donation-section" style="display:none;">
         <div class="container">
             <div class="donation-method">
                 <div class="method-icon">
@@ -145,7 +145,7 @@
         </div>
     </section>
 
-    <section id="bizum" class="donation-section alt">
+    <section id="bizum" class="donation-section alt" style="display:none;">
         <div class="container">
             <div class="donation-method reverse">
                 <div class="method-icon">
@@ -172,7 +172,7 @@
         </div>
     </section>
 
-    <section id="cuenta" class="donation-section">
+    <section id="cuenta" class="donation-section" style="display:none;">
         <div class="container">
             <div class="donation-method">
                 <div class="method-icon">
@@ -203,7 +203,7 @@
         </div>
     </section>
 
-    <section id="amazon" class="donation-section alt">
+    <section id="amazon" class="donation-section alt" style="display:none;">
         <div class="container">
             <div class="donation-method reverse">
                 <div class="method-icon">
@@ -228,7 +228,7 @@
         </div>
     </section>
 
-    <section id="wallapop" class="donation-section">
+    <section id="wallapop" class="donation-section" style="display:none;">
         <div class="container">
             <div class="donation-method">
                 <div class="method-icon">
@@ -315,9 +315,9 @@
                 <div class="footer-section">
                     <h3>Contacto</h3>
                     <ul class="contact-info">
-                        <li><i class="fas fa-envelope"></i> info@protectoraburjassot.com</li>
-                        <li><i class="fas fa-phone"></i> +34 XXX XXX XXX</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Burjassot, Valencia</li>
+                        <li><i class="fas fa-envelope"></i> <span id="footer-email">info@protectoraburjassot.org</span></li>
+                        <li><i class="fas fa-phone"></i> <span id="footer-phone">+34 XXX XXX XXX</span></li>
+                        <li><i class="fas fa-map-marker-alt"></i> <span id="footer-address">Burjassot, Valencia</span></li>
                     </ul>
                 </div>
 
@@ -355,6 +355,119 @@
             navigator.clipboard.writeText(text).then(() => {
                 alert('Copiado al portapapeles: ' + text);
             });
+        }
+
+        // Cargar configuración de donaciones desde la API
+        (async function loadDonationSettings() {
+            try {
+                const res = await fetch(`${window.location.origin}/api/settings`);
+                if (!res.ok) return;
+                const settings = await res.json();
+
+                // Mostrar/ocultar y actualizar Bizum
+                const bizumSection = document.getElementById('bizum');
+                if (settings.donation_bizum && settings.donation_bizum.trim()) {
+                    const bizumCodeEl = document.querySelector('.code-box .code');
+                    const bizumButtonEl = document.querySelector('.code-box .btn');
+                    if (bizumCodeEl) bizumCodeEl.textContent = settings.donation_bizum;
+                    if (bizumButtonEl) bizumButtonEl.setAttribute('onclick', `copyToClipboard('${settings.donation_bizum}')`);
+                    if (bizumSection) bizumSection.style.display = 'block';
+                } else {
+                    if (bizumSection) bizumSection.style.display = 'none';
+                }
+
+                // Mostrar/ocultar y actualizar Cuenta bancaria (IBAN)
+                const cuentaSection = document.getElementById('cuenta');
+                if (settings.donation_iban && settings.donation_iban.trim() && settings.donation_iban !== 'ES00 0000 0000 00 0000000000') {
+                    const ibanEls = document.querySelectorAll('.bank-details .code-box .code');
+                    const ibanButtonEl = document.querySelector('.bank-details .code-box .btn');
+                    if (ibanEls.length > 0) ibanEls[0].textContent = settings.donation_iban;
+                    if (ibanButtonEl) ibanButtonEl.setAttribute('onclick', `copyToClipboard('${settings.donation_iban}')`);
+                    if (cuentaSection) cuentaSection.style.display = 'block';
+                } else {
+                    if (cuentaSection) cuentaSection.style.display = 'none';
+                }
+
+                // Mostrar/ocultar y actualizar Teaming
+                const teamingSection = document.getElementById('teaming');
+                if (settings.donation_teaming_url && settings.donation_teaming_url.trim()) {
+                    const teamingLink = document.querySelector('#teaming a[href*="teaming"]');
+                    if (teamingLink) teamingLink.href = settings.donation_teaming_url;
+                    if (teamingSection) teamingSection.style.display = 'block';
+                } else {
+                    if (teamingSection) teamingSection.style.display = 'none';
+                }
+
+                // Mostrar/ocultar y actualizar Amazon
+                const amazonSection = document.getElementById('amazon');
+                if (settings.donation_amazon_wishlist && settings.donation_amazon_wishlist.trim() && !settings.donation_amazon_wishlist.includes('XXXXXXXXX')) {
+                    const amazonLink = document.querySelector('#amazon a[href*="amazon"]');
+                    if (amazonLink) amazonLink.href = settings.donation_amazon_wishlist;
+                    if (amazonSection) amazonSection.style.display = 'block';
+                } else {
+                    if (amazonSection) amazonSection.style.display = 'none';
+                }
+
+                // Mostrar/ocultar y actualizar Wallapop
+                const wallapopSection = document.getElementById('wallapop');
+                if (settings.donation_wallapop_url && settings.donation_wallapop_url.trim()) {
+                    const wallapopLink = document.querySelector('#wallapop a[href*="wallapop"]');
+                    if (wallapopLink) wallapopLink.href = settings.donation_wallapop_url;
+                    if (wallapopSection) wallapopSection.style.display = 'block';
+                } else {
+                    if (wallapopSection) wallapopSection.style.display = 'none';
+                }
+
+                // Añadir botón de PayPal si está configurado
+                if (settings.donation_paypal && settings.donation_paypal.trim()) {
+                    addPayPalSection(settings.donation_paypal);
+                }
+            } catch(e) {
+                console.log('No se pudo cargar la configuración de donaciones:', e);
+            }
+        })();
+
+        function addPayPalSection(paypalEmail) {
+            // Buscar la sección de cuenta bancaria para insertar PayPal después
+            const bankSection = document.getElementById('cuenta');
+            if (!bankSection) return;
+
+            // Crear nueva sección de PayPal
+            const paypalSection = document.createElement('section');
+            paypalSection.id = 'paypal';
+            paypalSection.className = 'donation-section alt';
+            paypalSection.innerHTML = `
+                <div class="container">
+                    <div class="donation-method reverse">
+                        <div class="method-icon">
+                            <i class="fab fa-paypal"></i>
+                        </div>
+                        <div class="method-content">
+                            <h2>PayPal</h2>
+                            <p>Dona de forma segura con PayPal. Acepta tarjetas de crédito/débito sin necesidad de tener cuenta PayPal.</p>
+                            <ul class="benefits-list">
+                                <li><i class="fas fa-check"></i> Pago seguro y encriptado</li>
+                                <li><i class="fas fa-check"></i> No necesitas cuenta PayPal</li>
+                                <li><i class="fas fa-check"></i> Acepta todas las tarjetas</li>
+                                <li><i class="fas fa-check"></i> Donación única o recurrente</li>
+                            </ul>
+                            <form action="https://www.paypal.com/donate" method="post" target="_blank" style="margin-top: 1rem;">
+                                <input type="hidden" name="business" value="${paypalEmail}">
+                                <input type="hidden" name="currency_code" value="EUR">
+                                <button type="submit" class="btn btn-primary btn-large" style="background:#0070ba; border-color:#0070ba;">
+                                    <i class="fab fa-paypal"></i> Donar con PayPal
+                                </button>
+                            </form>
+                        </div>
+                        <div class="method-image">
+                            <img src="../images/donations/paypal.jpg" alt="PayPal" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Insertar después de la sección de cuenta bancaria
+            bankSection.parentNode.insertBefore(paypalSection, bankSection.nextSibling);
         }
     </script>
 </body>

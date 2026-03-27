@@ -106,6 +106,57 @@
         </div>
     </div>
 
+    <!-- DONACIONES -->
+    <div style="background:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <h3 style="margin:0 0 1.2rem; color:#F4A460; border-bottom:2px solid #f5f5f5; padding-bottom:0.75rem;">
+            <i class="fas fa-donate"></i> Configuración de donaciones
+        </h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+            <div class="form-group">
+                <label for="donation_bizum">Código Bizum</label>
+                <input type="text" id="donation_bizum" name="donation_bizum"
+                       value="{{ settings.get('donation_bizum', '') }}"
+                       placeholder="XXXXX">
+                <small style="color:#888; display:block; margin-top:0.4rem;">
+                    Código de 5 dígitos para donaciones vía Bizum
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="donation_paypal">Email de PayPal</label>
+                <input type="email" id="donation_paypal" name="donation_paypal"
+                       value="{{ settings.get('donation_paypal', '') }}"
+                       placeholder="donaciones@protectoraburjassot.org">
+                <small style="color:#888; display:block; margin-top:0.4rem;">
+                    Email asociado a la cuenta PayPal para botón de donación
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="donation_iban">IBAN para transferencias</label>
+            <input type="text" id="donation_iban" name="donation_iban"
+                   value="{{ settings.get('donation_iban', '') }}"
+                   placeholder="ES00 0000 0000 00 0000000000">
+        </div>
+        <div class="form-group">
+            <label for="donation_teaming_url">URL de Teaming</label>
+            <input type="url" id="donation_teaming_url" name="donation_teaming_url"
+                   value="{{ settings.get('donation_teaming_url', '') }}"
+                   placeholder="https://www.teaming.net/protectoraburjassot">
+        </div>
+        <div class="form-group">
+            <label for="donation_amazon_wishlist">URL de Amazon Wishlist</label>
+            <input type="url" id="donation_amazon_wishlist" name="donation_amazon_wishlist"
+                   value="{{ settings.get('donation_amazon_wishlist', '') }}"
+                   placeholder="https://www.amazon.es/hz/wishlist/ls/XXXXXXXXX">
+        </div>
+        <div class="form-group">
+            <label for="donation_wallapop_url">URL de Wallapop</label>
+            <input type="url" id="donation_wallapop_url" name="donation_wallapop_url"
+                   value="{{ settings.get('donation_wallapop_url', '') }}"
+                   placeholder="https://es.wallapop.com/u/protectoraburjassot">
+        </div>
+    </div>
+
     <!-- OPCIONES TÉCNICAS -->
     <div style="background:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
         <h3 style="margin:0 0 1.2rem; color:#F4A460; border-bottom:2px solid #f5f5f5; padding-bottom:0.75rem;">

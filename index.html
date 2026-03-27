@@ -243,19 +243,23 @@
                 <div class="footer-section">
                     <h3>Contacto</h3>
                     <ul class="contact-info">
-                        <li><i class="fas fa-envelope"></i> info@protectoraburjassot.com</li>
-                        <li><i class="fas fa-phone"></i> +34 XXX XXX XXX</li>
-                        <li><i class="fas fa-map-marker-alt"></i> Burjassot, Valencia</li>
+                        <li><i class="fas fa-envelope"></i> <span id="footer-email">info@protectoraburjassot.org</span></li>
+                        <li><i class="fas fa-phone"></i> <span id="footer-phone">+34 XXX XXX XXX</span></li>
+                        <li><i class="fas fa-map-marker-alt"></i> <span id="footer-address">Burjassot, Valencia</span></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
-                    <h3>Nos apoyan</h3>
-                    <div class="sponsors-logos">
-                        <img src="images/logos/sponsor1.png" alt="Sponsor 1" onerror="this.style.display='none'">
-                        <img src="images/logos/sponsor2.png" alt="Sponsor 2" onerror="this.style.display='none'">
-                        <img src="images/logos/sponsor3.png" alt="Sponsor 3" onerror="this.style.display='none'">
-                    </div>
+                    <h3><i class="fas fa-paper-plane"></i> Newsletter</h3>
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem;">Suscríbete para recibir noticias sobre nuestros animales y eventos.</p>
+                    <form id="newsletterForm" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <input type="email" id="newsletterEmail" placeholder="Tu email" required
+                               style="padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                            <i class="fas fa-envelope"></i> Suscribirse
+                        </button>
+                        <div id="newsletterMessage" style="display: none; padding: 0.5rem; border-radius: 4px; font-size: 0.85rem; text-align: center;"></div>
+                    </form>
                 </div>
             </div>
 

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Newsletter - Suscriptores{% endblock %}
+{% block page_title %}Newsletter{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2><i class="fas fa-envelope"></i> Suscriptores del Newsletter
+        <small style="font-size:0.7em; color:#999; font-weight:normal;">{{ subscribers|length }} registros</small>
+    </h2>
+    <a href="{{ url_for('export_newsletter_csv') }}" class="btn btn-primary">
+        <i class="fas fa-download"></i> Exportar CSV
+    </a>
+</div>
+
+<!-- Filtros por estado -->
+<div style="display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center;">
+    <strong>Estado:</strong>
+    <a href="{{ url_for('list_newsletter_subscribers') }}"
+       class="btn btn-sm" style="background:{% if not active_filter %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">
+        Todos
+    </a>
+    <a href="{{ url_for('list_newsletter_subscribers', active='1') }}"
+       class="btn btn-sm" style="background:{% if active_filter == '1' %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">
+        <i class="fas fa-check-circle"></i> Activos
+    </a>
+    <a href="{{ url_for('list_newsletter_subscribers', active='0') }}"
+       class="btn btn-sm" style="background:{% if active_filter == '0' %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">
+        <i class="fas fa-times-circle"></i> Dados de baja
+    </a>
+</div>
+
+{% if subscribers %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nombre</th>
+            <th>Fecha suscripción</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in subscribers %}
+        <tr style="{% if not s.is_active %}background:#fff5f5; opacity:0.7;{% endif %}">
+            <td>
+                <a href="mailto:{{ s.email }}" style="color:#333;">{{ s.email }}</a>
+            </td>
+            <td>{{ s.name or '—' }}</td>
+            <td style="white-space:nowrap; font-size:0.85rem; color:#666;">
+                {{ s.subscribed_at[:10] }}
+            </td>
+            <td>
+                {% if s.is_active %}
+                <span class="badge badge-success">Activo</span>
+                {% else %}
+                <span class="badge badge-danger">Dado de baja</span>
+                {% endif %}
+            </td>
+            <td style="white-space:nowrap;">
+                <form method="POST" action="{{ url_for('toggle_newsletter_subscriber', subscriber_id=s.id) }}" style="display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-sm"
+                            style="background:#3498db; color:white;"
+                            title="{{ 'Desactivar' if s.is_active else 'Reactivar' }}">
+                        <i class="fas fa-{{ 'toggle-on' if s.is_active else 'toggle-off' }}"></i>
+                    </button>
+                </form>
+                <form method="POST" action="{{ url_for('delete_newsletter_subscriber', subscriber_id=s.id) }}" style="display:inline;"
+                      onsubmit="return confirm('¿Eliminar este suscriptor permanentemente?');">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="background:#f9f9f9; border-radius:8px; padding:1.5rem; margin-top:2rem;">
+    <h3 style="margin:0 0 1rem; color:#F4A460;"><i class="fas fa-info-circle"></i> Información</h3>
+    <ul style="margin:0; padding-left:1.5rem; color:#666;">
+        <li><strong>Total suscriptores:</strong> {{ subscribers|length }}</li>
+        <li><strong>Activos:</strong> {{ subscribers|selectattr('is_active')|list|length }}</li>
+        <li><strong>Dados de baja:</strong> {{ subscribers|rejectattr('is_active')|list|length }}</li>
+    </ul>
+    <p style="margin:1rem 0 0; font-size:0.9rem; color:#888;">
+        <i class="fas fa-lightbulb"></i>
+        Exporta los suscriptores activos a CSV para importarlos en plataformas de email marketing como Mailchimp, Sendinblue o Brevo.
+    </p>
+</div>
+
+{% else %}
+<div style="text-align:center; padding:3rem;">
+    <i class="fas fa-envelope-open" style="font-size:4rem; color:#ddd; margin-bottom:1rem;"></i>
+    <h3 style="color:#666;">No hay suscriptores registrados</h3>
+    <p style="color:#999;">Los usuarios que se suscriban al newsletter aparecerán aquí.</p>
+</div>
+{% endif %}
+{% endblock %}

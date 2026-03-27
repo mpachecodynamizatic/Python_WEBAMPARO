@@ -16,55 +16,26 @@
 </div>
 
 {% if adoptions %}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Fecha</th>
-            <th>Animal</th>
-            <th>Solicitante</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Mensaje</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for r in adoptions %}
-        <tr style="{% if r.status == 'pendiente' %}background:#fffbf0;{% elif r.status == 'rechazada' %}background:#fff5f5;{% elif r.status == 'aprobada' %}background:#f0fff4;{% endif %}">
-            <td style="white-space:nowrap; font-size:0.85rem; color:#666;">{{ r.created_at[:10] }}</td>
-            <td>
-                <strong>{{ r.animal_name or '—' }}</strong><br>
-                <a href="{{ url_for('edit_animal', animal_id=r.animal_id) }}" style="font-size:0.8rem; color:#F4A460;">
-                    #{{ r.animal_id }} ver animal
-                </a>
-            </td>
-            <td><strong>{{ r.name }}</strong></td>
-            <td><a href="mailto:{{ r.email }}">{{ r.email }}</a></td>
-            <td>{{ r.phone or '—' }}</td>
-            <td style="max-width:220px; font-size:0.85rem; color:#555;">
-                {% if r.message %}
-                <details>
-                    <summary style="cursor:pointer; color:#F4A460;">Ver mensaje</summary>
-                    <p style="margin-top:0.5rem;">{{ r.message }}</p>
-                </details>
-                {% else %}—{% endif %}
-            </td>
-            <td>
-                {% if r.status == 'pendiente' %}
-                <span class="badge badge-warning">Pendiente</span>
-                {% elif r.status == 'en_proceso' %}
-                <span class="badge" style="background:#3498db; color:white; padding:0.3rem 0.7rem; border-radius:20px; font-size:0.8rem;">En proceso</span>
-                {% elif r.status == 'aprobada' %}
-                <span class="badge badge-success">Aprobada</span>
-                {% else %}
-                <span class="badge badge-danger">Rechazada</span>
-                {% endif %}
-            </td>
-            <td style="white-space:nowrap;">
+<div style="display: grid; gap: 1.5rem;">
+    {% for r in adoptions %}
+    <div style="background:{% if r.status == 'pendiente' %}#fffbf0{% elif r.status == 'rechazada' %}#fff5f5{% elif r.status == 'aprobada' %}#f0fff4{% else %}white{% endif %}; border-radius:10px; padding:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06); border-left:4px solid {% if r.status == 'pendiente' %}#FFB347{% elif r.status == 'rechazada' %}#e74c3c{% elif r.status == 'aprobada' %}#27ae60{% else %}#ddd{% endif %};">
+
+        <!-- Cabecera con info básica y acciones -->
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+            <div>
+                <h3 style="margin:0 0 0.5rem; color:#333;">
+                    <i class="fas fa-user"></i> {{ r.name }}
+                    {% if r.age %}<span style="font-size:0.85rem; color:#666; font-weight:normal;">({{ r.age }} años)</span>{% endif %}
+                </h3>
+                <div style="display:flex; gap:1.5rem; flex-wrap:wrap; font-size:0.9rem; color:#666;">
+                    <span><i class="fas fa-paw"></i> Animal: <strong><a href="{{ url_for('edit_animal', animal_id=r.animal_id) }}" style="color:#F4A460;">{{ r.animal_name or '—' }}</a></strong></span>
+                    <span><i class="fas fa-calendar"></i> {{ r.created_at[:10] }}</span>
+                </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
                 <form method="POST" action="{{ url_for('update_adoption_status', req_id=r.id) }}" style="display:inline;">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-                    <select name="status" onchange="this.form.submit()" style="padding:0.3rem; border-radius:4px; border:1px solid #ddd; font-size:0.85rem;">
+                    <select name="status" onchange="this.form.submit()" style="padding:0.4rem 0.6rem; border-radius:6px; border:1px solid #ddd; font-size:0.9rem;">
                         <option value="pendiente" {% if r.status=='pendiente' %}selected{% endif %}>Pendiente</option>
                         <option value="en_proceso" {% if r.status=='en_proceso' %}selected{% endif %}>En proceso</option>
                         <option value="aprobada" {% if r.status=='aprobada' %}selected{% endif %}>Aprobada</option>
@@ -78,12 +49,149 @@
                         <i class="fas fa-trash"></i>
                     </button>
                 </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<p style="color:#666; margin-top:1rem;">Total: <strong>{{ adoptions|length }}</strong> solicitudes</p>
+            </div>
+        </div>
+
+        <!-- Info de contacto -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; margin-bottom:1rem; padding:1rem; background:white; border-radius:8px;">
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:0.85rem; margin-bottom:0.25rem;">Email:</strong>
+                <a href="mailto:{{ r.email }}" style="color:#333;">{{ r.email }}</a>
+            </div>
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:0.85rem; margin-bottom:0.25rem;">Teléfono:</strong>
+                <span>{{ r.phone or '—' }}</span>
+            </div>
+            {% if r.city or r.address %}
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:0.85rem; margin-bottom:0.25rem;">Ubicación:</strong>
+                <span>{{ r.city or '—' }}{% if r.address %}, {{ r.address }}{% endif %}</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Detalles expandibles -->
+        <details style="margin-top:1rem;">
+            <summary style="cursor:pointer; color:#F4A460; font-weight:600; padding:0.5rem; border-radius:6px; background:rgba(244,164,96,0.1);">
+                <i class="fas fa-chevron-down"></i> Ver información completa del formulario
+            </summary>
+
+            <div style="margin-top:1rem; display:grid; gap:1.5rem;">
+                <!-- Situación del hogar -->
+                {% if r.living_situation or r.own_or_rent or r.has_yard or r.landlord_permission %}
+                <div style="background:white; padding:1rem; border-radius:8px;">
+                    <h4 style="color:#F4A460; margin:0 0 0.75rem; font-size:1rem;"><i class="fas fa-home"></i> Situación del hogar</h4>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.75rem; font-size:0.9rem;">
+                        {% if r.living_situation %}
+                        <div><strong>Vivienda:</strong> {{ r.living_situation }}</div>
+                        {% endif %}
+                        {% if r.own_or_rent %}
+                        <div><strong>Propiedad:</strong> {{ r.own_or_rent }}</div>
+                        {% endif %}
+                        {% if r.has_yard %}
+                        <div><strong>Jardín/Patio:</strong> {{ r.has_yard }}</div>
+                        {% endif %}
+                        {% if r.landlord_permission %}
+                        <div><strong>Permiso propietario:</strong> {{ r.landlord_permission }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Composición del hogar -->
+                {% if r.household_members or r.has_children or r.children_ages %}
+                <div style="background:white; padding:1rem; border-radius:8px;">
+                    <h4 style="color:#F4A460; margin:0 0 0.75rem; font-size:1rem;"><i class="fas fa-users"></i> Composición del hogar</h4>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.75rem; font-size:0.9rem;">
+                        {% if r.household_members %}
+                        <div><strong>Personas en casa:</strong> {{ r.household_members }}</div>
+                        {% endif %}
+                        {% if r.has_children %}
+                        <div><strong>Niños:</strong> {{ r.has_children }}</div>
+                        {% endif %}
+                        {% if r.children_ages %}
+                        <div><strong>Edades niños:</strong> {{ r.children_ages }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Experiencia con animales -->
+                {% if r.current_pets or r.pet_experience %}
+                <div style="background:white; padding:1rem; border-radius:8px;">
+                    <h4 style="color:#F4A460; margin:0 0 0.75rem; font-size:1rem;"><i class="fas fa-paw"></i> Experiencia con animales</h4>
+                    {% if r.current_pets %}
+                    <div style="margin-bottom:0.75rem;">
+                        <strong>Mascotas actuales:</strong>
+                        <p style="margin:0.25rem 0 0; color:#555;">{{ r.current_pets }}</p>
+                    </div>
+                    {% endif %}
+                    {% if r.pet_experience %}
+                    <div>
+                        <strong>Experiencia previa:</strong>
+                        <p style="margin:0.25rem 0 0; color:#555;">{{ r.pet_experience }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Estilo de vida -->
+                {% if r.work_schedule or r.hours_home_per_day or r.why_adopt %}
+                <div style="background:white; padding:1rem; border-radius:8px;">
+                    <h4 style="color:#F4A460; margin:0 0 0.75rem; font-size:1rem;"><i class="fas fa-briefcase"></i> Estilo de vida</h4>
+                    {% if r.work_schedule %}
+                    <div style="margin-bottom:0.75rem;">
+                        <strong>Horario de trabajo:</strong> {{ r.work_schedule }}
+                    </div>
+                    {% endif %}
+                    {% if r.hours_home_per_day %}
+                    <div style="margin-bottom:0.75rem;">
+                        <strong>Horas en casa:</strong> {{ r.hours_home_per_day }}
+                    </div>
+                    {% endif %}
+                    {% if r.why_adopt %}
+                    <div>
+                        <strong>Motivo de adopción:</strong>
+                        <p style="margin:0.25rem 0 0; color:#555; background:#f9f9f9; padding:0.75rem; border-radius:6px; border-left:3px solid #F4A460;">{{ r.why_adopt }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Referencias -->
+                {% if r.vet_name or r.vet_phone or r.reference_name or r.reference_phone %}
+                <div style="background:white; padding:1rem; border-radius:8px;">
+                    <h4 style="color:#F4A460; margin:0 0 0.75rem; font-size:1rem;"><i class="fas fa-stethoscope"></i> Referencias</h4>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.75rem; font-size:0.9rem;">
+                        {% if r.vet_name or r.vet_phone %}
+                        <div>
+                            <strong>Veterinario:</strong><br>
+                            {{ r.vet_name or '—' }}{% if r.vet_phone %} - {{ r.vet_phone }}{% endif %}
+                        </div>
+                        {% endif %}
+                        {% if r.reference_name or r.reference_phone %}
+                        <div>
+                            <strong>Referencia personal:</strong><br>
+                            {{ r.reference_name or '—' }}{% if r.reference_phone %} - {{ r.reference_phone }}{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Comentarios adicionales -->
+                {% if r.comments %}
+                <div style="background:white; padding:1rem; border-radius:8px;">
+                    <h4 style="color:#F4A460; margin:0 0 0.75rem; font-size:1rem;"><i class="fas fa-comment"></i> Comentarios adicionales</h4>
+                    <p style="margin:0; color:#555;">{{ r.comments }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </details>
+    </div>
+    {% endfor %}
+</div>
+<p style="color:#666; margin-top:1.5rem;">Total: <strong>{{ adoptions|length }}</strong> solicitudes</p>
 
 {% else %}
 <div style="text-align:center; padding:3rem;">
