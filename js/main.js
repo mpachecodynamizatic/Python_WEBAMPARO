@@ -151,9 +151,18 @@ function createAnimalCard(animal) {
 
     const typeCapitalized = animal.type.charAt(0).toUpperCase() + animal.type.slice(1);
     const animalType = (animal.type === 'gato') ? 'gato' : 'perro';
-    const animalImgSrc = (animal.image && animal.image.startsWith('uploads/'))
-        ? `${API_BASE}/${animal.image}`
-        : `images/animales/${animalType}.svg`;
+
+    // Determinar source de imagen: base64, uploads o placeholder
+    let animalImgSrc = `images/animales/${animalType}.svg`;
+    if (animal.image) {
+        if (animal.image.startsWith('data:image/')) {
+            // Imagen en base64 (almacenada en BD)
+            animalImgSrc = animal.image;
+        } else if (animal.image.startsWith('uploads/')) {
+            // Imagen en disco
+            animalImgSrc = `${API_BASE}/${animal.image}`;
+        }
+    }
     const animalFallback = `images/animales/${animalType}.svg`;
 
     card.innerHTML = `

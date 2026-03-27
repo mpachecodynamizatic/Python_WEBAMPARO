@@ -8,7 +8,8 @@
       "Bash(fi)",
       "Bash(for file in *.html)",
       "Bash(do sed -i '/<meta name=\"\"api-base\"\" content=\"\"http:\\\\/\\\\/localhost:5000\"\">/d' \"$file\")",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(grep:*)"
     ]
   }
 }

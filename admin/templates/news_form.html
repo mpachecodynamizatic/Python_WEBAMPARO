@@ -61,9 +61,16 @@
         </small>
         {% if news_item and news_item.image %}
         <div style="margin-top: 1rem;">
+            {% if news_item.image.startswith('data:image/') %}
+            {# Imagen en base64 (almacenada en BD) #}
+            <img src="{{ news_item.image }}" alt="{{ news_item.title }}"
+                 style="max-width: 200px; border-radius: 8px;">
+            {% else %}
+            {# Imagen en disco #}
             <img src="/{{ news_item.image }}" alt="{{ news_item.title }}"
                  style="max-width: 200px; border-radius: 8px;"
                  onerror="this.onerror=null; this.src='/images/noticia.svg'">
+            {% endif %}
         </div>
         {% endif %}
     </div>

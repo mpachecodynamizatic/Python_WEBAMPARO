@@ -68,6 +68,23 @@ Website for "Protectora de Animales Burjassot" (animal shelter). **Single-server
 - `js/adopcion.js` - Adoption page: filters, search, animal cards with modals
 - `test_api.html` - Diagnostic tool for testing API endpoints
 
+### Database: Dual Mode (SQLite / PostgreSQL)
+
+**Automatic detection** based on environment:
+- **Development (local)**: SQLite (`admin/protectora.db`)
+- **Production (Render)**: PostgreSQL (via `DATABASE_URL` env var)
+
+**How it works:**
+- `get_db()` returns a `DatabaseWrapper` that automatically converts SQL placeholders
+- All queries use SQLite syntax (`?` placeholders)
+- Wrapper converts `?` → `%s` automatically when using PostgreSQL
+- No code changes needed - works seamlessly in both environments
+
+**Important:**
+- Database is auto-created on first run via `init_db()`
+- Tables use compatible syntax (SERIAL for PostgreSQL, AUTOINCREMENT for SQLite)
+- Sample data (animals, news) inserted automatically if database is empty
+
 ## Image Handling (Critical)
 
 ### Database Image Paths

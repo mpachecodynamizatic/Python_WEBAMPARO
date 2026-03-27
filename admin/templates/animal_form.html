@@ -70,9 +70,16 @@
         <input type="file" id="image" name="image" accept="image/*">
         {% if animal and animal.image %}
         <div style="margin-top: 1rem;">
+            {% if animal.image.startswith('data:image/') %}
+            {# Imagen en base64 (almacenada en BD) #}
+            <img src="{{ animal.image }}" alt="{{ animal.name }}"
+                 style="max-width: 200px; border-radius: 8px;">
+            {% else %}
+            {# Imagen en disco #}
             <img src="/{{ animal.image }}" alt="{{ animal.name }}"
                  style="max-width: 200px; border-radius: 8px;"
                  onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
+            {% endif %}
         </div>
         {% elif animal %}
         <div style="margin-top: 1rem;">

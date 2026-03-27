@@ -31,9 +31,16 @@
         <tr>
             <td>
                 {% if animal.image %}
-                <img src="/{{ animal.image }}" alt="{{ animal.name }}"
-                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
-                     onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
+                    {% if animal.image.startswith('data:image/') %}
+                    {# Imagen en base64 (almacenada en BD) - usar directamente #}
+                    <img src="{{ animal.image }}" alt="{{ animal.name }}"
+                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                    {% else %}
+                    {# Imagen en disco - servir como ruta #}
+                    <img src="/{{ animal.image }}" alt="{{ animal.name }}"
+                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                         onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
+                    {% endif %}
                 {% else %}
                 <img src="/images/animales/{{ animal.type }}.svg" alt="{{ animal.name }}"
                      style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">

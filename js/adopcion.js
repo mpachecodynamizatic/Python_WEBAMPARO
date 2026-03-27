@@ -6,9 +6,15 @@ const BASE_URL = API_BASE;
 
 // Devuelve la URL correcta de la imagen del animal, con fallback al placeholder
 function getAnimalImage(animal) {
-    if (animal.image && animal.image.startsWith('uploads/')) {
-        // Imagen subida por el admin → servida por Flask en puerto 5000
-        return `${BASE_URL}/${animal.image}`;
+    if (animal.image) {
+        // Imagen en base64 (almacenada en BD) → usar directamente
+        if (animal.image.startsWith('data:image/')) {
+            return animal.image;
+        }
+        // Imagen en disco → servida por Flask
+        if (animal.image.startsWith('uploads/')) {
+            return `${BASE_URL}/${animal.image}`;
+        }
     }
     // Sin imagen real o ruta legacy → placeholder SVG según tipo
     const type = (animal.type === 'gato') ? 'gato' : 'perro';

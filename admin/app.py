@@ -17,12 +17,21 @@ import logging
 from datetime import datetime
 import sqlite3
 from functools import wraps
+import base64
+from urllib.parse import urlparse
 
 try:
     from PIL import Image as PilImage
     PIL_AVAILABLE = True
 except ImportError:
     PIL_AVAILABLE = False
+
+try:
+    import psycopg2
+    import psycopg2.extras
+    PSYCOPG2_AVAILABLE = True
+except ImportError:
+    PSYCOPG2_AVAILABLE = False
 
 try:
     from flask_limiter import Limiter
@@ -100,8 +109,21 @@ os.makedirs(os.path.join(UPLOAD_FOLDER, 'fotos'), exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, 'videos'), exist_ok=True)
 os.makedirs(os.path.join(UPLOAD_FOLDER, 'pdfs'), exist_ok=True)
 
-# Base de datos SQLite
-DATABASE = 'protectora.db'
+# ============================================
+# CONFIGURACIÓN DE BASE DE DATOS
+# ============================================
+# Detecta automáticamente si usar PostgreSQL (producción/Render) o SQLite (desarrollo local)
+DATABASE_URL = os.environ.get('DATABASE_URL')  # Render proporciona esto automáticamente
+USE_POSTGRES = DATABASE_URL is not None and PSYCOPG2_AVAILABLE
+
+if USE_POSTGRES:
+    logger.info('🐘 Usando PostgreSQL (producción)')
+    # Render proporciona DATABASE_URL con postgres://, pero psycopg2 necesita postgresql://
+    if DATABASE_URL.startswith('postgres://'):
+        DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
+else:
+    logger.info('📁 Usando SQLite (desarrollo local)')
+    DATABASE = 'protectora.db'
 
 # Tamaño máximo de imagen al guardar (en píxeles, lado mayor)
 IMAGE_MAX_SIZE = 1200
@@ -133,39 +155,222 @@ def save_image(file, filepath):
     return filepath
 
 
+def compress_image_to_base64(file, max_size=800, quality=75):
+    """
+    Comprime una imagen y la convierte a base64 para almacenar en base de datos.
+    Retorna string base64 con prefijo data:image/jpeg;base64,
+    """
+    if not PIL_AVAILABLE:
+        # Si no hay Pillow, leer archivo directo y convertir a base64
+        file.seek(0)
+        img_data = file.read()
+        b64 = base64.b64encode(img_data).decode('utf-8')
+        return f"data:image/jpeg;base64,{b64}"
+
+    try:
+        file.seek(0)
+        img = PilImage.open(file)
+        img = img.convert('RGB')
+
+        # Redimensionar si es muy grande
+        if img.width > max_size or img.height > max_size:
+            img.thumbnail((max_size, max_size), PilImage.LANCZOS)
+
+        # Guardar en buffer de memoria como JPEG comprimido
+        buffer = io.BytesIO()
+        img.save(buffer, 'JPEG', quality=quality, optimize=True)
+        buffer.seek(0)
+
+        # Convertir a base64
+        img_data = buffer.getvalue()
+        b64 = base64.b64encode(img_data).decode('utf-8')
+
+        logger.info('Imagen comprimida a base64 (tamaño: %d bytes)', len(img_data))
+        return f"data:image/jpeg;base64,{b64}"
+    except Exception as e:
+        logger.error('Error al comprimir imagen: %s', e)
+        # Fallback: leer archivo directo
+        file.seek(0)
+        img_data = file.read()
+        b64 = base64.b64encode(img_data).decode('utf-8')
+        return f"data:image/jpeg;base64,{b64}"
+
+
+def get_setting(key, default=None):
+    """Obtener un valor de configuración de site_settings"""
+    try:
+        db = get_db()
+        cursor = db.cursor()
+        if USE_POSTGRES:
+            cursor.execute('SELECT value FROM site_settings WHERE key = %s', (key,))
+        else:
+            cursor.execute('SELECT value FROM site_settings WHERE key = ?', (key,))
+        result = cursor.fetchone()
+        cursor.close()
+        return result['value'] if result else default
+    except:
+        return default
+
+
+def get_placeholder():
+    """Retorna el placeholder correcto para consultas SQL según la BD"""
+    return '%s' if USE_POSTGRES else '?'
+
+
+def execute_query(db_or_cursor, query, params=None):
+    """
+    Ejecuta una consulta SQL adaptando automáticamente los placeholders.
+    Convierte ? a %s si estamos usando PostgreSQL.
+
+    Args:
+        db_or_cursor: Conexión o cursor de base de datos
+        query: Query SQL con placeholders ? (estilo SQLite)
+        params: Parámetros de la consulta (tupla o lista)
+
+    Returns:
+        Cursor con los resultados
+    """
+    # Convertir placeholders si es PostgreSQL
+    if USE_POSTGRES and '?' in query:
+        query = query.replace('?', '%s')
+
+    # Determinar si es conexión o cursor
+    if hasattr(db_or_cursor, 'cursor'):
+        cursor = db_or_cursor.cursor()
+    else:
+        cursor = db_or_cursor
+
+    # Ejecutar query
+    if params:
+        cursor.execute(query, params)
+    else:
+        cursor.execute(query)
+
+    return cursor
+
+
+class DatabaseWrapper:
+    """
+    Wrapper para conexión de BD que convierte automáticamente placeholders.
+    Permite usar sintaxis SQLite (?) en todo el código, y convierte a PostgreSQL (%s) automáticamente.
+    """
+    def __init__(self, conn, is_postgres=False):
+        self._conn = conn
+        self._is_postgres = is_postgres
+
+    def execute(self, query, params=None):
+        """Ejecuta query convirtiendo placeholders automáticamente"""
+        if self._is_postgres and '?' in query:
+            query = query.replace('?', '%s')
+        cursor = self._conn.cursor()
+        if params:
+            cursor.execute(query, params)
+        else:
+            cursor.execute(query)
+        return cursor
+
+    def cursor(self):
+        """Retorna un cursor envuelto"""
+        return WrappedCursor(self._conn.cursor(), self._is_postgres)
+
+    def commit(self):
+        return self._conn.commit()
+
+    def rollback(self):
+        return self._conn.rollback()
+
+    def close(self):
+        return self._conn.close()
+
+
+class WrappedCursor:
+    """Cursor que convierte placeholders automáticamente"""
+    def __init__(self, cursor, is_postgres=False):
+        self._cursor = cursor
+        self._is_postgres = is_postgres
+
+    def execute(self, query, params=None):
+        if self._is_postgres and '?' in query:
+            query = query.replace('?', '%s')
+        if params:
+            self._cursor.execute(query, params)
+        else:
+            self._cursor.execute(query)
+        return self
+
+    def fetchone(self):
+        return self._cursor.fetchone()
+
+    def fetchall(self):
+        return self._cursor.fetchall()
+
+    def fetchmany(self, size=None):
+        return self._cursor.fetchmany(size) if size else self._cursor.fetchmany()
+
+    def close(self):
+        return self._cursor.close()
+
+    @property
+    def rowcount(self):
+        return self._cursor.rowcount
+
+
 def get_db():
-    """Obtener conexión a base de datos"""
-    db = sqlite3.connect(DATABASE)
-    db.row_factory = sqlite3.Row
-    return db
+    """
+    Obtener conexión a base de datos.
+    Retorna PostgreSQL en producción (Render) o SQLite en desarrollo local.
+    El wrapper convierte automáticamente placeholders ? a %s en PostgreSQL.
+    """
+    if USE_POSTGRES:
+        # PostgreSQL (producción en Render)
+        conn = psycopg2.connect(DATABASE_URL)
+        conn.cursor_factory = psycopg2.extras.RealDictCursor
+        return DatabaseWrapper(conn, is_postgres=True)
+    else:
+        # SQLite (desarrollo local)
+        conn = sqlite3.connect(DATABASE)
+        conn.row_factory = sqlite3.Row
+        return DatabaseWrapper(conn, is_postgres=False)
 
 def init_db():
     """Inicializar base de datos"""
     with app.app_context():
         db = get_db()
+        cursor = db.cursor()
+
+        # Definir tipo de autoincremento según BD
+        if USE_POSTGRES:
+            auto_id = 'SERIAL PRIMARY KEY'
+            bool_default_true = 'BOOLEAN DEFAULT TRUE'
+            bool_default_false = 'BOOLEAN DEFAULT FALSE'
+        else:
+            auto_id = 'INTEGER PRIMARY KEY AUTOINCREMENT'
+            bool_default_true = 'BOOLEAN DEFAULT 1'
+            bool_default_false = 'BOOLEAN DEFAULT 0'
 
         # Tabla de usuarios
-        db.execute('''
+        cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id {auto_id},
                 username TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
                 email TEXT,
                 role TEXT DEFAULT 'editor',
-                is_active BOOLEAN DEFAULT 1,
+                is_active {bool_default_true},
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
 
-        # Migración: añadir columnas nuevas a DBs pre-existentes
-        for col, definition in [('role', "TEXT DEFAULT 'editor'"), ('is_active', 'BOOLEAN DEFAULT 1')]:
-            try:
-                db.execute(f'ALTER TABLE users ADD COLUMN {col} {definition}')
-            except Exception:
-                pass  # columna ya existe
+        # Migración: añadir columnas nuevas a DBs pre-existentes (solo SQLite)
+        if not USE_POSTGRES:
+            for col, definition in [('role', "TEXT DEFAULT 'editor'"), ('is_active', 'BOOLEAN DEFAULT 1')]:
+                try:
+                    cursor.execute(f'ALTER TABLE users ADD COLUMN {col} {definition}')
+                except Exception:
+                    pass  # columna ya existe
 
         # Tabla de configuración del sitio (clave-valor)
-        db.execute('''
+        cursor.execute('''
             CREATE TABLE IF NOT EXISTS site_settings (
                 key TEXT PRIMARY KEY,
                 value TEXT,
@@ -174,9 +379,9 @@ def init_db():
         ''')
 
         # Tabla de animales
-        db.execute('''
+        cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS animals (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id {auto_id},
                 name TEXT NOT NULL,
                 type TEXT NOT NULL,
                 age TEXT,
@@ -192,39 +397,39 @@ def init_db():
         ''')
 
         # Tabla de noticias
-        db.execute('''
+        cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS news (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id {auto_id},
                 title TEXT NOT NULL,
                 category TEXT,
                 content TEXT,
                 excerpt TEXT,
                 image TEXT,
                 date TEXT,
-                published BOOLEAN DEFAULT 1,
+                published {bool_default_true},
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
 
         # Tabla de contactos
-        db.execute('''
+        cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS contacts (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id {auto_id},
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
                 phone TEXT,
                 subject TEXT,
                 message TEXT,
-                read BOOLEAN DEFAULT 0,
+                read {bool_default_false},
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
 
         # Tabla de colaboradores (socios, voluntarios, padrinos, acogida, empresa)
-        db.execute('''
+        cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS collaborators (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id {auto_id},
                 type TEXT NOT NULL,
                 name TEXT NOT NULL,
                 email TEXT NOT NULL,
@@ -237,9 +442,9 @@ def init_db():
         ''')
 
         # Tabla de solicitudes de adopción
-        db.execute('''
+        cursor.execute(f'''
             CREATE TABLE IF NOT EXISTS adoption_requests (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id {auto_id},
                 animal_id INTEGER NOT NULL,
                 animal_name TEXT,
                 name TEXT NOT NULL,
@@ -247,19 +452,22 @@ def init_db():
                 phone TEXT,
                 message TEXT,
                 status TEXT DEFAULT 'pendiente',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (animal_id) REFERENCES animals(id)
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                {',' if USE_POSTGRES else ', FOREIGN KEY (animal_id) REFERENCES animals(id)'}
+                {'FOREIGN KEY (animal_id) REFERENCES animals(id)' if USE_POSTGRES else ''}
             )
         ''')
 
         # Crear usuario admin por defecto
+        placeholder = get_placeholder()
         try:
             hashed_password = generate_password_hash('protectora2026')
-            db.execute('INSERT INTO users (username, password, email, role, is_active) VALUES (?, ?, ?, ?, ?)',
-                      ('admin', hashed_password, 'admin@protectoraburjassot.com', 'superadmin', 1))
-        except sqlite3.IntegrityError:
+            cursor.execute(f'INSERT INTO users (username, password, email, role, is_active) VALUES ({placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder})',
+                      ('admin', hashed_password, 'admin@protectoraburjassot.com', 'superadmin', True if USE_POSTGRES else 1))
+        except (sqlite3.IntegrityError if not USE_POSTGRES else psycopg2.IntegrityError):
             # Si ya existe, asegurarse de que tiene rol superadmin
-            db.execute("UPDATE users SET role = 'superadmin', is_active = 1 WHERE username = 'admin'")
+            cursor.execute(f"UPDATE users SET role = 'superadmin', is_active = {placeholder} WHERE username = {placeholder}",
+                          (True if USE_POSTGRES else 1, 'admin'))
 
         # Insertar configuración del sitio por defecto (solo si no existe)
         default_settings = [
@@ -273,15 +481,17 @@ def init_db():
             ('social_instagram', 'https://www.instagram.com/protectoraburjassot'),
             ('social_twitter', 'https://www.twitter.com/protectoraburjassot'),
             ('maps_embed_url', ''),
+            ('store_images_in_db', '0'),  # Almacenar imágenes comprimidas en BD (0=no, 1=sí)
         ]
         for key, value in default_settings:
             try:
-                db.execute('INSERT INTO site_settings (key, value) VALUES (?, ?)', (key, value))
+                cursor.execute(f'INSERT INTO site_settings (key, value) VALUES ({placeholder}, {placeholder})', (key, value))
             except Exception:
                 pass  # ya existe
 
         # Insertar datos de ejemplo si la base de datos está vacía
-        animal_count = db.execute('SELECT COUNT(*) as count FROM animals').fetchone()['count']
+        cursor.execute('SELECT COUNT(*) as count FROM animals')
+        animal_count = cursor.fetchone()['count']
         if animal_count == 0:
             # Datos de ejemplo de animales
             animales_ejemplo = [
@@ -324,13 +534,14 @@ def init_db():
             ]
 
             for animal in animales_ejemplo:
-                db.execute('''
+                cursor.execute(f'''
                     INSERT INTO animals (name, type, age, gender, size, description, image, status)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                    VALUES ({placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder})
                 ''', animal)
 
         # Insertar noticias de ejemplo si no hay ninguna
-        news_count = db.execute('SELECT COUNT(*) as count FROM news').fetchone()['count']
+        cursor.execute('SELECT COUNT(*) as count FROM news')
+        news_count = cursor.fetchone()['count']
         if news_count == 0:
             noticias_ejemplo = [
                 ('Jornada de adopción este fin de semana', 'evento',
@@ -356,16 +567,20 @@ def init_db():
             ]
 
             for noticia in noticias_ejemplo:
-                db.execute('''
+                cursor.execute(f'''
                     INSERT INTO news (title, category, content, excerpt, image, date, published)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
+                    VALUES ({placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder}, {placeholder})
                 ''', noticia)
 
-        db.commit()
-
         # Migración: limpiar rutas de imagen de muestra que no existen en disco
-        db.execute("UPDATE animals SET image = NULL WHERE image LIKE 'images/animales/%'")
+        if USE_POSTGRES:
+            cursor.execute("UPDATE animals SET image = NULL WHERE image LIKE %s", ('images/animales/%',))
+        else:
+            cursor.execute("UPDATE animals SET image = NULL WHERE image LIKE ?", ('images/animales/%',))
+
         db.commit()
+        cursor.close()
+        logger.info('✅ Base de datos inicializada correctamente')
 
 # Decorador para rutas protegidas
 def login_required(f):
@@ -526,13 +741,21 @@ def new_animal():
             if file and file.filename and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 if filename:
-                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                    filename = f"{timestamp}_{filename}"
-                    fotos_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'fotos')
-                    os.makedirs(fotos_dir, exist_ok=True)
-                    filepath = os.path.join(fotos_dir, filename)
-                    saved = save_image(file, filepath)
-                    image_path = 'uploads/fotos/' + os.path.basename(saved)
+                    # Verificar si almacenar en BD o en disco
+                    store_in_db = get_setting('store_images_in_db', '0') == '1'
+
+                    if store_in_db:
+                        # Comprimir y guardar como base64 en BD
+                        image_path = compress_image_to_base64(file)
+                    else:
+                        # Guardar en disco (método tradicional)
+                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                        filename = f"{timestamp}_{filename}"
+                        fotos_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'fotos')
+                        os.makedirs(fotos_dir, exist_ok=True)
+                        filepath = os.path.join(fotos_dir, filename)
+                        saved = save_image(file, filepath)
+                        image_path = 'uploads/fotos/' + os.path.basename(saved)
 
         db = get_db()
         db.execute('''
@@ -572,19 +795,27 @@ def edit_animal(animal_id):
             if file and file.filename and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 if filename:  # secure_filename puede devolver cadena vacía
-                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                    filename = f"{timestamp}_{filename}"
-                    fotos_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'fotos')
-                    os.makedirs(fotos_dir, exist_ok=True)
-                    filepath = os.path.join(fotos_dir, filename)
-                    saved = save_image(file, filepath)
-                    filename = os.path.basename(saved)
-                    # Borrar imagen anterior del disco si era un upload
-                    if image_path and image_path.startswith('uploads/'):
-                        old_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), image_path)
-                        if os.path.exists(old_path):
-                            os.remove(old_path)
-                    image_path = f"uploads/fotos/{filename}"
+                    # Verificar si almacenar en BD o en disco
+                    store_in_db = get_setting('store_images_in_db', '0') == '1'
+
+                    if store_in_db:
+                        # Comprimir y guardar como base64 en BD
+                        image_path = compress_image_to_base64(file)
+                    else:
+                        # Guardar en disco (método tradicional)
+                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                        filename = f"{timestamp}_{filename}"
+                        fotos_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'fotos')
+                        os.makedirs(fotos_dir, exist_ok=True)
+                        filepath = os.path.join(fotos_dir, filename)
+                        saved = save_image(file, filepath)
+                        filename = os.path.basename(saved)
+                        # Borrar imagen anterior del disco si era un upload (solo si no está en BD)
+                        if image_path and image_path.startswith('uploads/'):
+                            old_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), image_path)
+                            if os.path.exists(old_path):
+                                os.remove(old_path)
+                        image_path = f"uploads/fotos/{filename}"
 
         # Actualizar
         db.execute('''
@@ -726,13 +957,21 @@ def new_news():
             if file and file.filename and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 if filename:
-                    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                    filename = f"{timestamp}_{filename}"
-                    fotos_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'fotos')
-                    os.makedirs(fotos_dir, exist_ok=True)
-                    filepath = os.path.join(fotos_dir, filename)
-                    saved = save_image(file, filepath)
-                    image_path = 'uploads/fotos/' + os.path.basename(saved)
+                    # Verificar si almacenar en BD o en disco
+                    store_in_db = get_setting('store_images_in_db', '0') == '1'
+
+                    if store_in_db:
+                        # Comprimir y guardar como base64 en BD
+                        image_path = compress_image_to_base64(file)
+                    else:
+                        # Guardar en disco (método tradicional)
+                        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                        filename = f"{timestamp}_{filename}"
+                        fotos_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'fotos')
+                        os.makedirs(fotos_dir, exist_ok=True)
+                        filepath = os.path.join(fotos_dir, filename)
+                        saved = save_image(file, filepath)
+                        image_path = 'uploads/fotos/' + os.path.basename(saved)
 
         db = get_db()
         db.execute('''
@@ -837,6 +1076,15 @@ def admin_settings():
                 'ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP',
                 (key, value)
             )
+
+        # Manejar checkbox de almacenamiento en BD (solo se envía si está marcado)
+        store_in_db = '1' if request.form.get('store_images_in_db') else '0'
+        db.execute(
+            'INSERT INTO site_settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) '
+            'ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP',
+            ('store_images_in_db', store_in_db)
+        )
+
         db.commit()
         flash('Configuración guardada correctamente.', 'success')
         return redirect(url_for('admin_settings'))
