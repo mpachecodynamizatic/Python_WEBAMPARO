@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+ENV/
+env/
+
+# Base de datos local
+admin/protectora.db
+*.db
+
+# Backups
+backups/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+admin/app.log
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# Batch files (solo para Windows)
+*.bat
+
+# Node modules si los hubiera
+node_modules/
+
+# Archivos temporales
+.DS_Store
+*.tmp
