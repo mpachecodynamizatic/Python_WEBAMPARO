@@ -4,25 +4,34 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Website for "Protectora de Animales Burjassot" (animal shelter). Dual-server architecture:
+Website for "Protectora de Animales Burjassot" (animal shelter). **Single-server architecture:**
 
-- **Frontend**: Static HTML/CSS/Vanilla JS served via Python HTTP server (port 8000)
-- **Backend**: Flask 3.0 + SQLite CMS with Jinja2 templates (port 5000)
+- **Flask Server (port 5000)**: Serves everything - static frontend files, REST API, and admin panel
+  - Static files (HTML/CSS/JS)
+  - REST API endpoints (/api/*)
+  - Admin panel (/admin/*)
+  - File uploads (/uploads/*)
+  - Images (/images/*)
 
-The backend serves both as a REST API for the frontend and as a server-rendered admin panel.
+**Simple, unified architecture** - one Flask server does it all.
 
 ## Running the Project
 
 ```bat
-.\run.bat        # Start both servers (handles venv, dependencies, port conflicts)
-.\stop.bat       # Stop both servers
+.\run.bat        # Start Flask server (handles venv, dependencies, port check)
+.\stop.bat       # Stop Flask server
 ```
 
-**Critical**: Always use `run.bat`. Never start Flask or HTTP server manually. The batch script handles:
+**Critical**: Always use `run.bat`. The batch script handles:
 - Virtual environment creation/activation
 - Automatic dependency installation if missing
-- Port availability checks
-- Simultaneous server startup in separate windows
+- Port 5000 availability check
+- Flask server startup
+
+**Access URLs:**
+- Public site: `http://localhost:5000`
+- Admin panel: `http://localhost:5000/admin`
+- API: `http://localhost:5000/api/*`
 
 ### Other Utilities
 
@@ -39,8 +48,16 @@ The backend serves both as a REST API for the frontend and as a server-rendered 
 
 | Component | Technology | Port | Command |
 |-----------|-----------|------|---------|
-| Frontend | Static files via `python -m http.server` | 8000 | Auto-started by run.bat |
-| Backend/CMS | Flask app in `admin/app.py` | 5000 | Auto-started by run.bat |
+| Full Stack App | Flask (`admin/app.py`) | 5000 | Auto-started by run.bat |
+
+**Flask serves everything:**
+- `/` → index.html (homepage)
+- `/pages/*` → Static HTML pages
+- `/css/*`, `/js/*` → Static assets
+- `/admin/*` → Admin panel (Jinja2 templates)
+- `/api/*` → REST API (JSON)
+- `/uploads/*` → User-uploaded files
+- `/images/*` → Static images & placeholders
 
 ### Key Files
 

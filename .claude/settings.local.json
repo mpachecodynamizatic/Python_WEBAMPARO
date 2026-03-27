@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if [ ! -f .gitignore ])",
+      "Bash(then cat)",
+      "Bash(.gitignore:*)",
+      "Bash(else)",
+      "Bash(fi)"
+    ]
+  }
+}

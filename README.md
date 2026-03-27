@@ -83,14 +83,19 @@ http://localhost:5000/admin
 
 ### Despliegue del Sitio Web
 
-#### Opción 1: Servidor Web Local (Desarrollo)
+#### Desarrollo Local (Un Solo Comando)
 
 ```bash
-# Con Python
-python -m http.server 8000
+# Ejecutar el script automático (Windows)
+.\run.bat
+
+# O manualmente
+cd admin
+python app.py
 
 # Acceder a:
-http://localhost:8000
+http://localhost:5000        # Sitio web público
+http://localhost:5000/admin  # Panel de administración
 ```
 
 #### Opción 2: Servidor Web en Producción

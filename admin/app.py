@@ -398,11 +398,6 @@ def allowed_file(filename):
 # RUTAS DE AUTENTICACIÓN
 # ============================================
 
-@app.route('/')
-def index():
-    """Ruta raíz - redirige al panel de admin"""
-    return redirect(url_for('login'))
-
 @app.route('/admin/login', methods=['GET', 'POST'])
 def login():
     """Página de login"""
@@ -1325,6 +1320,22 @@ def static_images(filename):
     """Servir imágenes estáticas del proyecto"""
     images_folder = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'images')
     return send_from_directory(images_folder, filename)
+
+# ============================================
+# SERVIR ARCHIVOS ESTÁTICOS DEL FRONTEND
+# ============================================
+
+@app.route('/')
+def serve_index():
+    """Servir página principal"""
+    static_folder = os.path.dirname(os.path.dirname(__file__))
+    return send_from_directory(static_folder, 'index.html')
+
+@app.route('/<path:filename>')
+def serve_static(filename):
+    """Servir archivos estáticos (CSS, JS, HTML)"""
+    static_folder = os.path.dirname(os.path.dirname(__file__))
+    return send_from_directory(static_folder, filename)
 
 # ============================================
 # SITEMAP.XML DINÁMICO

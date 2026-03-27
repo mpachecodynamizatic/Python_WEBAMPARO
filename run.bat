@@ -112,9 +112,9 @@ if "%NEED_INSTALL%"=="1" (
 )
 
 REM ========================================================
-REM PASO 4: Verificar que los puertos esten disponibles
+REM PASO 4: Verificar que el puerto este disponible
 REM ========================================================
-echo [4/6] Verificando puertos disponibles...
+echo [4/6] Verificando puerto 5000...
 
 netstat -ano | find ":5000" | find "LISTENING" >nul
 if not errorlevel 1 (
@@ -131,72 +131,50 @@ if not errorlevel 1 (
     )
 )
 
-netstat -ano | find ":8000" | find "LISTENING" >nul
-if not errorlevel 1 (
-    echo.
-    echo [!] ADVERTENCIA: El puerto 8000 ya esta en uso
-    echo.
-    choice /C SN /M "Deseas detener el proceso y continuar (S/N)"
-    if errorlevel 2 goto :port_error
-    if errorlevel 1 (
-        for /f "tokens=5" %%a in ('netstat -aon ^| find ":8000" ^| find "LISTENING"') do (
-            taskkill /F /PID %%a >nul 2>&1
-        )
-        echo [OK] Proceso detenido
-    )
-)
-
-echo [OK] Puertos disponibles
+echo [OK] Puerto disponible
 echo.
 
 REM ========================================================
-REM PASO 5: Iniciar servidores
+REM PASO 5: Iniciar servidor Flask
 REM ========================================================
-echo [5/6] Iniciando servidores...
+echo [5/6] Iniciando servidor Flask...
 echo.
 
-echo Iniciando servidor CMS (Panel de Administracion)...
-start "CMS - Panel Admin" cmd /k "cd /d "%~dp0" && call venv\Scripts\activate.bat && cd admin && python app.py"
+echo Iniciando aplicacion web (Backend + Frontend)...
+start "Protectora Burjassot - Flask Server" cmd /k "cd /d "%~dp0" && call venv\Scripts\activate.bat && cd admin && python app.py"
 timeout /t 3 /nobreak > nul
 
-echo Iniciando servidor Web (Sitio Publico)...
-start "Web - Sitio Publico" cmd /k "cd /d "%~dp0" && call venv\Scripts\activate.bat && python -m http.server 8000"
-timeout /t 2 /nobreak > nul
-
-echo Esperando que los servidores inicien...
+echo Esperando que el servidor inicie...
 timeout /t 3 /nobreak > nul
 
 REM ========================================================
-REM PASO 6: Abrir navegadores
+REM PASO 6: Abrir navegador
 REM ========================================================
-echo [6/6] Preparando navegadores...
+echo [6/6] Preparando navegador...
 echo.
 
 echo ========================================================
-echo   Servidores iniciados correctamente
+echo   Servidor iniciado correctamente
 echo ========================================================
+echo.
+echo Sitio Web Publico:
+echo    URL: http://localhost:5000
 echo.
 echo Panel de Administracion:
 echo    URL: http://localhost:5000/admin
 echo    Usuario: admin
 echo    Contrasena: protectora2026
 echo.
-echo Sitio Web Publico:
-echo    URL: http://localhost:8000
-echo.
 echo ========================================================
 echo.
-echo Deseas abrir los navegadores automaticamente?
+echo Abriendo navegador...
 echo.
 
 goto :open_browser
 
 :open_browser
 echo.
-echo Abriendo navegadores...
-start http://localhost:5000/admin
-timeout /t 1 /nobreak > nul
-start http://localhost:8000
+start http://localhost:5000
 goto :end
 
 :skip_browser
@@ -206,8 +184,8 @@ goto :end
 
 :port_error
 echo.
-echo [ERROR] No se puede continuar con los puertos ocupados
-echo Por favor, cierra las aplicaciones que usen los puertos 5000 y 8000
+echo [ERROR] No se puede continuar con el puerto ocupado
+echo Por favor, cierra las aplicaciones que usen el puerto 5000
 echo.
 pause
 exit /b 1
@@ -218,18 +196,17 @@ echo ========================================================
 echo INSTRUCCIONES:
 echo ========================================================
 echo.
-echo * Se han abierto 2 ventanas de comandos:
-echo   - "CMS - Panel Admin" (puerto 5000)
-echo   - "Web - Sitio Publico" (puerto 8000)
+echo * Se ha abierto 1 ventana de comandos:
+echo   - "Protectora Burjassot - Flask Server" (puerto 5000)
 echo.
 echo * El entorno virtual esta activado automaticamente
 echo.
-echo * NO cierres estas ventanas mientras uses la web
+echo * NO cierres esta ventana mientras uses la web
 echo.
-echo * Para DETENER los servidores:
+echo * Para DETENER el servidor:
 echo   - Ejecuta: stop.bat
-echo   - O cierra ambas ventanas de comandos
-echo   - O presiona Ctrl+C en cada una
+echo   - O cierra la ventana de comandos
+echo   - O presiona Ctrl+C
 echo.
 echo * Para REINSTALAR dependencias:
 echo   - Elimina la carpeta "venv"
@@ -239,7 +216,7 @@ echo ========================================================
 echo.
 echo Entorno: venv (virtual environment)
 echo Dependencias: Verificadas e instaladas
-echo Estado: Servidores corriendo
+echo Estado: Servidor corriendo
 echo.
 echo ========================================================
 echo.

@@ -1,12 +1,12 @@
 @echo off
-title Detener Servidores - Protectora Burjassot
+title Detener Servidor - Protectora Burjassot
 color 0C
 
 echo ========================================================
-echo   Detener Servidores - Protectora Burjassot
+echo   Detener Servidor - Protectora Burjassot
 echo ========================================================
 echo.
-echo Deteniendo todos los servidores...
+echo Deteniendo servidor Flask...
 echo.
 
 set FOUND_PROCESS=0
@@ -23,50 +23,32 @@ for /f "tokens=5" %%a in ('netstat -aon ^| find ":5000" ^| find "LISTENING"') do
     )
 )
 
-REM Detener proceso HTTP Server (puerto 8000)
-for /f "tokens=5" %%a in ('netstat -aon ^| find ":8000" ^| find "LISTENING"') do (
-    echo Deteniendo servidor Web (PID: %%a)...
-    taskkill /F /PID %%a >nul 2>&1
-    if not errorlevel 1 (
-        echo [OK] Servidor Web detenido
-        set FOUND_PROCESS=1
-    ) else (
-        echo [!] No se pudo detener (puede que ya este cerrado)
-    )
-)
-
-REM Detener ventanas de comandos con titulos especificos
+REM Detener ventana de comandos con titulo especifico
 echo.
-echo Buscando ventanas de comandos abiertas...
-tasklist /FI "WINDOWTITLE eq CMS - Panel Admin" >nul 2>&1
+echo Buscando ventana de comandos abierta...
+tasklist /FI "WINDOWTITLE eq Protectora Burjassot - Flask Server" >nul 2>&1
 if not errorlevel 1 (
-    echo Cerrando ventana "CMS - Panel Admin"...
-    taskkill /FI "WINDOWTITLE eq CMS - Panel Admin" /F >nul 2>&1
-)
-
-tasklist /FI "WINDOWTITLE eq Web - Sitio Publico" >nul 2>&1
-if not errorlevel 1 (
-    echo Cerrando ventana "Web - Sitio Publico"...
-    taskkill /FI "WINDOWTITLE eq Web - Sitio Publico" /F >nul 2>&1
+    echo Cerrando ventana "Protectora Burjassot - Flask Server"...
+    taskkill /FI "WINDOWTITLE eq Protectora Burjassot - Flask Server" /F >nul 2>&1
 )
 
 echo.
 
 if "%FOUND_PROCESS%"=="1" (
     echo ========================================================
-    echo   Servidores detenidos correctamente
+    echo   Servidor detenido correctamente
     echo ========================================================
     echo.
-    echo Los servidores han sido detenidos.
-    echo Puedes volver a iniciarlos ejecutando: run.bat
+    echo El servidor ha sido detenido.
+    echo Puedes volver a iniciarlo ejecutando: run.bat
 ) else (
     echo ========================================================
-    echo   No se encontraron servidores en ejecucion
+    echo   No se encontro el servidor en ejecucion
     echo ========================================================
     echo.
-    echo No habia servidores corriendo en los puertos 5000 y 8000.
+    echo No habia servidor corriendo en el puerto 5000.
     echo.
-    echo Si quieres iniciar los servidores, ejecuta: run.bat
+    echo Si quieres iniciar el servidor, ejecuta: run.bat
 )
 
 echo.
