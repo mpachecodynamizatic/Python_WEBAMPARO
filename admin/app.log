@@ -41,3 +41,168 @@
 2026-03-27 18:22:11,552 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:11] "GET /admin/collaborators?status=activo HTTP/1.1" 200 -
 2026-03-27 18:22:14,633 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:14] "GET /admin/dashboard HTTP/1.1" 200 -
 2026-03-27 18:23:01,204 [INFO] 127.0.0.1 - - [27/Mar/2026 18:23:01] "GET /admin/users HTTP/1.1" 200 -
+2026-03-27 18:35:42,202 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 18:35:42,415 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.66:5000
+2026-03-27 18:35:42,415 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 18:35:49,746 [INFO] 127.0.0.1 - - [27/Mar/2026 18:35:49] "GET /admin HTTP/1.1" 200 -
+2026-03-27 18:35:56,175 [INFO] 127.0.0.1 - - [27/Mar/2026 18:35:56] "GET /admin HTTP/1.1" 200 -
+2026-03-27 18:36:13,180 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:13] "[32mGET /admin/logout HTTP/1.1[0m" 302 -
+2026-03-27 18:36:13,506 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:13] "GET /admin/login HTTP/1.1" 200 -
+2026-03-27 18:36:13,886 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:13] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 18:36:26,995 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:26] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-27 18:36:27,009 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:27] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:36:29,790 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:29] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 18:36:30,046 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:30] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 18:36:30,111 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:30] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 18:36:30,132 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:30] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 18:36:30,313 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:30] "GET /admin/news HTTP/1.1" 200 -
+2026-03-27 18:36:32,115 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:32] "GET /admin/settings HTTP/1.1" 200 -
+2026-03-27 18:36:33,132 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:33] "GET /admin/users HTTP/1.1" 200 -
+2026-03-27 18:36:34,547 [INFO] 127.0.0.1 - - [27/Mar/2026 18:36:34] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:40:41,542 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:41] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 18:40:43,001 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:43] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 18:40:46,539 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:46] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 18:40:46,843 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:46] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 18:40:46,880 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:46] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 18:40:46,881 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:46] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 18:40:48,717 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:48] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 18:40:52,217 [INFO] Exportación CSV contactos por usuario admin
+2026-03-27 18:40:52,225 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:52] "GET /admin/contacts/export HTTP/1.1" 200 -
+2026-03-27 18:40:59,982 [INFO] 127.0.0.1 - - [27/Mar/2026 18:40:59] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 18:41:01,186 [INFO] 127.0.0.1 - - [27/Mar/2026 18:41:01] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 18:41:03,425 [INFO] 127.0.0.1 - - [27/Mar/2026 18:41:03] "GET /admin/settings HTTP/1.1" 200 -
+2026-03-27 18:41:04,848 [INFO] 127.0.0.1 - - [27/Mar/2026 18:41:04] "GET /admin/users HTTP/1.1" 200 -
+2026-03-27 18:41:09,218 [INFO] 127.0.0.1 - - [27/Mar/2026 18:41:09] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:46:59,274 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 18:46:59,477 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.66:5000
+2026-03-27 18:46:59,477 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 18:47:06,776 [INFO] 127.0.0.1 - - [27/Mar/2026 18:47:06] "GET /admin HTTP/1.1" 200 -
+2026-03-27 18:47:44,025 [ERROR] Exception on /admin/contacts [GET]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 376, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 764, in list_contacts
+    return render_template('contacts.html', contacts=contacts)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\templating.py", line 151, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 771, in compile
+    self.handle_exception(source=source_hint)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\templates\contacts.html", line 87, in template
+    {% endblock %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'endif'. The innermost block that needs to be closed is 'if'.
+2026-03-27 18:47:44,035 [INFO] 127.0.0.1 - - [27/Mar/2026 18:47:44] "[35m[1mGET /admin/contacts HTTP/1.1[0m" 500 -
+2026-03-27 18:47:46,991 [ERROR] Exception on /admin/contacts [GET]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 376, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 764, in list_contacts
+    return render_template('contacts.html', contacts=contacts)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\templating.py", line 151, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 771, in compile
+    self.handle_exception(source=source_hint)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\templates\contacts.html", line 87, in template
+    {% endblock %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'endif'. The innermost block that needs to be closed is 'if'.
+2026-03-27 18:47:46,996 [INFO] 127.0.0.1 - - [27/Mar/2026 18:47:46] "[35m[1mGET /admin/contacts HTTP/1.1[0m" 500 -
+2026-03-27 18:47:48,120 [ERROR] Exception on /admin/contacts [GET]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 376, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 764, in list_contacts
+    return render_template('contacts.html', contacts=contacts)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\templating.py", line 151, in render_template
+    template = app.jinja_env.get_or_select_template(template_name_or_list)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 1087, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 1016, in get_template
+    return self._load_template(name, globals)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 975, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 771, in compile
+    self.handle_exception(source=source_hint)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\templates\contacts.html", line 87, in template
+    {% endblock %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You probably made a nesting mistake. Jinja is expecting this tag, but currently looking for 'endif'. The innermost block that needs to be closed is 'if'.
+2026-03-27 18:47:48,125 [INFO] 127.0.0.1 - - [27/Mar/2026 18:47:48] "[35m[1mGET /admin/contacts HTTP/1.1[0m" 500 -
+2026-03-27 18:48:39,522 [INFO] 127.0.0.1 - - [27/Mar/2026 18:48:39] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 18:49:01,558 [INFO] 127.0.0.1 - - [27/Mar/2026 18:49:01] "GET /admin/users HTTP/1.1" 200 -
+2026-03-27 18:49:13,776 [INFO] 127.0.0.1 - - [27/Mar/2026 18:49:13] "GET /admin/users HTTP/1.1" 200 -
+2026-03-27 18:49:14,085 [INFO] 127.0.0.1 - - [27/Mar/2026 18:49:14] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 18:49:15,979 [INFO] 127.0.0.1 - - [27/Mar/2026 18:49:15] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 18:49:18,493 [INFO] 127.0.0.1 - - [27/Mar/2026 18:49:18] "GET /admin/users HTTP/1.1" 200 -

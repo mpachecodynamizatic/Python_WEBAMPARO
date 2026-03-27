@@ -284,7 +284,7 @@
                 </a></li>
                 {% if session.role in ['superadmin', 'editor'] %}
                 <li><a href="{{ url_for('list_contacts') }}" {% if 'contact' in request.endpoint %}class="active"{% endif %}>
-                    <i class="fas fa-envelope"></i> Contactos
+                    <i class="fas fa-envelope"></i> Mensajes
                 </a></li>
                 <li><a href="{{ url_for('list_collaborators') }}" {% if 'collaborator' in request.endpoint %}class="active"{% endif %}>
                     <i class="fas fa-users"></i> Colaboradores

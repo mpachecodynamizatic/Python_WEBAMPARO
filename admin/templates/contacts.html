@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
-{% block title %}Mensajes de Contacto{% endblock %}
-{% block page_title %}Contactos{% endblock %}
+{% block title %}Mensajes{% endblock %}
+{% block page_title %}Mensajes{% endblock %}
 
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
@@ -49,6 +49,10 @@
             </td>
             <td style="white-space: nowrap; font-size: 0.85rem;">{{ contact.created_at }}</td>
             <td style="white-space: nowrap;">
+                <button type="button" class="btn btn-primary btn-sm" title="Ver mensaje completo"
+                        onclick="verMensaje({{ contact.id }}, '{{ contact.name|e }}', '{{ contact.email|e }}', '{{ (contact.phone or '')|e }}', '{{ (contact.subject or '')|e }}', {{ contact.message|tojson }}, '{{ contact.created_at }}')">
+                    <i class="fas fa-eye"></i>
+                </button>
                 {% if not contact.read %}
                 <form method="POST" action="{{ url_for('mark_contact_read', contact_id=contact.id) }}" style="display:inline;">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
@@ -76,4 +80,56 @@
     <p style="color: #999;">Cuando alguien rellene el formulario de contacto, aparecerá aquí.</p>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<!-- Modal visualizar mensaje -->
+<div id="modal-mensaje" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:12px; padding:2rem; max-width:640px; width:90%; max-height:80vh; overflow-y:auto; position:relative; box-shadow:0 8px 32px rgba(0,0,0,0.25);">
+        <button onclick="cerrarModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888;">&times;</button>
+        <h3 style="margin:0 0 1.25rem; color:#333;"><i class="fas fa-envelope-open-text" style="color:var(--primary-color,#F4A460);"></i> Mensaje completo</h3>
+        <dl style="display:grid; grid-template-columns:130px 1fr; gap:.6rem 1rem; font-size:.93rem;">
+            <dt style="color:#888; font-weight:600;">Nombre</dt>      <dd id="m-nombre" style="margin:0;"></dd>
+            <dt style="color:#888; font-weight:600;">Email</dt>       <dd id="m-email" style="margin:0;"></dd>
+            <dt style="color:#888; font-weight:600;">Teléfono</dt>    <dd id="m-telefono" style="margin:0;"></dd>
+            <dt style="color:#888; font-weight:600;">Asunto</dt>      <dd id="m-asunto" style="margin:0;"></dd>
+            <dt style="color:#888; font-weight:600;">Fecha</dt>       <dd id="m-fecha" style="margin:0;"></dd>
+        </dl>
+        <hr style="margin:1.25rem 0; border:none; border-top:1px solid #eee;">
+        <p style="font-size:.88rem; color:#888; margin:0 0 .5rem; text-transform:uppercase; letter-spacing:.05em;">Mensaje</p>
+        <div id="m-mensaje" style="white-space:pre-wrap; word-break:break-word; line-height:1.7; color:#333; background:#f9f9f9; padding:1rem; border-radius:8px; font-size:.95rem;"></div>
+        <div style="text-align:right; margin-top:1.5rem;">
+            <a id="m-mailto" href="#" class="btn btn-primary" style="margin-right:.5rem;">
+                <i class="fas fa-reply"></i> Responder
+            </a>
+            <button onclick="cerrarModal()" class="btn" style="background:#eee; color:#555;">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function verMensaje(id, nombre, email, telefono, asunto, mensaje, fecha) {
+    document.getElementById('m-nombre').textContent   = nombre   || '—';
+    document.getElementById('m-email').textContent    = email    || '—';
+    document.getElementById('m-telefono').textContent = telefono || '—';
+    document.getElementById('m-asunto').textContent   = asunto   || '—';
+    document.getElementById('m-fecha').textContent    = fecha    || '—';
+    document.getElementById('m-mensaje').textContent  = mensaje  || '';
+    const ml = document.getElementById('m-mailto');
+    ml.href = 'mailto:' + encodeURIComponent(email) + '?subject=Re%3A%20' + encodeURIComponent(asunto || '');
+    const modal = document.getElementById('modal-mensaje');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+function cerrarModal() {
+    document.getElementById('modal-mensaje').style.display = 'none';
+    document.body.style.overflow = '';
+}
+document.getElementById('modal-mensaje').addEventListener('click', function(e) {
+    if (e.target === this) cerrarModal();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') cerrarModal();
+});
+</script>
 {% endblock %}
