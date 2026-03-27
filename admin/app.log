@@ -1246,3 +1246,722 @@ jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You p
 2026-03-27 21:24:02,357 [INFO] 127.0.0.1 - - [27/Mar/2026 21:24:02] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
 2026-03-27 21:24:02,360 [INFO] 127.0.0.1 - - [27/Mar/2026 21:24:02] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
 2026-03-27 21:24:02,378 [INFO] 127.0.0.1 - - [27/Mar/2026 21:24:02] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:05,780 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:05] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:29:05,807 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:05] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-03-27 21:29:06,025 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:06] "GET /images/animales/gato.svg HTTP/1.1" 200 -
+2026-03-27 21:29:06,126 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:06] "GET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1" 200 -
+2026-03-27 21:29:06,135 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:06] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:29:06,495 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 21:29:08,741 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:08] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 21:29:25,525 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:29:25,527 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:29:25,688 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:29:25,708 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:29:25,709 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:29:30,748 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:30] "GET /admin HTTP/1.1" 200 -
+2026-03-27 21:29:30,792 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:30] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:29:30,940 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:30] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:29:31,107 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:31] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:29:31,118 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:31] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:29:31,137 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:31] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:29:31,266 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:31] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:29:35,573 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:35] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:29:35,802 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:35] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:35,904 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:35] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:35,906 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:35] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:35,925 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:35] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:40,377 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:40] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:29:40,412 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:40] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:40,626 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:40] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:40,723 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:40] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:40,727 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:40] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:42,665 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:42] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:29:42,697 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:42] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:42,916 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:42] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:43,023 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:43] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:43,024 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:43] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:47,680 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:47] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=created_at&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:29:47,738 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:47] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:47,931 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:47] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:48,050 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:48] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:48,051 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:48] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:48,406 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:48] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=created_at&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:29:48,700 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:48] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:48,743 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:48] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:48,746 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:48] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:48,751 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:48] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:50,164 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:50] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=status&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:29:50,238 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:50] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:50,436 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:50] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:50,548 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:50] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:50,550 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:50] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:50,871 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:50] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=status&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:29:51,171 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:51] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:51,205 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:51] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:51,206 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:51] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:51,207 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:51] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:53,043 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:53] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:29:53,126 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:53] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:53,311 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:53] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:53,386 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:53] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:53,388 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:53] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:56,430 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:56] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:29:56,765 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:56] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:56,770 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:56] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:56,781 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:56] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:56,786 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:56] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:57,100 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:57] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:29:57,416 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:57] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:57,453 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:57] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:57,458 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:57] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:57,465 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:57] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:58,037 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:58] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:29:58,075 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:58] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:58,389 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:58] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:58,397 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:58] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:29:58,401 [INFO] 127.0.0.1 - - [27/Mar/2026 21:29:58] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:12,636 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:12] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=name&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:30:12,727 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:12] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:12,884 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:12] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:12,993 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:12] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:13,002 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:13] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:16,334 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:16] "GET /admin/animals?search=&status=&per_page=20&sort_by=name&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:30:16,649 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:16] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:16,663 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:16] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:16,668 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:16] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:30:16,676 [INFO] 127.0.0.1 - - [27/Mar/2026 21:30:16] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:32:50,840 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:32:50,841 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:32:51,002 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:32:51,028 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:32:51,028 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:32:55,822 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:55] "GET /admin HTTP/1.1" 200 -
+2026-03-27 21:32:55,866 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:55] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:32:55,988 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:55] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:32:56,198 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:56] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:32:56,200 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:56] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:32:56,215 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:56] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:32:56,216 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:56] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:32:59,279 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:59] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:32:59,524 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:59] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:32:59,639 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:59] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:32:59,641 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:59] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:32:59,642 [INFO] 127.0.0.1 - - [27/Mar/2026 21:32:59] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:01,375 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:01] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:33:01,421 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:01] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:01,616 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:01] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:01,731 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:01] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:01,739 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:01] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:02,678 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:02] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:33:02,709 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:02] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:02,939 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:02] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:03,042 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:03] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:03,052 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:03] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:04,262 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:04] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:33:04,295 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:04] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:04,488 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:04] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:04,619 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:04] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:04,625 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:04] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:05,255 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:05] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:33:05,303 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:05] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:05,489 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:05] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:05,627 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:05] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:05,629 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:05] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:10,006 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:10] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:33:10,098 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:10] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:10,255 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:10] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:10,343 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:10] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:10,344 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:10] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:17,832 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:17] "GET /admin/animals?search=&status=adoption&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:33:18,147 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:18] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:18,174 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:18] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:18,176 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:18] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:18,180 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:18] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:23,350 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:23] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:33:23,376 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:23] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:23,607 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:23] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:23,697 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:23] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:23,708 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:23] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:54,571 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:54] "GET /admin/animals?search=&status=adopted&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:33:54,596 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:54] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:54,827 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:54] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:55,876 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:55] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:33:55,922 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:55] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:56,112 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:56] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:56,214 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:56] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:56,224 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:56] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:56,835 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:56] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:33:57,134 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:57] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:57,161 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:57] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:57,164 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:57] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:33:57,166 [INFO] 127.0.0.1 - - [27/Mar/2026 21:33:57] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:34:09,735 [ERROR] Exception on /admin/animals [GET]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 677, in decorated_function
+    return f(*args, **kwargs)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 940, in list_animals
+    result = paginate_query(
+        db,
+    ...<5 lines>...
+        params['per_page']
+    )
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 774, in paginate_query
+    total = db.execute(count_query, count_params).fetchone()['count']
+            ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 267, in execute
+    cursor.execute(query, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: incomplete input
+2026-03-27 21:34:09,745 [INFO] 127.0.0.1 - - [27/Mar/2026 21:34:09] "[35m[1mGET /admin/animals?search=lola&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1[0m" 500 -
+2026-03-27 21:37:30,920 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:37:30,921 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:37:31,082 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:37:31,106 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:37:31,106 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:37:35,763 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:35] "GET /admin HTTP/1.1" 200 -
+2026-03-27 21:37:35,834 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:35] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:37:35,915 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:35] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:37:36,154 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:36] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:37:36,172 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:36] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:37:36,173 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:36] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:37:36,222 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:36] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:37:45,569 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:45] "GET /admin/news HTTP/1.1" 200 -
+2026-03-27 21:37:46,132 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:46] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:37:46,398 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:46] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:46,473 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:46] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:46,479 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:46] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:46,491 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:46] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:50,367 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:50] "GET /admin/animals?search=lol&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:37:50,386 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:50] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:53,926 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:53] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:37:54,229 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:54] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:54,256 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:54] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:54,267 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:54] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:54,268 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:54] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:55,095 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:55] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:37:55,141 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:55] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:55,335 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:55] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:55,456 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:55] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:55,462 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:55] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:55,950 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:55] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:37:55,970 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:55] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:56,175 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:56,289 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:56,308 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:37:56,597 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:56,652 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:56,656 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:56,663 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:37:56,669 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:37:56,943 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:56] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:57,007 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:57,016 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:57,033 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[35m[1mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 206 -
+2026-03-27 21:37:57,048 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[35m[1mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 206 -
+2026-03-27 21:37:57,546 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:37:57,579 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:57,806 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:57,914 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:57,917 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:57] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:58,499 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:58] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:37:58,518 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:58] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:58,763 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:58] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:58,837 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:58] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:58,839 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:58] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:59,303 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:59] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:37:59,515 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:59] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:59,545 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:59] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:59,642 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:59] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:37:59,650 [INFO] 127.0.0.1 - - [27/Mar/2026 21:37:59] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:38:01,040 [INFO] 127.0.0.1 - - [27/Mar/2026 21:38:01] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:38:01,359 [INFO] 127.0.0.1 - - [27/Mar/2026 21:38:01] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:38:01,364 [INFO] 127.0.0.1 - - [27/Mar/2026 21:38:01] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:38:01,375 [INFO] 127.0.0.1 - - [27/Mar/2026 21:38:01] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:38:01,376 [INFO] 127.0.0.1 - - [27/Mar/2026 21:38:01] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:41:41,949 [INFO] 127.0.0.1 - - [27/Mar/2026 21:41:41] "[32mGET /admin/animals?status=adoption HTTP/1.1[0m" 302 -
+2026-03-27 21:42:46,359 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:42:46,360 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:42:46,523 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:42:46,543 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:42:46,543 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:42:51,762 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:51] "GET /admin HTTP/1.1" 200 -
+2026-03-27 21:42:51,831 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:51] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:42:51,919 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:51] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:42:52,162 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:52] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:42:52,169 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:52] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:42:52,177 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:52] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:42:52,228 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:52] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:42:52,364 [INFO] 127.0.0.1 - - [27/Mar/2026 21:42:52] "GET /admin/login HTTP/1.1" 200 -
+2026-03-27 21:43:13,256 [INFO] 127.0.0.1 - - [27/Mar/2026 21:43:13] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 21:43:28,670 [INFO] 127.0.0.1 - - [27/Mar/2026 21:43:28] "GET /admin/settings HTTP/1.1" 200 -
+2026-03-27 21:44:05,488 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:05] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:44:05,740 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:05] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:05,831 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:05] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:05,837 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:05] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:05,853 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:05] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:07,347 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:07] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:07,396 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:07] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:07,598 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:07] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:07,711 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:07] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:07,714 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:07] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:08,316 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:08] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:08,363 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:08] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:08,557 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:08] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:08,673 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:08] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:08,684 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:08] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:21,664 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:44:21,666 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:44:21,829 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:44:21,853 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:44:21,853 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:44:26,696 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:26] "GET /admin HTTP/1.1" 200 -
+2026-03-27 21:44:26,743 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:26] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:44:26,883 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:26] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:44:27,071 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:27] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:44:27,075 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:27] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:44:27,082 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:27] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:44:27,194 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:27] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:44:37,908 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:37] "GET /admin/login HTTP/1.1" 200 -
+2026-03-27 21:44:47,110 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:47] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-27 21:44:47,126 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:47] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 21:44:49,427 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:49] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:44:49,596 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:49] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:49,597 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:49] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:49,782 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:49] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:49,795 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:49] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:51,054 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:51] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:51,361 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:51] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:51,377 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:51] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:51,388 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:51] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:51,389 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:51] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:52,579 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:52] "GET /admin/animals?search=&status=&per_page=20&sort_by=&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:52,602 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:52] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:52,828 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:52] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:52,933 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:52] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:52,937 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:52] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:53,810 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:53] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=name&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:53,988 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:53] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:54,066 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:54,155 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:54,176 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:54,512 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=name&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:44:54,805 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:54,835 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:54,847 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:54,861 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:54] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:55,600 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:55] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=name&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:55,804 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:55] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:55,847 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:55] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:55,954 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:55] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:55,967 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:55] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:57,796 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:57] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=type&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:58,098 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:58] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:58,131 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:58] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:58,147 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:58] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:58,159 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:58] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:58,673 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:58] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=type&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:44:58,956 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:58] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:59,044 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:59,050 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:59,068 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:59,431 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=type&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:44:59,599 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:59,671 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:59,764 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:44:59,777 [INFO] 127.0.0.1 - - [27/Mar/2026 21:44:59] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:00,836 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:00] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=age&sort_order=desc HTTP/1.1" 200 -
+2026-03-27 21:45:01,134 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:01] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:01,159 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:01] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:01,182 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:01] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:01,679 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:01] "GET /admin/animals?page=1&per_page=20&search=&status=&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:01,887 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:01] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:01,929 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:01] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:02,032 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:02] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:02,033 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:02] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:02,668 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:02] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:02,995 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:02] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:02,997 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:02] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:03,011 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:03] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:03,025 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:03] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:45:34,363 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:34] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:34,681 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:34] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:34,711 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:34] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:45:34,715 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:34] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-03-27 21:45:34,716 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:34] "GET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1" 200 -
+2026-03-27 21:45:34,913 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:34] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:35,016 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:45:35,022 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-03-27 21:45:35,023 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1" 200 -
+2026-03-27 21:45:35,031 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:35,070 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:45:35,251 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:35,378 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:45:35,387 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-03-27 21:45:35,390 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:35,453 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:45:35,601 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-03-27 21:45:35,605 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1" 200 -
+2026-03-27 21:45:35,735 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /images/animales/gato.svg HTTP/1.1" 200 -
+2026-03-27 21:45:35,759 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:35,804 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:35,894 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:35] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:45:36,126 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-03-27 21:45:36,133 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /admin/animals?search=&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:45:36,139 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1" 200 -
+2026-03-27 21:45:36,176 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /images/animales/gato.svg HTTP/1.1" 200 -
+2026-03-27 21:45:36,182 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-03-27 21:45:36,306 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-03-27 21:45:36,489 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1" 200 -
+2026-03-27 21:45:36,493 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "GET /images/animales/gato.svg HTTP/1.1" 200 -
+2026-03-27 21:45:36,507 [INFO] 127.0.0.1 - - [27/Mar/2026 21:45:36] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 21:46:42,362 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:42] "GET /admin/animals?search=Gato&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:46:42,399 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:42] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:42,598 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:42] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:44,115 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:44] "GET /admin/animals?search=Gato&status=&per_page=20&sort_by=age&sort_order=asc HTTP/1.1" 200 -
+2026-03-27 21:46:44,151 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:44] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:44,383 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:44] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:45,311 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:45] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 21:46:45,542 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:45] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:45,556 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:45] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:45,665 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:45] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:45,667 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:45] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 21:46:52,549 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:52] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:46:53,888 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:53] "GET /admin/newsletter?active=1 HTTP/1.1" 200 -
+2026-03-27 21:46:54,701 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:54] "GET /admin/newsletter?active=0 HTTP/1.1" 200 -
+2026-03-27 21:46:56,454 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:56] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:46:58,023 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:58] "GET /admin/news HTTP/1.1" 200 -
+2026-03-27 21:46:59,129 [INFO] 127.0.0.1 - - [27/Mar/2026 21:46:59] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 21:47:00,445 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:00] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:47:01,608 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:01] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 21:47:02,892 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:02] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 21:47:03,528 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:03] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:47:21,686 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:21] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:47:22,000 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:22] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:47:22,004 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:22] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:22,015 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:22] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:47:22,021 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:22] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:47:22,265 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:22] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:47:25,116 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "GET /pages/contacto.html HTTP/1.1" 200 -
+2026-03-27 21:47:25,437 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:47:25,443 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[36mGET /css/forms.css HTTP/1.1[0m" 304 -
+2026-03-27 21:47:25,448 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:25,456 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:25,457 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:47:25,462 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:25,783 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:25,808 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 21:47:25,834 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:25] "[36mGET /js/contact.js HTTP/1.1[0m" 304 -
+2026-03-27 21:47:26,157 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:26] "GET /api/settings HTTP/1.1" 200 -
+2026-03-27 21:47:33,451 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:33] "[36mGET /index.html HTTP/1.1[0m" 304 -
+2026-03-27 21:47:33,761 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:33] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:47:33,774 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:33] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:33,777 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:33] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:47:33,790 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:33] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:47:35,141 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "GET /pages/colabora.html HTTP/1.1" 200 -
+2026-03-27 21:47:35,419 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:47:35,486 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[36mGET /css/colabora.css HTTP/1.1[0m" 304 -
+2026-03-27 21:47:35,493 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:47:35,494 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[36mGET /css/forms.css HTTP/1.1[0m" 304 -
+2026-03-27 21:47:35,498 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:35,505 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:35,731 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:35,796 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 21:47:35,814 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 21:47:35,815 [INFO] 127.0.0.1 - - [27/Mar/2026 21:47:35] "[36mGET /js/contact.js HTTP/1.1[0m" 304 -
+2026-03-27 21:49:05,619 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:05] "[36mGET /pages/contacto.html HTTP/1.1[0m" 304 -
+2026-03-27 21:49:05,814 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:05] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:49:05,855 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:05] "[36mGET /css/forms.css HTTP/1.1[0m" 304 -
+2026-03-27 21:49:05,973 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:05] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:49:05,976 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:05] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:05,977 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:05] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:05,998 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:05] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:06,133 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:06] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:06,209 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:06] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 21:49:06,300 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:06] "[36mGET /js/contact.js HTTP/1.1[0m" 304 -
+2026-03-27 21:49:06,629 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:06] "GET /api/settings HTTP/1.1" 200 -
+2026-03-27 21:49:12,292 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[36mGET /pages/contacto.html HTTP/1.1[0m" 304 -
+2026-03-27 21:49:12,627 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:49:12,641 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[36mGET /css/forms.css HTTP/1.1[0m" 304 -
+2026-03-27 21:49:12,643 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:49:12,646 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:12,662 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:12,668 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:12,946 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 21:49:12,964 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 21:49:12,969 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:12] "[36mGET /js/contact.js HTTP/1.1[0m" 304 -
+2026-03-27 21:49:13,297 [INFO] 127.0.0.1 - - [27/Mar/2026 21:49:13] "GET /api/settings HTTP/1.1" 200 -
+2026-03-27 21:50:22,354 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:22] "[36mGET /index.html HTTP/1.1[0m" 304 -
+2026-03-27 21:50:22,442 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:22] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:50:22,603 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:22] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:50:22,691 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:22] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:50:22,694 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:22] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:50:35,011 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:35] "GET /index.html HTTP/1.1" 200 -
+2026-03-27 21:50:35,358 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:35] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:50:35,360 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:35] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:50:35,364 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:35] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:50:35,381 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:35] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:50:38,988 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:38] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:50:39,773 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:39] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 21:50:40,675 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:40] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:50:51,393 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:51] "[36mGET /index.html HTTP/1.1[0m" 304 -
+2026-03-27 21:50:51,711 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:51] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:50:51,738 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:51] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:50:51,746 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:51] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:50:51,748 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:51] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:50:58,766 [INFO] 127.0.0.1 - - [27/Mar/2026 21:50:58] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 21:51:00,293 [INFO] 127.0.0.1 - - [27/Mar/2026 21:51:00] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 21:51:02,270 [INFO] 127.0.0.1 - - [27/Mar/2026 21:51:02] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:51:42,964 [INFO] 127.0.0.1 - - [27/Mar/2026 21:51:42] "POST /api/newsletter/subscribe HTTP/1.1" 200 -
+2026-03-27 21:53:24,989 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:53:24,990 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:53:25,168 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:53:25,183 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:53:25,184 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:53:30,817 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:30] "[32mGET /admin HTTP/1.1[0m" 302 -
+2026-03-27 21:53:30,925 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:30] "GET / HTTP/1.1" 200 -
+2026-03-27 21:53:30,943 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:30] "GET /admin/login HTTP/1.1" 200 -
+2026-03-27 21:53:31,131 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:31] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:53:31,263 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 21:53:31,267 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:31] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:53:31,275 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:31] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:53:31,318 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:31] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:53:31,442 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:31] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:53:43,557 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:43] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-27 21:53:43,611 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:43] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 21:53:45,625 [INFO] 127.0.0.1 - - [27/Mar/2026 21:53:45] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:54:01,207 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:01] "GET / HTTP/1.1" 200 -
+2026-03-27 21:54:01,234 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:01] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:54:01,548 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:01] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:54:01,551 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:01] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:54:01,559 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:01] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:54:05,222 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:05] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 21:54:06,157 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:06] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:54:07,964 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:07] "GET /admin/newsletter?active=1 HTTP/1.1" 200 -
+2026-03-27 21:54:09,276 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:09] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:54:49,639 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:49] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:54:49,949 [INFO] 127.0.0.1 - - [27/Mar/2026 21:54:49] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 21:55:01,434 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:01] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:55:01,469 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:01] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:55:01,770 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:01] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:55:01,784 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:01] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:55:01,786 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:01] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:55:01,805 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:01] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:55:12,805 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:12] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 21:55:12,834 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:12] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:55:13,065 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:13] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:55:13,147 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:13] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:55:13,154 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:13] "[36mGET /js/main.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 21:55:16,389 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:16] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 21:55:17,726 [INFO] 127.0.0.1 - - [27/Mar/2026 21:55:17] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:56:07,660 [INFO] 127.0.0.1 - - [27/Mar/2026 21:56:07] "GET /admin/newsletter?active=1 HTTP/1.1" 200 -
+2026-03-27 21:56:08,436 [INFO] 127.0.0.1 - - [27/Mar/2026 21:56:08] "GET /admin/newsletter?active=0 HTTP/1.1" 200 -
+2026-03-27 21:56:09,257 [INFO] 127.0.0.1 - - [27/Mar/2026 21:56:09] "GET /admin/newsletter?active=1 HTTP/1.1" 200 -
+2026-03-27 21:56:10,002 [INFO] 127.0.0.1 - - [27/Mar/2026 21:56:10] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:57:36,070 [INFO] 127.0.0.1 - - [27/Mar/2026 21:57:36] "POST /api/newsletter/subscribe HTTP/1.1" 200 -
+2026-03-27 21:58:46,825 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:58:46,827 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:58:46,993 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:58:47,011 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:58:47,012 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:58:51,958 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:51] "GET /admin HTTP/1.1" 200 -
+2026-03-27 21:58:51,995 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:51] "GET / HTTP/1.1" 200 -
+2026-03-27 21:58:52,146 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:52] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:58:52,321 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:52] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:58:52,339 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:52] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:58:52,387 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:52] "GET /js/main.js?v=5 HTTP/1.1" 200 -
+2026-03-27 21:58:52,476 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:52] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:58:59,212 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:59] "GET / HTTP/1.1" 200 -
+2026-03-27 21:58:59,521 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:59] "GET /css/styles.css HTTP/1.1" 200 -
+2026-03-27 21:58:59,537 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:59] "GET /js/i18n.js HTTP/1.1" 200 -
+2026-03-27 21:58:59,539 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:59] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:58:59,540 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:59] "GET /js/main.js?v=5 HTTP/1.1" 200 -
+2026-03-27 21:58:59,846 [INFO] 127.0.0.1 - - [27/Mar/2026 21:58:59] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 21:59:00,171 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:00] "GET /images/favicon.svg HTTP/1.1" 200 -
+2026-03-27 21:59:06,530 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:06] "GET / HTTP/1.1" 200 -
+2026-03-27 21:59:06,858 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:06] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:59:06,865 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:06] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:59:06,881 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:06] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:59:06,894 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:06] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 21:59:11,560 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:11] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:59:11,616 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 21:59:13,121 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:13] "GET /admin/newsletter?active=1 HTTP/1.1" 200 -
+2026-03-27 21:59:14,218 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:14] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 21:59:47,913 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 21:59:47,922 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 21:59:48,108 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 21:59:48,131 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 21:59:48,132 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 21:59:53,752 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:53] "GET /admin HTTP/1.1" 200 -
+2026-03-27 21:59:53,830 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:53] "GET / HTTP/1.1" 200 -
+2026-03-27 21:59:53,929 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:53] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 21:59:54,160 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:54] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 21:59:54,182 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:54] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 21:59:54,226 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:54] "GET /js/main.js?v=5 HTTP/1.1" 200 -
+2026-03-27 21:59:54,242 [INFO] 127.0.0.1 - - [27/Mar/2026 21:59:54] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:00:21,241 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:21] "GET / HTTP/1.1" 200 -
+2026-03-27 22:00:21,574 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:21] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:00:21,579 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:21] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:00:21,585 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:21] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:00:21,594 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:21] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:00:26,365 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:26] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:30,593 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:30] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:30,653 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:30] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:00:31,493 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:31] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:31,565 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:31] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:00:31,762 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:31] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:31,969 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:31] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:32,171 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:00:32,175 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:32,394 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:00:32,400 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:32,612 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:00:32,616 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:32,820 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:00:32,831 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:00:32,959 [INFO] 127.0.0.1 - - [27/Mar/2026 22:00:32] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:04:49,427 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 22:04:49,432 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 22:04:49,590 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 22:04:49,607 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 22:04:49,607 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 22:04:54,760 [INFO] 127.0.0.1 - - [27/Mar/2026 22:04:54] "GET /admin HTTP/1.1" 200 -
+2026-03-27 22:04:54,821 [INFO] 127.0.0.1 - - [27/Mar/2026 22:04:54] "GET / HTTP/1.1" 200 -
+2026-03-27 22:04:54,939 [INFO] 127.0.0.1 - - [27/Mar/2026 22:04:54] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:04:55,157 [INFO] 127.0.0.1 - - [27/Mar/2026 22:04:55] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:04:55,159 [INFO] 127.0.0.1 - - [27/Mar/2026 22:04:55] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:04:55,205 [INFO] 127.0.0.1 - - [27/Mar/2026 22:04:55] "GET /js/main.js?v=5 HTTP/1.1" 200 -
+2026-03-27 22:04:55,257 [INFO] 127.0.0.1 - - [27/Mar/2026 22:04:55] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:05:00,547 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:00] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:05:20,616 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:20] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:05:20,635 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:20] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:05:20,936 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:20] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:05:20,943 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:20] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:05:20,944 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:20] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:05:20,956 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:20] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:05:32,643 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:32] "POST /api/newsletter/subscribe HTTP/1.1" 200 -
+2026-03-27 22:05:36,988 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:36] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:05:47,341 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:47] "[32mPOST /admin/newsletter/2/toggle HTTP/1.1[0m" 302 -
+2026-03-27 22:05:47,638 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:47] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:05:49,480 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:49] "[32mPOST /admin/newsletter/2/toggle HTTP/1.1[0m" 302 -
+2026-03-27 22:05:49,507 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:49] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:05:56,426 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:56] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 22:05:56,675 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:56] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:05:56,752 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:56] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 22:05:56,756 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:56] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 22:05:56,769 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:56] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:05:57,825 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:57] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:05:59,250 [INFO] 127.0.0.1 - - [27/Mar/2026 22:05:59] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:06:01,372 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:01] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:06:02,584 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:02] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:06:03,507 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:03] "GET /admin/news HTTP/1.1" 200 -
+2026-03-27 22:06:05,935 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:05] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:06:07,578 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:07] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:06:08,863 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:08] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:06:10,478 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:10] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:06:19,585 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:19] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 22:06:35,165 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:35] "GET /index.html HTTP/1.1" 200 -
+2026-03-27 22:06:35,506 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:35] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:06:35,511 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:35] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:06:35,524 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:35] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:06:35,529 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:35] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:06:35,837 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:35] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:06:52,711 [INFO] 127.0.0.1 - - [27/Mar/2026 22:06:52] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:07:16,778 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:16] "[36mGET /pages/contacto.html HTTP/1.1[0m" 304 -
+2026-03-27 22:07:17,098 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:07:17,123 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:07:17,124 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[36mGET /css/forms.css HTTP/1.1[0m" 304 -
+2026-03-27 22:07:17,126 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:07:17,134 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 22:07:17,146 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 22:07:17,415 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 22:07:17,441 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "GET /js/main.js HTTP/1.1" 200 -
+2026-03-27 22:07:17,442 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "[36mGET /js/contact.js HTTP/1.1[0m" 304 -
+2026-03-27 22:07:17,762 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:17] "GET /api/settings HTTP/1.1" 200 -
+2026-03-27 22:07:40,958 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:40] "POST /api/contact HTTP/1.1" 200 -
+2026-03-27 22:07:45,322 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:45] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:07:52,815 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:52] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:07:54,801 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:54] "GET /admin/collaborators?type=socio HTTP/1.1" 200 -
+2026-03-27 22:07:55,731 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:55] "GET /admin/collaborators?type=padrino HTTP/1.1" 200 -
+2026-03-27 22:07:56,498 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:56] "GET /admin/collaborators?type=voluntario HTTP/1.1" 200 -
+2026-03-27 22:07:57,239 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:57] "GET /admin/collaborators?type=acogida HTTP/1.1" 200 -
+2026-03-27 22:07:58,039 [INFO] 127.0.0.1 - - [27/Mar/2026 22:07:58] "GET /admin/collaborators?type=empresa HTTP/1.1" 200 -
+2026-03-27 22:09:22,039 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[36mGET /pages/colabora.html HTTP/1.1[0m" 304 -
+2026-03-27 22:09:22,214 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:09:22,305 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[36mGET /css/colabora.css HTTP/1.1[0m" 304 -
+2026-03-27 22:09:22,388 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[36mGET /css/forms.css HTTP/1.1[0m" 304 -
+2026-03-27 22:09:22,404 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:09:22,406 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:09:22,424 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 22:09:22,535 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 22:09:22,632 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 22:09:22,732 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 22:09:22,735 [INFO] 127.0.0.1 - - [27/Mar/2026 22:09:22] "[36mGET /js/contact.js HTTP/1.1[0m" 304 -
+2026-03-27 22:10:01,379 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:01] "POST /api/collaborate HTTP/1.1" 200 -
+2026-03-27 22:10:09,544 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:09] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:10:10,742 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:10] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:10:18,086 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:18] "GET /admin/collaborators?type=socio HTTP/1.1" 200 -
+2026-03-27 22:10:19,968 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:19] "GET /admin/collaborators?type=padrino HTTP/1.1" 200 -
+2026-03-27 22:10:21,344 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:21] "GET /admin/collaborators?type=socio HTTP/1.1" 200 -
+2026-03-27 22:10:23,031 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:23] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:10:34,994 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:34] "GET /admin/collaborators?status=pendiente HTTP/1.1" 200 -
+2026-03-27 22:10:36,168 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:36] "GET /admin/collaborators?status=activo HTTP/1.1" 200 -
+2026-03-27 22:10:37,418 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:37] "GET /admin/collaborators?status=activo HTTP/1.1" 200 -
+2026-03-27 22:10:38,833 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:38] "GET /admin/collaborators?status=pendiente HTTP/1.1" 200 -
+2026-03-27 22:10:59,915 [INFO] 127.0.0.1 - - [27/Mar/2026 22:10:59] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 22:11:04,095 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:04] "GET /admin/news HTTP/1.1" 200 -
+2026-03-27 22:11:05,105 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:05] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 22:11:05,411 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:05] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:11:05,425 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:05] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:11:05,435 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:05] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 22:11:05,439 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:05] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 22:11:06,251 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:06] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:11:07,057 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:07] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:11:08,051 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:08] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:11:09,075 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:09] "GET /admin/settings HTTP/1.1" 200 -
+2026-03-27 22:11:10,920 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:10] "GET /admin/users HTTP/1.1" 200 -
+2026-03-27 22:11:12,977 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:12] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 22:11:17,099 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[36mGET /index.html HTTP/1.1[0m" 304 -
+2026-03-27 22:11:17,416 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:11:17,426 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:11:17,435 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:11:17,438 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:11:17,761 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -

@@ -731,10 +731,11 @@ def build_query_with_filters(base_query, search_columns, search_term, allowed_so
     """
     params = []
     query = base_query
+    placeholder = get_placeholder()
 
     # Agregar búsqueda
     if search_term and search_columns:
-        search_conditions = ' OR '.join([f"{col} LIKE ?" for col in search_columns])
+        search_conditions = ' OR '.join([f"{col} LIKE {placeholder}" for col in search_columns])
         # Si el query ya tiene WHERE, usar AND, sino agregar WHERE
         if 'WHERE' in query.upper():
             query += f' AND ({search_conditions})'
@@ -743,11 +744,13 @@ def build_query_with_filters(base_query, search_columns, search_term, allowed_so
         # Agregar parámetros de búsqueda
         params.extend([f'%{search_term}%'] * len(search_columns))
 
-    # Agregar ordenamiento
+    # Agregar ordenamiento (solo si hay columna válida)
     if sort_by and sort_by in allowed_sort_columns:
-        query += f' ORDER BY {sort_by} {sort_order.upper()}'
-    else:
-        query += f' ORDER BY {default_sort} {sort_order.upper()}'
+        order = sort_order.upper() if sort_order.upper() in ('ASC', 'DESC') else 'DESC'
+        query += f' ORDER BY {sort_by} {order}'
+    elif default_sort:
+        order = sort_order.upper() if sort_order.upper() in ('ASC', 'DESC') else 'DESC'
+        query += f' ORDER BY {default_sort} {order}'
 
     return query, params
 
@@ -767,12 +770,14 @@ def paginate_query(db, count_query, data_query, count_params, data_params, page,
     Returns:
         dict con 'items', 'total', 'page', 'per_page', 'total_pages'
     """
+    placeholder = get_placeholder()
+
     # Contar total
     total = db.execute(count_query, count_params).fetchone()['count']
 
     # Obtener datos paginados
     offset = (page - 1) * per_page
-    data_query += f' LIMIT ? OFFSET ?'
+    data_query += f' LIMIT {placeholder} OFFSET {placeholder}'
     data_params.extend([per_page, offset])
     items = db.execute(data_query, data_params).fetchall()
 
@@ -887,6 +892,7 @@ def list_animals():
     """Listar animales con paginación, búsqueda y ordenamiento"""
     db = get_db()
     params = get_pagination_params()
+    placeholder = get_placeholder()
 
     # Filtro por estado
     status_filter = request.args.get('status', '')
@@ -897,7 +903,7 @@ def list_animals():
     query_params = []
 
     if status_filter:
-        where_clause = ' WHERE status = ?'
+        where_clause = f' WHERE status = {placeholder}'
         base_query += where_clause
         count_query += where_clause
         query_params.append(status_filter)
@@ -1087,19 +1093,86 @@ def delete_animal(animal_id):
 @app.route('/admin/news')
 @login_required
 def list_news():
-    """Listar noticias con paginación"""
+    """Listar noticias con paginación, búsqueda y ordenamiento"""
     db = get_db()
-    page = max(1, request.args.get('page', 1, type=int))
-    per_page = 15
-    offset = (page - 1) * per_page
-    total = db.execute('SELECT COUNT(*) as n FROM news').fetchone()['n']
-    news = db.execute(
-        'SELECT * FROM news ORDER BY date DESC LIMIT ? OFFSET ?',
-        (per_page, offset)
-    ).fetchall()
-    total_pages = (total + per_page - 1) // per_page
-    return render_template('news.html', news=news,
-                           page=page, total_pages=total_pages, total=total)
+    params = get_pagination_params()
+    placeholder = get_placeholder()
+
+    # Filtro por categoría y estado publicado
+    category_filter = request.args.get('category', '')
+    published_filter = request.args.get('published', '')
+
+    # Construir query base
+    base_query = 'SELECT * FROM news'
+    count_query = 'SELECT COUNT(*) as count FROM news'
+    query_params = []
+    where_clauses = []
+
+    if category_filter:
+        where_clauses.append(f'category = {placeholder}')
+        query_params.append(category_filter)
+
+    if published_filter:
+        where_clauses.append(f'published = {placeholder}')
+        query_params.append(int(published_filter))
+
+    if where_clauses:
+        where_clause = ' WHERE ' + ' AND '.join(where_clauses)
+        base_query += where_clause
+        count_query += where_clause
+
+    # Columnas donde buscar
+    search_columns = ['title', 'excerpt', 'content', 'category']
+    allowed_sort_columns = ['id', 'title', 'category', 'date', 'published', 'created_at']
+
+    # Construir query con búsqueda y ordenamiento
+    data_query, search_params = build_query_with_filters(
+        base_query,
+        search_columns,
+        params['search'],
+        allowed_sort_columns,
+        params['sort_by'],
+        params['sort_order'],
+        default_sort='date'
+    )
+
+    # Si hay búsqueda, actualizar también el count_query
+    if params['search']:
+        count_query, _ = build_query_with_filters(
+            count_query,
+            search_columns,
+            params['search'],
+            [],
+            '',
+            '',
+            ''
+        )
+
+    # Combinar parámetros
+    all_params = query_params + search_params
+
+    # Paginar
+    result = paginate_query(
+        db,
+        count_query,
+        data_query,
+        query_params + search_params,
+        all_params.copy(),
+        params['page'],
+        params['per_page']
+    )
+
+    return render_template('news.html',
+                           news=result['items'],
+                           page=result['page'],
+                           per_page=result['per_page'],
+                           total_pages=result['total_pages'],
+                           total=result['total'],
+                           sort_by=params['sort_by'],
+                           sort_order=params['sort_order'],
+                           search=params['search'],
+                           category_filter=category_filter,
+                           published_filter=published_filter)
 
 
 @app.route('/admin/news/<int:news_id>/edit', methods=['GET', 'POST'])

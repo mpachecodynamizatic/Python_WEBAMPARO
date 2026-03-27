@@ -4,107 +4,239 @@
 {% block page_title %}Animales{% endblock %}
 
 {% block content %}
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
     <h2><i class="fas fa-paw"></i> Todos los animales
-        <small style="font-size:0.7em; color:#999; font-weight:normal;">{{ total }} registros</small>
+        <small style="font-size:0.7em; color:#999; font-weight:normal;">{{ total }} {{ 'resultado' if total == 1 else 'resultados' }}</small>
     </h2>
     <a href="{{ url_for('new_animal') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Añadir animal
     </a>
 </div>
 
-{% if animals %}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Foto</th>
-            <th>Nombre</th>
-            <th>Tipo</th>
-            <th>Edad</th>
-            <th>Estado</th>
-            <th>Fecha</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for animal in animals %}
-        <tr>
-            <td>
-                {% if animal.image %}
-                    {% if animal.image.startswith('data:image/') %}
-                    {# Imagen en base64 (almacenada en BD) - usar directamente #}
-                    <img src="{{ animal.image }}" alt="{{ animal.name }}"
-                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                    {% else %}
-                    {# Imagen en disco - servir como ruta #}
-                    <img src="/{{ animal.image }}" alt="{{ animal.name }}"
-                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
-                         onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
-                    {% endif %}
-                {% else %}
-                <img src="/images/animales/{{ animal.type }}.svg" alt="{{ animal.name }}"
-                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                {% endif %}
-            </td>
-            <td><strong>{{ animal.name }}</strong></td>
-            <td>
-                <i class="fas fa-{% if animal.type == 'perro' %}dog{% else %}cat{% endif %}"></i>
-                {{ animal.type|capitalize }}
-            </td>
-            <td>{{ animal.age }}</td>
-            <td>
-                <select class="status-select" data-id="{{ animal.id }}"
-                        style="padding:0.3rem 0.5rem; border-radius:4px; border:1px solid #ddd; font-size:0.82rem; cursor:pointer; background:#fff;">
-                    <option value="adoption" {% if animal.status == 'adoption' %}selected{% endif %}>En adopción</option>
-                    <option value="reserved"  {% if animal.status == 'reserved'  %}selected{% endif %}>Reservado</option>
-                    <option value="adopted"  {% if animal.status == 'adopted'  %}selected{% endif %}>Adoptado</option>
-                    <option value="foster"   {% if animal.status == 'foster'   %}selected{% endif %}>Acogida</option>
+<!-- Barra de búsqueda y filtros -->
+<div style="background:#f9f9f9; border-radius:8px; padding:1.5rem; margin-bottom:1.5rem;">
+    <form method="GET" action="{{ url_for('list_animals') }}" style="display:grid; gap:1rem;">
+        <!-- Fila 1: Búsqueda y filtro por estado -->
+        <div style="display:grid; grid-template-columns:1fr 200px; gap:1rem;">
+            <div style="position:relative;">
+                <i class="fas fa-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#999;"></i>
+                <input type="text" name="search" value="{{ search }}" placeholder="Buscar por nombre, edad, tamaño..."
+                       style="width:100%; padding:0.75rem 0.75rem 0.75rem 2.5rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem;">
+            </div>
+            <select name="status" style="padding:0.75rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; background:white;">
+                <option value="">Todos los estados</option>
+                <option value="adoption" {% if status_filter == 'adoption' %}selected{% endif %}>En adopción</option>
+                <option value="reserved" {% if status_filter == 'reserved' %}selected{% endif %}>Reservado</option>
+                <option value="adopted" {% if status_filter == 'adopted' %}selected{% endif %}>Adoptado</option>
+                <option value="foster" {% if status_filter == 'foster' %}selected{% endif %}>Acogida</option>
+            </select>
+        </div>
+
+        <!-- Fila 2: Botones -->
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-filter"></i> Filtrar
+            </button>
+            <a href="{{ url_for('list_animals') }}" class="btn" style="background:#eee; color:#333;">
+                <i class="fas fa-times"></i> Limpiar
+            </a>
+            <div style="margin-left:auto; display:flex; gap:0.5rem; align-items:center;">
+                <span style="font-size:0.9rem; color:#666;">Registros por página:</span>
+                <select name="per_page" onchange="this.form.submit()" style="padding:0.5rem; border:1px solid #ddd; border-radius:4px; font-size:0.9rem; background:white;">
+                    <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+                    <option value="20" {% if per_page == 20 %}selected{% endif %}>20</option>
+                    <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
+                    <option value="100" {% if per_page == 100 %}selected{% endif %}>100</option>
                 </select>
-                <span class="status-feedback-{{ animal.id }}" style="display:none; font-size:0.75rem; color:green; margin-left:4px;">✓</span>
-            </td>
-            <td>{{ animal.created_at }}</td>
-            <td>
-                <a href="{{ url_for('edit_animal', animal_id=animal.id) }}" class="btn btn-primary btn-sm">
-                    <i class="fas fa-edit"></i>
-                </a>
-                <form method="POST" action="{{ url_for('delete_animal', animal_id=animal.id) }}" style="display: inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este animal?');">
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </form>
-            </td>
-        </tr>
+            </div>
+        </div>
+
+        <!-- Mantener parámetros de ordenamiento y página -->
+        <input type="hidden" name="sort_by" value="{{ sort_by }}">
+        <input type="hidden" name="sort_order" value="{{ sort_order }}">
+    </form>
+</div>
+
+{% if animals %}
+<div style="overflow-x:auto;">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>
+                    <a href="{{ url_for('list_animals', page=page, per_page=per_page, search=search, status=status_filter, sort_by='name', sort_order='asc' if sort_by == 'name' and sort_order == 'desc' else 'desc') }}"
+                       style="color:inherit; text-decoration:none; display:flex; align-items:center; gap:0.3rem;">
+                        Nombre
+                        {% if sort_by == 'name' %}
+                            <i class="fas fa-sort-{{ 'down' if sort_order == 'desc' else 'up' }}" style="font-size:0.8rem; color:#F4A460;"></i>
+                        {% else %}
+                            <i class="fas fa-sort" style="font-size:0.8rem; color:#ccc;"></i>
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('list_animals', page=page, per_page=per_page, search=search, status=status_filter, sort_by='type', sort_order='asc' if sort_by == 'type' and sort_order == 'desc' else 'desc') }}"
+                       style="color:inherit; text-decoration:none; display:flex; align-items:center; gap:0.3rem;">
+                        Tipo
+                        {% if sort_by == 'type' %}
+                            <i class="fas fa-sort-{{ 'down' if sort_order == 'desc' else 'up' }}" style="font-size:0.8rem; color:#F4A460;"></i>
+                        {% else %}
+                            <i class="fas fa-sort" style="font-size:0.8rem; color:#ccc;"></i>
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('list_animals', page=page, per_page=per_page, search=search, status=status_filter, sort_by='age', sort_order='asc' if sort_by == 'age' and sort_order == 'desc' else 'desc') }}"
+                       style="color:inherit; text-decoration:none; display:flex; align-items:center; gap:0.3rem;">
+                        Edad
+                        {% if sort_by == 'age' %}
+                            <i class="fas fa-sort-{{ 'down' if sort_order == 'desc' else 'up' }}" style="font-size:0.8rem; color:#F4A460;"></i>
+                        {% else %}
+                            <i class="fas fa-sort" style="font-size:0.8rem; color:#ccc;"></i>
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('list_animals', page=page, per_page=per_page, search=search, status=status_filter, sort_by='status', sort_order='asc' if sort_by == 'status' and sort_order == 'desc' else 'desc') }}"
+                       style="color:inherit; text-decoration:none; display:flex; align-items:center; gap:0.3rem;">
+                        Estado
+                        {% if sort_by == 'status' %}
+                            <i class="fas fa-sort-{{ 'down' if sort_order == 'desc' else 'up' }}" style="font-size:0.8rem; color:#F4A460;"></i>
+                        {% else %}
+                            <i class="fas fa-sort" style="font-size:0.8rem; color:#ccc;"></i>
+                        {% endif %}
+                    </a>
+                </th>
+                <th>
+                    <a href="{{ url_for('list_animals', page=page, per_page=per_page, search=search, status=status_filter, sort_by='created_at', sort_order='asc' if sort_by == 'created_at' and sort_order == 'desc' else 'desc') }}"
+                       style="color:inherit; text-decoration:none; display:flex; align-items:center; gap:0.3rem;">
+                        Fecha
+                        {% if sort_by == 'created_at' or not sort_by %}
+                            <i class="fas fa-sort-{{ 'down' if sort_order == 'desc' else 'up' }}" style="font-size:0.8rem; color:#F4A460;"></i>
+                        {% else %}
+                            <i class="fas fa-sort" style="font-size:0.8rem; color:#ccc;"></i>
+                        {% endif %}
+                    </a>
+                </th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for animal in animals %}
+            <tr>
+                <td>
+                    {% if animal.image %}
+                        {% if animal.image.startswith('data:image/') %}
+                        <img src="{{ animal.image }}" alt="{{ animal.name }}"
+                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                        {% else %}
+                        <img src="/{{ animal.image }}" alt="{{ animal.name }}"
+                             style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                             onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
+                        {% endif %}
+                    {% else %}
+                    <img src="/images/animales/{{ animal.type }}.svg" alt="{{ animal.name }}"
+                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                    {% endif %}
+                </td>
+                <td><strong>{{ animal.name }}</strong></td>
+                <td>
+                    <i class="fas fa-{% if animal.type == 'perro' %}dog{% else %}cat{% endif %}"></i>
+                    {{ animal.type|capitalize }}
+                </td>
+                <td>{{ animal.age }}</td>
+                <td>
+                    <select class="status-select" data-id="{{ animal.id }}"
+                            style="padding:0.3rem 0.5rem; border-radius:4px; border:1px solid #ddd; font-size:0.82rem; cursor:pointer; background:#fff;">
+                        <option value="adoption" {% if animal.status == 'adoption' %}selected{% endif %}>En adopción</option>
+                        <option value="reserved"  {% if animal.status == 'reserved'  %}selected{% endif %}>Reservado</option>
+                        <option value="adopted"  {% if animal.status == 'adopted'  %}selected{% endif %}>Adoptado</option>
+                        <option value="foster"   {% if animal.status == 'foster'   %}selected{% endif %}>Acogida</option>
+                    </select>
+                    <span class="status-feedback-{{ animal.id }}" style="display:none; font-size:0.75rem; color:green; margin-left:4px;">✓</span>
+                </td>
+                <td style="white-space:nowrap; font-size:0.85rem; color:#666;">{{ animal.created_at[:10] }}</td>
+                <td style="white-space:nowrap;">
+                    <a href="{{ url_for('edit_animal', animal_id=animal.id) }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <form method="POST" action="{{ url_for('delete_animal', animal_id=animal.id) }}" style="display: inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este animal?');">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Paginación mejorada -->
+{% if total_pages > 1 %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-top:1.5rem; flex-wrap:wrap; gap:1rem;">
+    <div style="color:#666; font-size:0.9rem;">
+        Mostrando {{ (page - 1) * per_page + 1 }} - {{ [page * per_page, total]|min }} de {{ total }}
+    </div>
+    <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
+        {% if page > 1 %}
+        <a href="{{ url_for('list_animals', page=1, per_page=per_page, search=search, status=status_filter, sort_by=sort_by, sort_order=sort_order) }}"
+           class="btn" style="background:#eee; color:#333; padding:0.5rem 0.75rem;" title="Primera">
+            <i class="fas fa-angle-double-left"></i>
+        </a>
+        <a href="{{ url_for('list_animals', page=page-1, per_page=per_page, search=search, status=status_filter, sort_by=sort_by, sort_order=sort_order) }}"
+           class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
+            <i class="fas fa-chevron-left"></i> Anterior
+        </a>
+        {% endif %}
+
+        {% set start_page = [1, page - 2]|max %}
+        {% set end_page = [total_pages, page + 2]|min %}
+
+        {% if start_page > 1 %}
+        <span style="padding:0.5rem;">...</span>
+        {% endif %}
+
+        {% for p in range(start_page, end_page + 1) %}
+        <a href="{{ url_for('list_animals', page=p, per_page=per_page, search=search, status=status_filter, sort_by=sort_by, sort_order=sort_order) }}"
+           class="btn" style="padding:0.5rem 0.9rem; {{ 'background:#F4A460; color:white;' if p == page else 'background:#eee; color:#333;' }}">
+            {{ p }}
+        </a>
         {% endfor %}
-    </tbody>
-</table>
+
+        {% if end_page < total_pages %}
+        <span style="padding:0.5rem;">...</span>
+        {% endif %}
+
+        {% if page < total_pages %}
+        <a href="{{ url_for('list_animals', page=page+1, per_page=per_page, search=search, status=status_filter, sort_by=sort_by, sort_order=sort_order) }}"
+           class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
+            Siguiente <i class="fas fa-chevron-right"></i>
+        </a>
+        <a href="{{ url_for('list_animals', page=total_pages, per_page=per_page, search=search, status=status_filter, sort_by=sort_by, sort_order=sort_order) }}"
+           class="btn" style="background:#eee; color:#333; padding:0.5rem 0.75rem;" title="Última">
+            <i class="fas fa-angle-double-right"></i>
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
 {% else %}
 <div style="text-align: center; padding: 3rem;">
     <i class="fas fa-paw" style="font-size: 4rem; color: #ddd; margin-bottom: 1rem;"></i>
+    {% if search or status_filter %}
+    <h3 style="color: #666;">No se encontraron resultados</h3>
+    <p style="color: #999; margin-bottom: 1.5rem;">Prueba con otros criterios de búsqueda</p>
+    <a href="{{ url_for('list_animals') }}" class="btn btn-primary">
+        <i class="fas fa-times"></i> Limpiar filtros
+    </a>
+    {% else %}
     <h3 style="color: #666;">No hay animales registrados</h3>
     <p style="color: #999; margin-bottom: 1.5rem;">Comienza añadiendo tu primer animal</p>
     <a href="{{ url_for('new_animal') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Añadir primer animal
-    </a>
-</div>
-{% endif %}
-
-{% if total_pages > 1 %}
-<div style="display:flex; align-items:center; gap:0.5rem; margin-top:1.5rem; justify-content:center; flex-wrap:wrap;">
-    {% if page > 1 %}
-    <a href="{{ url_for('list_animals', page=page-1) }}" class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
-        <i class="fas fa-chevron-left"></i> Anterior
-    </a>
-    {% endif %}
-    {% for p in range(1, total_pages+1) %}
-    <a href="{{ url_for('list_animals', page=p) }}"
-       class="btn" style="padding:0.5rem 0.9rem; {{ 'background:#F4A460; color:white;' if p == page else 'background:#eee; color:#333;' }}">
-        {{ p }}
-    </a>
-    {% endfor %}
-    {% if page < total_pages %}
-    <a href="{{ url_for('list_animals', page=page+1) }}" class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
-        Siguiente <i class="fas fa-chevron-right"></i>
     </a>
     {% endif %}
 </div>
@@ -140,7 +272,6 @@ document.querySelectorAll('.status-select').forEach(function(sel) {
             this.value = this.dataset.original || this.value;
         }
     });
-    // Store original value
     sel.dataset.original = sel.value;
 });
 </script>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Protectora de Animales Burjassot - Rescatamos, cuidamos y buscamos hogares para animales">
+    <meta name="api-base" content="http://localhost:5000">
     <title>Protectora de Animales Burjassot</title>
     <!-- Open Graph -->
     <meta property="og:type" content="website">
@@ -283,6 +284,63 @@
 
     <!-- Scripts -->
     <script src="js/i18n.js"></script>
-    <script src="js/main.js?v=4"></script>
+    <script src="js/main.js?v=5"></script>
+    <script>
+    // Newsletter — script independiente, no depende de main.js
+    (function() {
+        var form = document.getElementById('newsletterForm');
+        if (!form) return;
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            var emailEl = document.getElementById('newsletterEmail');
+            var msgEl   = document.getElementById('newsletterMessage');
+            var btn     = form.querySelector('button[type="submit"]');
+            var email   = emailEl ? emailEl.value.trim() : '';
+
+            function showMsg(text, ok) {
+                if (!msgEl) return;
+                msgEl.textContent = text;
+                msgEl.style.display = 'block';
+                msgEl.style.background = ok ? '#d4edda' : '#f8d7da';
+                msgEl.style.color      = ok ? '#155724' : '#721c24';
+                msgEl.style.border     = '1px solid ' + (ok ? '#c3e6cb' : '#f5c6cb');
+                msgEl.style.padding    = '0.6rem';
+                msgEl.style.borderRadius = '4px';
+                msgEl.style.marginTop  = '0.5rem';
+                setTimeout(function() { msgEl.style.display = 'none'; }, 6000);
+            }
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showMsg('Por favor, introduce un email válido.', false);
+                return;
+            }
+
+            var apiBase = (document.querySelector('meta[name="api-base"]') || {}).content || 'http://localhost:5000';
+            var originalHtml = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            try {
+                var res  = await fetch(apiBase + '/api/newsletter/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                var data = await res.json();
+                if (res.ok && data.success) {
+                    showMsg(data.message || '¡Suscripción realizada con éxito!', true);
+                    emailEl.value = '';
+                } else {
+                    showMsg(data.error || 'Error al suscribirse. Inténtalo de nuevo.', false);
+                }
+            } catch(err) {
+                showMsg('Error de conexión. Comprueba tu red e inténtalo de nuevo.', false);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        });
+    })();
+    </script>
 </body>
 </html>

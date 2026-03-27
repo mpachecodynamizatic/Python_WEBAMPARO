@@ -175,6 +175,7 @@ goto :open_browser
 :open_browser
 echo.
 start http://localhost:5000
+start http://localhost:5000/admin
 goto :end
 
 :skip_browser
