@@ -4,29 +4,47 @@
 {% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
+
+{# ── TARJETAS DE ESTADÍSTICAS ───────────────────────────────────── #}
 <div class="stats-grid">
-    <div class="stat-card" style="background: linear-gradient(135deg, #F4A460, #FF8C42);">
-        <i class="fas fa-paw" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-        <h3>{{ stats.total_animals }}</h3>
-        <p>En adopción</p>
-    </div>
-    <div class="stat-card" style="background: linear-gradient(135deg, #87CEEB, #5DADE2);">
-        <i class="fas fa-home" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-        <h3>{{ stats.total_adopted }}</h3>
-        <p>Adoptados</p>
-    </div>
-    <div class="stat-card" style="background: linear-gradient(135deg, #98D8C8, #76C7B8);">
-        <i class="fas fa-newspaper" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-        <h3>{{ stats.total_news }}</h3>
-        <p>Noticias publicadas</p>
-    </div>
-    <div class="stat-card" style="background: linear-gradient(135deg, #FFB6C1, #FF8FA3);">
-        <i class="fas fa-envelope" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
-        <h3>{{ stats.unread_contacts }}</h3>
-        <p>Mensajes sin leer</p>
-    </div>
+    <a href="{{ url_for('list_animals') }}?status=adoption" class="stat-card stat-card-link" style="background: linear-gradient(135deg, #F4A460, #FF8C42); padding: 1rem;">
+        <i class="fas fa-paw" style="font-size: 1.4rem; margin-bottom: 0.3rem;"></i>
+        <h3 style="font-size: 1.8rem; margin-bottom: 0.2rem;">{{ stats.total_animals }}</h3>
+        <p style="font-size: 0.8rem; margin: 0;">En adopción</p>
+    </a>
+    <a href="{{ url_for('list_animals') }}?status=adopted" class="stat-card stat-card-link" style="background: linear-gradient(135deg, #87CEEB, #5DADE2); padding: 1rem;">
+        <i class="fas fa-home" style="font-size: 1.4rem; margin-bottom: 0.3rem;"></i>
+        <h3 style="font-size: 1.8rem; margin-bottom: 0.2rem;">{{ stats.total_adopted }}</h3>
+        <p style="font-size: 0.8rem; margin: 0;">Adoptados</p>
+    </a>
+    <a href="{{ url_for('list_news') }}" class="stat-card stat-card-link" style="background: linear-gradient(135deg, #98D8C8, #76C7B8); padding: 1rem;">
+        <i class="fas fa-newspaper" style="font-size: 1.4rem; margin-bottom: 0.3rem;"></i>
+        <h3 style="font-size: 1.8rem; margin-bottom: 0.2rem;">{{ stats.total_news }}</h3>
+        <p style="font-size: 0.8rem; margin: 0;">Noticias</p>
+    </a>
+    <a href="{{ url_for('list_contacts') }}" class="stat-card stat-card-link" style="background: linear-gradient(135deg, #FFB6C1, #FF8FA3); padding: 1rem;">
+        <i class="fas fa-envelope" style="font-size: 1.4rem; margin-bottom: 0.3rem;"></i>
+        <h3 style="font-size: 1.8rem; margin-bottom: 0.2rem;">{{ stats.unread_contacts }}</h3>
+        <p style="font-size: 0.8rem; margin: 0;">Mensajes sin leer</p>
+    </a>
+    <a href="{{ url_for('list_animals') }}?status=foster" class="stat-card stat-card-link" style="background: linear-gradient(135deg, #C9B8FF, #9B7EDE); padding: 1rem;">
+        <i class="fas fa-heart" style="font-size: 1.4rem; margin-bottom: 0.3rem;"></i>
+        <h3 style="font-size: 1.8rem; margin-bottom: 0.2rem;">{{ stats.total_foster }}</h3>
+        <p style="font-size: 0.8rem; margin: 0;">En acogida</p>
+    </a>
+    <a href="{{ url_for('list_adoptions') }}" class="stat-card stat-card-link" style="background: linear-gradient(135deg, #FFDDA1, #FFB347); padding: 1rem;">
+        <i class="fas fa-clock" style="font-size: 1.4rem; margin-bottom: 0.3rem;"></i>
+        <h3 style="font-size: 1.8rem; margin-bottom: 0.2rem;">{{ stats.pending_adopt }}</h3>
+        <p style="font-size: 0.8rem; margin: 0;">Adopciones pendientes</p>
+    </a>
+    <a href="{{ url_for('list_collaborators') }}" class="stat-card stat-card-link" style="background: linear-gradient(135deg, #A8E6CF, #5DBF9D); padding: 1rem;">
+        <i class="fas fa-users" style="font-size: 1.4rem; margin-bottom: 0.3rem;"></i>
+        <h3 style="font-size: 1.8rem; margin-bottom: 0.2rem;">{{ stats.active_collabs }}</h3>
+        <p style="font-size: 0.8rem; margin: 0;">Colaboradores activos</p>
+    </a>
 </div>
 
+{# ── ÚLTIMOS CONTACTOS ─────────────────────────────────────────── #}
 <h2 style="margin-bottom: 1rem;">
     <i class="fas fa-envelope"></i> Últimos contactos
 </h2>
@@ -64,6 +82,7 @@
 <p style="text-align: center; color: #666; padding: 2rem;">No hay mensajes recientes</p>
 {% endif %}
 
+{# ── ACCESOS RÁPIDOS ───────────────────────────────────────────── #}
 <div style="margin-top: 2rem;">
     <h2 style="margin-bottom: 1rem;">
         <i class="fas fa-rocket"></i> Accesos rápidos

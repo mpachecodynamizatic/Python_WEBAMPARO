@@ -5,7 +5,9 @@
 
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h2><i class="fas fa-newspaper"></i> Todas las noticias</h2>
+    <h2><i class="fas fa-newspaper"></i> Todas las noticias
+        <small style="font-size:0.7em; color:#999; font-weight:normal;">{{ total }} registros</small>
+    </h2>
     <a href="{{ url_for('new_news') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Nueva noticia
     </a>
@@ -64,6 +66,27 @@
     <a href="{{ url_for('new_news') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Añadir primera noticia
     </a>
+</div>
+{% endif %}
+
+{% if total_pages > 1 %}
+<div style="display:flex; align-items:center; gap:0.5rem; margin-top:1.5rem; justify-content:center; flex-wrap:wrap;">
+    {% if page > 1 %}
+    <a href="{{ url_for('list_news', page=page-1) }}" class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
+        <i class="fas fa-chevron-left"></i> Anterior
+    </a>
+    {% endif %}
+    {% for p in range(1, total_pages+1) %}
+    <a href="{{ url_for('list_news', page=p) }}"
+       class="btn" style="padding:0.5rem 0.9rem; {{ 'background:#F4A460; color:white;' if p == page else 'background:#eee; color:#333;' }}">
+        {{ p }}
+    </a>
+    {% endfor %}
+    {% if page < total_pages %}
+    <a href="{{ url_for('list_news', page=page+1) }}" class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
+        Siguiente <i class="fas fa-chevron-right"></i>
+    </a>
+    {% endif %}
 </div>
 {% endif %}
 

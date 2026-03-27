@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /uploads/
+
+User-agent: *
+Allow: /

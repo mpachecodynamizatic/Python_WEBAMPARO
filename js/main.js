@@ -1,7 +1,9 @@
 // ===================================
 // Configuración y variables globales
 // ===================================
-const API_URL = 'http://localhost:5000/api'; // URL base para el backend
+// API base leída desde <meta name="api-base"> para soportar distintos entornos
+const API_BASE = document.querySelector('meta[name="api-base"]')?.content || 'http://localhost:5000';
+const API_URL = API_BASE + '/api';
 
 // Traducciones (básicas)
 const translations = {
@@ -100,7 +102,7 @@ function initLanguageSelector() {
 }
 
 function changeLanguage(lang) {
-    console.log('Idioma cambiado a:', lang);
+    if (window.applyI18n) window.applyI18n(lang);
 }
 
 // ===================================
@@ -149,7 +151,7 @@ function createAnimalCard(animal) {
     const typeCapitalized = animal.type.charAt(0).toUpperCase() + animal.type.slice(1);
     const animalType = (animal.type === 'gato') ? 'gato' : 'perro';
     const animalImgSrc = (animal.image && animal.image.startsWith('uploads/'))
-        ? `http://localhost:5000/${animal.image}`
+        ? `${API_BASE}/${animal.image}`
         : `images/animales/${animalType}.svg`;
     const animalFallback = `images/animales/${animalType}.svg`;
 
@@ -216,7 +218,7 @@ function createNewsCard(news) {
     const formattedDate = formatDate(news.date);
 
     const newsImgSrc = (news.image && news.image.startsWith('uploads/'))
-        ? `http://localhost:5000/${news.image}`
+        ? `${API_BASE}/${news.image}`
         : 'images/noticia.svg';
 
     card.innerHTML = `

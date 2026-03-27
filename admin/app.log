@@ -1,0 +1,43 @@
+2026-03-27 18:10:16,537 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.66:5000
+2026-03-27 18:10:16,537 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 18:10:23,765 [INFO] 127.0.0.1 - - [27/Mar/2026 18:10:23] "GET /admin HTTP/1.1" 200 -
+2026-03-27 18:10:42,696 [INFO] 127.0.0.1 - - [27/Mar/2026 18:10:42] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 18:10:45,301 [INFO] 127.0.0.1 - - [27/Mar/2026 18:10:45] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 18:10:47,165 [INFO] 127.0.0.1 - - [27/Mar/2026 18:10:47] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 18:10:48,096 [INFO] 127.0.0.1 - - [27/Mar/2026 18:10:48] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:11:06,989 [INFO] 127.0.0.1 - - [27/Mar/2026 18:11:06] "GET /admin/settings HTTP/1.1" 200 -
+2026-03-27 18:11:09,211 [INFO] 127.0.0.1 - - [27/Mar/2026 18:11:09] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:12:26,594 [INFO] 127.0.0.1 - - [27/Mar/2026 18:12:26] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 18:12:26,808 [INFO] 127.0.0.1 - - [27/Mar/2026 18:12:26] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 18:12:26,823 [INFO] 127.0.0.1 - - [27/Mar/2026 18:12:26] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 18:12:26,944 [INFO] 127.0.0.1 - - [27/Mar/2026 18:12:26] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 18:12:28,899 [INFO] 127.0.0.1 - - [27/Mar/2026 18:12:28] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:12:31,715 [INFO] 127.0.0.1 - - [27/Mar/2026 18:12:31] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:13:00,798 [INFO] 127.0.0.1 - - [27/Mar/2026 18:13:00] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:13:01,096 [INFO] 127.0.0.1 - - [27/Mar/2026 18:13:01] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 18:15:52,913 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.66:5000
+2026-03-27 18:15:52,914 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 18:15:59,883 [INFO] 127.0.0.1 - - [27/Mar/2026 18:15:59] "GET /admin HTTP/1.1" 200 -
+2026-03-27 18:19:50,543 [INFO] 127.0.0.1 - - [27/Mar/2026 18:19:50] "GET /api/animals?status=adopted HTTP/1.1" 200 -
+2026-03-27 18:19:54,729 [INFO] 127.0.0.1 - - [27/Mar/2026 18:19:54] "GET /api/animals?status=adoption HTTP/1.1" 200 -
+2026-03-27 18:19:55,186 [INFO] 127.0.0.1 - - [27/Mar/2026 18:19:55] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 18:20:39,101 [INFO] 127.0.0.1 - - [27/Mar/2026 18:20:39] "GET /api/animals?status=adoption HTTP/1.1" 200 -
+2026-03-27 18:20:39,123 [INFO] 127.0.0.1 - - [27/Mar/2026 18:20:39] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 18:21:03,767 [INFO] 127.0.0.1 - - [27/Mar/2026 18:21:03] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 18:22:02,740 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:02] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 18:22:04,223 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:04] "GET /admin/collaborators?type=socio HTTP/1.1" 200 -
+2026-03-27 18:22:04,643 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:04] "GET /admin/collaborators?type=padrino HTTP/1.1" 200 -
+2026-03-27 18:22:05,056 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:05] "GET /admin/collaborators?type=voluntario HTTP/1.1" 200 -
+2026-03-27 18:22:06,748 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:06] "GET /admin/collaborators?type=voluntario HTTP/1.1" 200 -
+2026-03-27 18:22:07,948 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:07] "GET /admin/collaborators?type=voluntario&status=rechazado HTTP/1.1" 200 -
+2026-03-27 18:22:10,331 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:10] "GET /admin/collaborators?type=voluntario&status=pendiente HTTP/1.1" 200 -
+2026-03-27 18:22:10,895 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:10] "GET /admin/collaborators?type=voluntario&status=activo HTTP/1.1" 200 -
+2026-03-27 18:22:11,552 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:11] "GET /admin/collaborators?status=activo HTTP/1.1" 200 -
+2026-03-27 18:22:14,633 [INFO] 127.0.0.1 - - [27/Mar/2026 18:22:14] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 18:23:01,204 [INFO] 127.0.0.1 - - [27/Mar/2026 18:23:01] "GET /admin/users HTTP/1.1" 200 -

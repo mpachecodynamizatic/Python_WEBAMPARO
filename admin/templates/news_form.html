@@ -3,6 +3,10 @@
 {% block title %}{% if news_item %}Editar{% else %}Nueva{% endif %} Noticia{% endblock %}
 {% block page_title %}{% if news_item %}Editar{% else %}Nueva{% endif %} Noticia{% endblock %}
 
+{% block extra_css %}
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <form method="POST" enctype="multipart/form-data">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
@@ -40,8 +44,13 @@
 
     <div class="form-group">
         <label for="content">Contenido completo *</label>
-        <textarea id="content" name="content" rows="10" required
-                  placeholder="Escribe el contenido completo de la noticia...">{% if news_item %}{{ news_item.content }}{% endif %}</textarea>
+        <!-- Hidden input: the actual value submitted with the form -->
+        <input type="hidden" id="content" name="content">
+        <!-- Quill editor container -->
+        <div id="quill-editor" style="height: 280px; border-radius: 6px; font-size: 1rem;"></div>
+        <small style="color:#666; margin-top:0.4rem; display:block;">
+            Usa la barra de herramientas para dar formato al texto.
+        </small>
     </div>
 
     <div class="form-group">
@@ -74,4 +83,36 @@
         </a>
     </div>
 </form>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script>
+    var quill = new Quill('#quill-editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: [
+                [{ 'header': [2, 3, false] }],
+                ['bold', 'italic', 'underline'],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['link', 'blockquote'],
+                ['clean']
+            ]
+        },
+        placeholder: 'Escribe el contenido completo de la noticia...'
+    });
+
+    // Load existing content when editing
+    var existing = {{ (news_item.content if news_item and news_item.content else '') | tojson }};
+    if (existing) {
+        quill.clipboard.dangerouslyPasteHTML(existing);
+    }
+
+    // On form submit, copy Quill HTML to hidden input
+    document.querySelector('form').addEventListener('submit', function() {
+        var html = quill.root.innerHTML;
+        if (html === '<p><br></p>') html = '';
+        document.getElementById('content').value = html;
+    });
+</script>
 {% endblock %}

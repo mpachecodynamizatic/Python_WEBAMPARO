@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{% if user %}Editar usuario{% else %}Nuevo usuario{% endif %}{% endblock %}
+{% block page_title %}{% if user %}Editar usuario: {{ user.username }}{% else %}Nuevo usuario{% endif %}{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group">
+            <label for="username">Nombre de usuario *</label>
+            {% if user %}
+            <input type="text" id="username" value="{{ user.username }}" disabled
+                   style="background:#f5f5f5; color:#888;">
+            <small style="color:#888;">El nombre de usuario no se puede cambiar.</small>
+            {% else %}
+            <input type="text" id="username" name="username" required
+                   placeholder="ej: maria_garcia" autocomplete="off">
+            <small style="color:#888;">Sin espacios. Se usará para iniciar sesión.</small>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email"
+                   value="{{ user.email if user else '' }}"
+                   placeholder="usuario@protectoraburjassot.com">
+        </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group">
+            <label for="password">{% if user %}Nueva contraseña{% else %}Contraseña *{% endif %}</label>
+            <input type="password" id="password" name="password"
+                   {% if not user %}required{% endif %}
+                   placeholder="{% if user %}Dejar vacío para no cambiarla{% else %}Mínimo 8 caracteres{% endif %}"
+                   autocomplete="new-password" minlength="8">
+        </div>
+
+        <div class="form-group">
+            <label for="role">Rol *</label>
+            <select id="role" name="role" required
+                    {% if user and user.username == 'admin' %}disabled{% endif %}
+                    onchange="updateRoleInfo()">
+                {% for r in roles %}
+                <option value="{{ r }}"
+                    {% if user and user.role == r %}selected{% elif not user and r == 'editor' %}selected{% endif %}>
+                    {% if r == 'superadmin' %}👑 Superadmin
+                    {% elif r == 'editor' %}✏️ Editor
+                    {% else %}👁 Visor{% endif %}
+                </option>
+                {% endfor %}
+            </select>
+            {% if user and user.username == 'admin' %}
+            <input type="hidden" name="role" value="superadmin">
+            <small style="color:#888;">El rol del administrador principal no se puede cambiar.</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Descripción del rol seleccionado -->
+    <div id="role-info" style="background:#f8f9fa; border-left:4px solid #F4A460; padding:1rem; border-radius:0 8px 8px 0; margin-bottom:1.5rem; font-size:0.9rem;">
+    </div>
+
+    {% if user %}
+    <div class="form-group" style="display:flex; align-items:center; gap:0.75rem;">
+        <input type="checkbox" id="is_active" name="is_active" style="width:auto;"
+               {% if user.is_active %}checked{% endif %}
+               {% if user.username == 'admin' %}disabled{% endif %}>
+        <label for="is_active" style="margin:0; font-weight:600;">
+            Usuario activo
+            {% if user.username == 'admin' %}
+            <small style="color:#888; font-weight:400;">(el usuario admin no se puede desactivar)</small>
+            {% endif %}
+        </label>
+        {% if user.username == 'admin' %}
+        <input type="hidden" name="is_active" value="on">
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> {% if user %}Guardar cambios{% else %}Crear usuario{% endif %}
+        </button>
+        <a href="{{ url_for('list_users') }}" class="btn" style="background:#95a5a6; color:white;">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
+    </div>
+</form>
+
+{% block extra_js %}
+<script>
+const roleInfo = {
+    superadmin: {
+        color: '#8e44ad',
+        icon: 'fa-crown',
+        title: 'Superadmin — Acceso total',
+        desc: 'Puede gestionar todo: animales, noticias, contactos, colaboradores, solicitudes de adopción, <strong>configuración del sitio</strong> y <strong>usuarios y roles</strong>.'
+    },
+    editor: {
+        color: '#2980b9',
+        icon: 'fa-edit',
+        title: 'Editor — Gestión de contenido',
+        desc: 'Puede gestionar animales, noticias, contactos, colaboradores y solicitudes de adopción. <strong>No puede</strong> acceder a la configuración del sitio ni a la gestión de usuarios.'
+    },
+    viewer: {
+        color: '#7f8c8d',
+        icon: 'fa-eye',
+        title: 'Visor — Solo lectura',
+        desc: 'Solo puede ver el dashboard y las listas de animales y noticias. <strong>No puede</strong> crear, editar ni eliminar ningún registro.'
+    }
+};
+
+function updateRoleInfo() {
+    var sel = document.getElementById('role');
+    var role = sel ? sel.value : '{{ user.role if user else "editor" }}';
+    var info = roleInfo[role] || roleInfo.editor;
+    var box = document.getElementById('role-info');
+    box.style.borderColor = info.color;
+    box.innerHTML = '<p style="margin:0; font-weight:600; color:' + info.color + ';">'
+        + '<i class="fas ' + info.icon + '"></i> ' + info.title + '</p>'
+        + '<p style="margin:0.4rem 0 0;">' + info.desc + '</p>';
+}
+
+updateRoleInfo();
+</script>
+{% endblock %}
+{% endblock %}

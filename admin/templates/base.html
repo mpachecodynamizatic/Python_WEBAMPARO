@@ -137,9 +137,37 @@
         .stat-card {
             background: linear-gradient(135deg, #F4A460, #FF8C42);
             color: white;
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 10px;
             text-align: center;
+        }
+
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat-card p {
+            font-size: 0.8rem;
+            margin: 0;
+        }
+
+        a.stat-card-link {
+            display: block;
+            text-decoration: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        a.stat-card-link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+            color: white;
+        }
+
+        a.stat-card-link:active {
+            transform: translateY(-1px);
         }
 
         .stat-card h3 {
@@ -248,17 +276,37 @@
                 <li><a href="{{ url_for('dashboard') }}" {% if request.endpoint == 'dashboard' %}class="active"{% endif %}>
                     <i class="fas fa-chart-line"></i> Dashboard
                 </a></li>
-                <li><a href="{{ url_for('list_animals') }}" {% if 'animals' in request.endpoint %}class="active"{% endif %}>
+                <li><a href="{{ url_for('list_animals') }}" {% if 'animal' in request.endpoint %}class="active"{% endif %}>
                     <i class="fas fa-paw"></i> Animales
                 </a></li>
                 <li><a href="{{ url_for('list_news') }}" {% if 'news' in request.endpoint %}class="active"{% endif %}>
                     <i class="fas fa-newspaper"></i> Noticias
                 </a></li>
+                {% if session.role in ['superadmin', 'editor'] %}
                 <li><a href="{{ url_for('list_contacts') }}" {% if 'contact' in request.endpoint %}class="active"{% endif %}>
                     <i class="fas fa-envelope"></i> Contactos
                 </a></li>
-                <li><a href="{{ url_for('change_password') }}" {% if request.endpoint == 'change_password' %}class="active"{% endif %}>
-                    <i class="fas fa-cog"></i> Configuración
+                <li><a href="{{ url_for('list_collaborators') }}" {% if 'collaborator' in request.endpoint %}class="active"{% endif %}>
+                    <i class="fas fa-users"></i> Colaboradores
+                </a></li>
+                <li><a href="{{ url_for('list_adoptions') }}" {% if 'adoption' in request.endpoint %}class="active"{% endif %}>
+                    <i class="fas fa-heart"></i> Solicitudes adopción
+                </a></li>
+                {% endif %}
+                {% if session.role == 'superadmin' %}
+                <li style="margin-top: 1rem; padding: 0.4rem 1.5rem; font-size: 0.7rem; text-transform: uppercase; color: #aaa; letter-spacing: 0.08em;">
+                    Administración
+                </li>
+                <li><a href="{{ url_for('admin_settings') }}" {% if request.endpoint == 'admin_settings' %}class="active"{% endif %}>
+                    <i class="fas fa-sliders-h"></i> Configuración del sitio
+                </a></li>
+                <li><a href="{{ url_for('list_users') }}" {% if 'user' in request.endpoint %}class="active"{% endif %}>
+                    <i class="fas fa-user-shield"></i> Usuarios y roles
+                </a></li>
+                {% endif %}
+                <li style="margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+                <a href="{{ url_for('change_password') }}" {% if request.endpoint == 'change_password' %}class="active"{% endif %}>
+                    <i class="fas fa-key"></i> Cambiar contraseña
                 </a></li>
                 <li><a href="{{ url_for('logout') }}">
                     <i class="fas fa-sign-out-alt"></i> Cerrar sesión

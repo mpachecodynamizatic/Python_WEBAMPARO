@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Contacta con Protectora de Animales Burjassot">
     <title>Contacto - Protectora de Animales Burjassot</title>
+    <meta name="api-base" content="http://localhost:5000">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Protectora de Animales Burjassot">
+    <meta property="og:title" content="Contacto - Protectora de Animales Burjassot">
+    <meta property="og:description" content="Contacta con la Protectora de Animales Burjassot. Estamos aquí para ayudarte.">
+    <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/forms.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -96,28 +103,28 @@
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
                                 <h3>Dirección</h3>
-                                <p>Burjassot, Valencia<br>España</p>
+                                <p id="contact-address">Burjassot, Valencia<br>España</p>
                             </div>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-phone"></i>
                             <div>
                                 <h3>Teléfono</h3>
-                                <p>+34 XXX XXX XXX</p>
+                                <p id="contact-phone">+34 XXX XXX XXX</p>
                             </div>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-envelope"></i>
                             <div>
                                 <h3>Email</h3>
-                                <p>info@protectoraburjassot.com</p>
+                                <p><a id="contact-email" href="mailto:info@protectoraburjassot.com">info@protectoraburjassot.com</a></p>
                             </div>
                         </div>
                         <div class="info-item">
                             <i class="fas fa-clock"></i>
                             <div>
                                 <h3>Horario de atención</h3>
-                                <p>Lunes a Viernes: 10:00 - 18:00<br>Sábados: 10:00 - 14:00</p>
+                                <p id="contact-hours">Lunes a Viernes: 10:00 - 18:00<br>Sábados: 10:00 - 14:00</p>
                             </div>
                         </div>
                     </div>
@@ -193,7 +200,7 @@
         <div class="container">
             <h2 class="section-title">¿Dónde estamos?</h2>
             <div class="map-container">
-                <iframe
+                <iframe id="contact-map"
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12275.456123456789!2d-0.4167!3d39.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMznCsDMwJzAwLjAiTiAwwrAyNScwMC4wIlc!5e0!3m2!1ses!2ses!4v1234567890123!5m2!1ses!2ses"
                     width="100%"
                     height="450"
@@ -268,7 +275,30 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <script src="../js/i18n.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/contact.js"></script>
+    <script>
+    // Cargar datos de contacto desde la API de configuración del sitio
+    (async function loadContactSettings() {
+        try {
+            const res = await fetch('http://localhost:5000/api/settings');
+            if (!res.ok) return;
+            const s = await res.json();
+
+            if (s.contact_address) document.getElementById('contact-address').textContent = s.contact_address;
+            if (s.contact_phone)   document.getElementById('contact-phone').textContent   = s.contact_phone;
+            if (s.contact_hours)   document.getElementById('contact-hours').textContent   = s.contact_hours;
+            if (s.contact_email) {
+                const el = document.getElementById('contact-email');
+                el.textContent = s.contact_email;
+                el.href = 'mailto:' + s.contact_email;
+            }
+            if (s.maps_embed_url) {
+                document.getElementById('contact-map').src = s.maps_embed_url;
+            }
+        } catch(e) { /* Servidor no disponible: se mantienen los valores por defecto */ }
+    })();
+    </script>
 </body>
 </html>

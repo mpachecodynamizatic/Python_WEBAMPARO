@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Colabora con nosotros - Protectora de Animales Burjassot">
     <title>Colabora - Protectora de Animales Burjassot</title>
+    <meta name="api-base" content="http://localhost:5000">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Protectora de Animales Burjassot">
+    <meta property="og:title" content="Colabora - Protectora de Animales Burjassot">
+    <meta property="og:description" content="Hazte socio, voluntario, padrino o empresa solidaria. Únete a nuestra comunidad de colaboradores.">
+    <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/colabora.css">
     <link rel="stylesheet" href="../css/forms.css">
@@ -120,9 +127,37 @@
                             <span class="label">Socio protector</span>
                         </div>
                     </div>
-                    <a href="contacto.html" class="btn btn-primary">
-                        <i class="fas fa-envelope"></i> Solicitar información
-                    </a>
+                    <!-- Formulario de socio -->
+                    <div id="socio-form-container" style="margin-top:1.5rem;">
+                        <button class="btn btn-primary" onclick="toggleColabForm('socio')" type="button">
+                            <i class="fas fa-envelope"></i> Solicitar información
+                        </button>
+                        <form id="socio-form" class="colab-inline-form" style="display:none; margin-top:1rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="socio-name">Nombre completo *</label>
+                                    <input type="text" id="socio-name" required placeholder="Tu nombre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="socio-email">Email *</label>
+                                    <input type="email" id="socio-email" required placeholder="tu@email.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="socio-phone">Teléfono</label>
+                                <input type="tel" id="socio-phone" placeholder="+34 XXX XXX XXX">
+                            </div>
+                            <div class="form-group">
+                                <label for="socio-msg">Mensaje (opcional)</label>
+                                <textarea id="socio-msg" rows="3" placeholder="Cuéntanos algo más..."></textarea>
+                            </div>
+                            <div style="display:flex; gap:0.75rem;">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                                <button type="button" class="btn" style="background:#95a5a6;color:white;" onclick="toggleColabForm('socio')">Cancelar</button>
+                            </div>
+                            <p id="socio-feedback" style="display:none; margin-top:0.75rem;"></p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -153,9 +188,37 @@
                             <span class="label">Apadrinamiento básico</span>
                         </div>
                     </div>
-                    <a href="adopcion.html" class="btn btn-secondary">
-                        <i class="fas fa-paw"></i> Ver animales para apadrinar
-                    </a>
+                    <!-- Formulario de padrino/madrina -->
+                    <div id="padrino-form-container" style="margin-top:1.5rem;">
+                        <button class="btn btn-secondary" onclick="toggleColabForm('padrino')" type="button">
+                            <i class="fas fa-heart"></i> Quiero apadrinar un animal
+                        </button>
+                        <form id="padrino-form" class="colab-inline-form" style="display:none; margin-top:1rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="padrino-name">Nombre completo *</label>
+                                    <input type="text" id="padrino-name" required placeholder="Tu nombre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="padrino-email">Email *</label>
+                                    <input type="email" id="padrino-email" required placeholder="tu@email.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="padrino-phone">Teléfono</label>
+                                <input type="tel" id="padrino-phone" placeholder="+34 XXX XXX XXX">
+                            </div>
+                            <div class="form-group">
+                                <label for="padrino-msg">¿Qué animal te gustaría apadrinar?</label>
+                                <textarea id="padrino-msg" rows="3" placeholder="Tipo de animal, edad aproximada o algo que te haya llamado la atención..."></textarea>
+                            </div>
+                            <div style="display:flex; gap:0.75rem;">
+                                <button type="submit" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                                <button type="button" class="btn" style="background:#95a5a6;color:white;" onclick="toggleColabForm('padrino')">Cancelar</button>
+                            </div>
+                            <p id="padrino-feedback" style="display:none; margin-top:0.75rem;"></p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -202,9 +265,37 @@
                             <p>Gestión, documentación, fundraising</p>
                         </div>
                     </div>
-                    <a href="contacto.html" class="btn btn-primary">
-                        <i class="fas fa-user-plus"></i> Quiero ser voluntario
-                    </a>
+                    <!-- Formulario de voluntariado -->
+                    <div id="voluntariado-form-container" style="margin-top:1.5rem;">
+                        <button class="btn btn-primary" onclick="toggleColabForm('voluntariado')" type="button">
+                            <i class="fas fa-user-plus"></i> Quiero ser voluntario
+                        </button>
+                        <form id="voluntariado-form" class="colab-inline-form" style="display:none; margin-top:1rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="voluntariado-name">Nombre completo *</label>
+                                    <input type="text" id="voluntariado-name" required placeholder="Tu nombre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="voluntariado-email">Email *</label>
+                                    <input type="email" id="voluntariado-email" required placeholder="tu@email.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="voluntariado-phone">Teléfono</label>
+                                <input type="tel" id="voluntariado-phone" placeholder="+34 XXX XXX XXX">
+                            </div>
+                            <div class="form-group">
+                                <label for="voluntariado-msg">¿En qué te gustaría colaborar?</label>
+                                <textarea id="voluntariado-msg" rows="3" placeholder="Cuéntanos tus habilidades e intereses..."></textarea>
+                            </div>
+                            <div style="display:flex; gap:0.75rem;">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                                <button type="button" class="btn" style="background:#95a5a6;color:white;" onclick="toggleColabForm('voluntariado')">Cancelar</button>
+                            </div>
+                            <p id="voluntariado-feedback" style="display:none; margin-top:0.75rem;"></p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -233,9 +324,37 @@
                             <li><i class="fas fa-check"></i> Apoyo y asesoramiento constante</li>
                         </ul>
                     </div>
-                    <a href="contacto.html" class="btn btn-secondary">
-                        <i class="fas fa-home"></i> Quiero ser casa de acogida
-                    </a>
+                    <!-- Formulario de acogida -->
+                    <div id="acogida-form-container" style="margin-top:1.5rem;">
+                        <button class="btn btn-secondary" onclick="toggleColabForm('acogida')" type="button">
+                            <i class="fas fa-home"></i> Quiero ser casa de acogida
+                        </button>
+                        <form id="acogida-form" class="colab-inline-form" style="display:none; margin-top:1rem;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="acogida-name">Nombre completo *</label>
+                                    <input type="text" id="acogida-name" required placeholder="Tu nombre">
+                                </div>
+                                <div class="form-group">
+                                    <label for="acogida-email">Email *</label>
+                                    <input type="email" id="acogida-email" required placeholder="tu@email.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="acogida-phone">Teléfono</label>
+                                <input type="tel" id="acogida-phone" placeholder="+34 XXX XXX XXX">
+                            </div>
+                            <div class="form-group">
+                                <label for="acogida-msg">Cuéntanos sobre tu situación</label>
+                                <textarea id="acogida-msg" rows="3" placeholder="Tipo de vivienda, si tienes otros animales, disponibilidad..."></textarea>
+                            </div>
+                            <div style="display:flex; gap:0.75rem;">
+                                <button type="submit" class="btn btn-secondary"><i class="fas fa-paper-plane"></i> Enviar</button>
+                                <button type="button" class="btn" style="background:#95a5a6;color:white;" onclick="toggleColabForm('acogida')">Cancelar</button>
+                            </div>
+                            <p id="acogida-feedback" style="display:none; margin-top:0.75rem;"></p>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -419,10 +538,112 @@
         <i class="fas fa-arrow-up"></i>
     </button>
 
+    <script src="../js/i18n.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/contact.js"></script>
     <script>
-        // Reemplazar ID del formulario para el formulario de empresa
+        // Toggle inline collaboration forms
+        function toggleColabForm(type) {
+            var form = document.getElementById(type + '-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Generic collaboration form handler
+        async function submitColabForm(type, name, email, phone, message) {
+            try {
+                const res = await fetch('http://localhost:5000/api/collaborate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type, name, email, phone, message })
+                });
+                return res.ok;
+            } catch(e) {
+                return false;
+            }
+        }
+
+        function showFeedback(id, ok) {
+            var el = document.getElementById(id + '-feedback');
+            if (!el) return;
+            el.style.display = 'block';
+            if (ok) {
+                el.style.color = '#27ae60';
+                el.textContent = '¡Solicitud enviada correctamente! Nos pondremos en contacto contigo pronto.';
+            } else {
+                el.style.color = '#e74c3c';
+                el.textContent = 'Error al enviar. Por favor, inténtalo de nuevo o contáctanos directamente.';
+            }
+        }
+
+        // Padrino form
+        document.getElementById('padrino-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            const ok = await submitColabForm(
+                'padrino',
+                document.getElementById('padrino-name').value,
+                document.getElementById('padrino-email').value,
+                document.getElementById('padrino-phone').value,
+                document.getElementById('padrino-msg').value
+            );
+            showFeedback('padrino', ok);
+            if (ok) this.reset();
+            btn.disabled = false;
+        });
+
+        // Socio form
+        document.getElementById('socio-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            const ok = await submitColabForm(
+                'socio',
+                document.getElementById('socio-name').value,
+                document.getElementById('socio-email').value,
+                document.getElementById('socio-phone').value,
+                document.getElementById('socio-msg').value
+            );
+            showFeedback('socio', ok);
+            if (ok) this.reset();
+            btn.disabled = false;
+        });
+
+        // Voluntariado form
+        document.getElementById('voluntariado-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            const ok = await submitColabForm(
+                'voluntario',
+                document.getElementById('voluntariado-name').value,
+                document.getElementById('voluntariado-email').value,
+                document.getElementById('voluntariado-phone').value,
+                document.getElementById('voluntariado-msg').value
+            );
+            showFeedback('voluntariado', ok);
+            if (ok) this.reset();
+            btn.disabled = false;
+        });
+
+        // Acogida form
+        document.getElementById('acogida-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            const ok = await submitColabForm(
+                'acogida',
+                document.getElementById('acogida-name').value,
+                document.getElementById('acogida-email').value,
+                document.getElementById('acogida-phone').value,
+                document.getElementById('acogida-msg').value
+            );
+            showFeedback('acogida', ok);
+            if (ok) this.reset();
+            btn.disabled = false;
+        });
+
+        // Empresa (companyForm) — real API call
         document.getElementById('companyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formMessage = document.getElementById('companyFormMessage');
@@ -432,20 +653,43 @@
             submitButton.disabled = true;
             submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
 
-            // Simular envío
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            const extra = JSON.stringify({
+                cif: document.getElementById('cif').value,
+                contactName: document.getElementById('contactName').value,
+                position: document.getElementById('position').value,
+                sector: document.getElementById('sector').value,
+                colaborationType: document.getElementById('colaborationType').value
+            });
 
-            formMessage.textContent = '¡Propuesta enviada correctamente! Nos pondremos en contacto contigo pronto.';
-            formMessage.className = 'form-message success';
+            let ok = false;
+            try {
+                const res = await fetch('http://localhost:5000/api/collaborate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type: 'empresa',
+                        name: document.getElementById('companyName').value,
+                        email: document.getElementById('companyEmail').value,
+                        phone: document.getElementById('companyPhone').value,
+                        message: document.getElementById('companyMessage').value,
+                        extra: extra
+                    })
+                });
+                ok = res.ok;
+            } catch(e) { ok = false; }
+
+            if (ok) {
+                formMessage.textContent = '¡Propuesta enviada correctamente! Nos pondremos en contacto contigo pronto.';
+                formMessage.className = 'form-message success';
+                this.reset();
+            } else {
+                formMessage.textContent = 'Error al enviar. Por favor, inténtalo de nuevo.';
+                formMessage.className = 'form-message error';
+            }
             formMessage.style.display = 'block';
-
-            this.reset();
             submitButton.disabled = false;
             submitButton.innerHTML = originalText;
-
-            setTimeout(() => {
-                formMessage.style.display = 'none';
-            }, 5000);
+            setTimeout(() => { formMessage.style.display = 'none'; }, 6000);
         });
     </script>
 </body>

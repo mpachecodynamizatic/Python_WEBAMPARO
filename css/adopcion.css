@@ -58,6 +58,35 @@
     gap: 0.5rem;
 }
 
+/* Tab de estado: En adopción / En acogida */
+.status-tab-btn {
+    padding: 0.6rem 1.4rem;
+    border: 2px solid #9B7EDE;
+    background: var(--bg-white);
+    color: #9B7EDE;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.status-tab-btn:hover {
+    background: #9B7EDE;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.status-tab-btn.active {
+    background: linear-gradient(135deg, #9B7EDE, #C9B8FF);
+    color: white;
+    border-color: #9B7EDE;
+    box-shadow: var(--shadow-md);
+}
+
 .filter-btn:hover {
     background: var(--primary-color);
     color: var(--text-white);

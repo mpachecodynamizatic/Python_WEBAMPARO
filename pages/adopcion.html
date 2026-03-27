@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Animales en adopción - Protectora de Animales Burjassot">
     <title>En Adopción - Protectora de Animales Burjassot</title>
+    <meta name="api-base" content="http://localhost:5000">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Protectora de Animales Burjassot">
+    <meta property="og:title" content="En Adopción - Protectora de Animales Burjassot">
+    <meta property="og:description" content="Conoce a los animales que buscan un hogar. Adopta un pequeño amigo en Burjassot.">
+    <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/adopcion.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -92,6 +99,16 @@
     <section class="filters">
         <div class="container">
             <div class="filter-bar">
+                <!-- Tab: en adopción / en acogida -->
+                <div class="filter-buttons" style="margin-bottom: .75rem;">
+                    <button class="status-tab-btn active" data-status="adoption">
+                        <i class="fas fa-heart"></i> En adopción
+                    </button>
+                    <button class="status-tab-btn" data-status="foster">
+                        <i class="fas fa-house-heart"></i> En acogida
+                    </button>
+                </div>
+
                 <div class="filter-buttons">
                     <button class="filter-btn active" data-filter="todos">
                         <i class="fas fa-th"></i> Todos
@@ -249,7 +266,8 @@
     </button>
 
     <!-- Scripts -->
+    <script src="../js/i18n.js"></script>
     <script src="../js/main.js"></script>
-    <script src="../js/adopcion.js?v=3"></script>
+    <script src="../js/adopcion.js?v=4"></script>
 </body>
 </html>

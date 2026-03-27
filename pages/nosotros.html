@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Quiénes somos - Protectora de Animales Burjassot">
     <title>Nosotros - Protectora de Animales Burjassot</title>
+    <meta name="api-base" content="http://localhost:5000">
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Protectora de Animales Burjassot">
+    <meta property="og:title" content="Nosotros - Protectora de Animales Burjassot">
+    <meta property="og:description" content="Conoce a la Protectora de Animales de Burjassot: nuestra historia, equipo y misión.">
+    <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -270,13 +277,15 @@
 
     <button class="scroll-to-top" id="scrollToTop"><i class="fas fa-arrow-up"></i></button>
 
+    <script src="../js/i18n.js"></script>
     <script>
+        const _apiBase = document.querySelector('meta[name="api-base"]')?.content || 'http://localhost:5000';
         // Load live stats
-        fetch('http://localhost:5000/api/animals?status=adopted')
+        fetch(`${_apiBase}/api/animals?status=adopted`)
             .then(r => r.json())
             .then(d => { document.getElementById('stat-adopted').textContent = d.animals.length; })
             .catch(() => {});
-        fetch('http://localhost:5000/api/animals?status=adoption')
+        fetch(`${_apiBase}/api/animals?status=adoption`)
             .then(r => r.json())
             .then(d => { document.getElementById('stat-adoption').textContent = d.animals.length; })
             .catch(() => {});

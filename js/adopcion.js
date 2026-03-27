@@ -1,6 +1,7 @@
-// API URL
-const API_URL = 'http://localhost:5000/api';
-const BASE_URL = 'http://localhost:5000';
+// API URL leída desde <meta name="api-base"> para soportar distintos entornos
+const API_BASE = document.querySelector('meta[name="api-base"]')?.content || 'http://localhost:5000';
+const API_URL = API_BASE + '/api';
+const BASE_URL = API_BASE;
 
 // Devuelve la URL correcta de la imagen del animal, con fallback al placeholder
 function getAnimalImage(animal) {
@@ -14,6 +15,7 @@ function getAnimalImage(animal) {
 }
 
 // Estado de los filtros
+let currentStatusTab = 'adoption'; // 'adoption' o 'foster'
 let currentFilter = 'todos';
 let currentSize = 'todos';
 let searchQuery = '';
@@ -21,11 +23,34 @@ let allAnimals = [];
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
+    initStatusTabs();
     initFilters();
     initSizeFilters();
     initSearch();
     loadAnimals();
 });
+
+// Inicializar tabs de estado (adopción / acogida)
+function initStatusTabs() {
+    const tabs = document.querySelectorAll('.status-tab-btn');
+    tabs.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            this.classList.add('active');
+            currentStatusTab = this.getAttribute('data-status');
+            // Reiniciar filtros de tipo y tamaño al cambiar tab
+            currentFilter = 'todos';
+            currentSize = 'todos';
+            searchQuery = '';
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelector('[data-filter="todos"]')?.classList.add('active');
+            document.querySelectorAll('.size-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelector('[data-size="todos"]')?.classList.add('active');
+            loadAnimals();
+        });
+    });
+}
 
 // Inicializar filtros por tipo
 function initFilters() {
@@ -78,7 +103,7 @@ async function loadAnimals() {
     container.style.display = 'grid';
 
     try {
-        const response = await fetch(`${API_URL}/animals?status=adoption`);
+        const response = await fetch(`${API_URL}/animals?status=${currentStatusTab}`);
 
         if (!response.ok) {
             throw new Error('Error al cargar animales');
@@ -160,6 +185,7 @@ function createAnimalCardDetailed(animal) {
     const imgSrc = getAnimalImage(animal);
     const type = (animal.type === 'gato') ? 'gato' : 'perro';
     const fallbackSrc = `../images/animales/${type}.svg`;
+    const isReserved = animal.status === 'reserved';
 
     card.innerHTML = `
         <img src="${imgSrc}" alt="${animal.name}" class="animal-image"
@@ -168,6 +194,7 @@ function createAnimalCardDetailed(animal) {
             <span class="animal-type">
                 <i class="fas ${typeIcon}"></i> ${typeCapitalized}
             </span>
+            ${isReserved ? '<span style="display:inline-block;background:#FFB347;color:white;padding:.15rem .6rem;border-radius:8px;font-size:.78rem;font-weight:600;margin-left:.4rem;"><i class="fas fa-lock"></i> Reservado</span>' : ''}
             <h3 class="animal-name">${animal.name}</h3>
             <div class="animal-details">
                 <p><i class="fas fa-birthday-cake"></i> ${animal.age || 'Edad desconocida'}</p>
@@ -284,10 +311,27 @@ function showAnimalDetails(animalId) {
             ${animal.description || 'Sin descripción'}
         </p>
 
-        <div style="text-align: center;">
-            <a href="../pages/contacto.html" class="btn btn-primary btn-large">
-                <i class="fas fa-envelope"></i> Contactar para adoptar a ${animal.name}
-            </a>
+        <div style="margin-top: 2rem; border-top: 2px solid #f0f0f0; padding-top: 1.5rem;">
+            <h3 style="color: #F4A460; margin-bottom: 1rem;">
+                <i class="fas fa-paw"></i> Solicitar adopción
+            </h3>
+            <div id="adopt-form-${animal.id}">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem;">
+                    <input type="text" id="adopt-name-${animal.id}" placeholder="Tu nombre completo *"
+                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box;">
+                    <input type="email" id="adopt-email-${animal.id}" placeholder="Tu email *"
+                           style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box;">
+                </div>
+                <input type="tel" id="adopt-phone-${animal.id}" placeholder="Teléfono (opcional)"
+                       style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box; margin-bottom:0.75rem;">
+                <textarea id="adopt-msg-${animal.id}" placeholder="Cuéntanos sobre ti: tu hogar, estilo de vida, experiencia con animales..."
+                          style="padding:0.6rem; border:1px solid #ddd; border-radius:6px; font-size:0.95rem; width:100%; box-sizing:border-box; height:90px; resize:vertical; margin-bottom:0.75rem;"></textarea>
+                <button onclick="submitAdoptRequest(${animal.id})"
+                        style="background:#F4A460; color:white; border:none; padding:0.8rem 2rem; border-radius:8px; font-size:1rem; cursor:pointer; font-weight:600;">
+                    <i class="fas fa-paper-plane"></i> Enviar solicitud
+                </button>
+                <p id="adopt-feedback-${animal.id}" style="display:none; margin-top:0.75rem; padding:0.6rem 1rem; border-radius:6px; font-weight:500;"></p>
+            </div>
         </div>
     `;
 
@@ -300,6 +344,55 @@ function showAnimalDetails(animalId) {
             modal.remove();
         }
     });
+}
+
+async function submitAdoptRequest(animalId) {
+    const name = document.getElementById('adopt-name-' + animalId).value.trim();
+    const email = document.getElementById('adopt-email-' + animalId).value.trim();
+    const phone = document.getElementById('adopt-phone-' + animalId).value.trim();
+    const message = document.getElementById('adopt-msg-' + animalId).value.trim();
+    const feedback = document.getElementById('adopt-feedback-' + animalId);
+
+    if (!name || !email) {
+        feedback.style.display = 'block';
+        feedback.style.background = '#fdecea';
+        feedback.style.color = '#e74c3c';
+        feedback.textContent = 'Por favor, completa tu nombre y email.';
+        return;
+    }
+
+    const btn = feedback.previousElementSibling;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+    try {
+        const res = await fetch(`${API_BASE}/api/animals/` + animalId + '/adopt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, phone, message })
+        });
+        const data = await res.json();
+        feedback.style.display = 'block';
+        if (res.ok) {
+            feedback.style.background = '#eafaf1';
+            feedback.style.color = '#27ae60';
+            feedback.textContent = '¡Solicitud enviada! Nos pondremos en contacto contigo pronto.';
+            btn.style.display = 'none';
+        } else {
+            feedback.style.background = '#fdecea';
+            feedback.style.color = '#e74c3c';
+            feedback.textContent = data.error || 'Error al enviar la solicitud. Inténtalo de nuevo.';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud';
+        }
+    } catch(e) {
+        feedback.style.display = 'block';
+        feedback.style.background = '#fdecea';
+        feedback.style.color = '#e74c3c';
+        feedback.textContent = 'Error de conexión. Por favor, inténtalo de nuevo.';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud';
+    }
 }
 
 // Función para obtener detalles de un animal específico desde la URL

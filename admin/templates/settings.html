@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Configuración del sitio{% endblock %}
+{% block page_title %}Configuración del sitio{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
+    <!-- DATOS DEL REFUGIO -->
+    <div style="background:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <h3 style="margin:0 0 1.2rem; color:#F4A460; border-bottom:2px solid #f5f5f5; padding-bottom:0.75rem;">
+            <i class="fas fa-paw"></i> Información de la protectora
+        </h3>
+        <div class="form-group">
+            <label for="shelter_name">Nombre de la protectora</label>
+            <input type="text" id="shelter_name" name="shelter_name"
+                   value="{{ settings.get('shelter_name', '') }}"
+                   placeholder="Ej: Protectora de Animales Burjassot">
+        </div>
+        <div class="form-group">
+            <label for="shelter_description">Descripción breve</label>
+            <textarea id="shelter_description" name="shelter_description" rows="3"
+                      placeholder="Breve descripción para el pie de página y sección 'Sobre nosotros'...">{{ settings.get('shelter_description', '') }}</textarea>
+        </div>
+    </div>
+
+    <!-- DATOS DE CONTACTO -->
+    <div style="background:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <h3 style="margin:0 0 1.2rem; color:#F4A460; border-bottom:2px solid #f5f5f5; padding-bottom:0.75rem;">
+            <i class="fas fa-map-marker-alt"></i> Datos de contacto públicos
+        </h3>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+            <div class="form-group">
+                <label for="contact_email">Email de contacto</label>
+                <input type="email" id="contact_email" name="contact_email"
+                       value="{{ settings.get('contact_email', '') }}"
+                       placeholder="info@protectoraburjassot.com">
+            </div>
+            <div class="form-group">
+                <label for="contact_phone">Teléfono</label>
+                <input type="tel" id="contact_phone" name="contact_phone"
+                       value="{{ settings.get('contact_phone', '') }}"
+                       placeholder="+34 XXX XXX XXX">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="contact_address">Dirección</label>
+            <input type="text" id="contact_address" name="contact_address"
+                   value="{{ settings.get('contact_address', '') }}"
+                   placeholder="Calle Ejemplo 1, 46100 Burjassot, Valencia">
+        </div>
+        <div class="form-group">
+            <label for="contact_hours">Horario de atención</label>
+            <input type="text" id="contact_hours" name="contact_hours"
+                   value="{{ settings.get('contact_hours', '') }}"
+                   placeholder="Lunes a Viernes 10:00-14:00 y 17:00-20:00">
+        </div>
+    </div>
+
+    <!-- MAPA -->
+    <div style="background:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <h3 style="margin:0 0 1.2rem; color:#F4A460; border-bottom:2px solid #f5f5f5; padding-bottom:0.75rem;">
+            <i class="fas fa-map"></i> Mapa (Google Maps embed)
+        </h3>
+        <div class="form-group">
+            <label for="maps_embed_url">URL de embed de Google Maps</label>
+            <input type="url" id="maps_embed_url" name="maps_embed_url"
+                   value="{{ settings.get('maps_embed_url', '') }}"
+                   placeholder="https://www.google.com/maps/embed?pb=...">
+            <small style="color:#888; display:block; margin-top:0.4rem;">
+                Entra en Google Maps → busca la dirección → Compartir → Insertar mapa → copia solo la URL del atributo <code>src</code>.
+            </small>
+        </div>
+        {% if settings.get('maps_embed_url') %}
+        <div style="margin-top:1rem;">
+            <iframe src="{{ settings.get('maps_embed_url') }}" width="100%" height="200"
+                    style="border:0; border-radius:8px;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- REDES SOCIALES -->
+    <div style="background:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <h3 style="margin:0 0 1.2rem; color:#F4A460; border-bottom:2px solid #f5f5f5; padding-bottom:0.75rem;">
+            <i class="fas fa-share-alt"></i> Redes sociales
+        </h3>
+        <div class="form-group">
+            <label for="social_facebook"><i class="fab fa-facebook" style="color:#1877F2;"></i> Facebook</label>
+            <input type="url" id="social_facebook" name="social_facebook"
+                   value="{{ settings.get('social_facebook', '') }}"
+                   placeholder="https://www.facebook.com/protectoraburjassot">
+        </div>
+        <div class="form-group">
+            <label for="social_instagram"><i class="fab fa-instagram" style="color:#E4405F;"></i> Instagram</label>
+            <input type="url" id="social_instagram" name="social_instagram"
+                   value="{{ settings.get('social_instagram', '') }}"
+                   placeholder="https://www.instagram.com/protectoraburjassot">
+        </div>
+        <div class="form-group">
+            <label for="social_twitter"><i class="fab fa-x-twitter" style="color:#000;"></i> X / Twitter</label>
+            <input type="url" id="social_twitter" name="social_twitter"
+                   value="{{ settings.get('social_twitter', '') }}"
+                   placeholder="https://www.twitter.com/protectoraburjassot">
+        </div>
+    </div>
+
+    <div style="display:flex; gap:1rem;">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Guardar configuración
+        </button>
+        <a href="{{ url_for('dashboard') }}" class="btn" style="background:#95a5a6; color:white;">
+            Cancelar
+        </a>
+    </div>
+    <p style="color:#888; font-size:0.85rem; margin-top:1rem;">
+        <i class="fas fa-info-circle"></i>
+        Estos datos se pueden cargar dinámicamente en el sitio web público vía <code>GET /api/settings</code>.
+    </p>
+</form>
+{% endblock %}

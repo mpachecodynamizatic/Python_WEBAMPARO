@@ -53,8 +53,9 @@
         <label for="status">Estado</label>
         <select id="status" name="status">
             <option value="adoption" {% if animal.status == 'adoption' %}selected{% endif %}>En adopción</option>
+            <option value="reserved" {% if animal.status == 'reserved' %}selected{% endif %}>Reservado</option>
             <option value="adopted" {% if animal.status == 'adopted' %}selected{% endif %}>Adoptado</option>
-            <option value="fostered" {% if animal.status == 'fostered' %}selected{% endif %}>En acogida</option>
+            <option value="foster" {% if animal.status == 'foster' %}selected{% endif %}>En acogida</option>
         </select>
     </div>
     {% endif %}

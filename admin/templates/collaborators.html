@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Colaboradores{% endblock %}
+{% block page_title %}Colaboradores{% endblock %}
+
+{% block content %}
+<!-- Filtros -->
+<div style="display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center;">
+    <strong>Tipo:</strong>
+    {% for t, label in [('','Todos'),('socio','Socio'),('padrino','Padrino/Madrina'),('voluntario','Voluntario'),('acogida','Acogida'),('empresa','Empresa')] %}
+    <a href="{{ url_for('list_collaborators', type=t if t else None, status=current_status) }}"
+       class="btn btn-sm" style="background:{% if current_type == t or (not current_type and not t) %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">
+        {{ label }}
+    </a>
+    {% endfor %}
+
+    <strong style="margin-left:1rem;">Estado:</strong>
+    {% for s, label in [('','Todos'),('pendiente','Pendiente'),('activo','Activo'),('rechazado','Rechazado')] %}
+    <a href="{{ url_for('list_collaborators', type=current_type, status=s if s else None) }}"
+       class="btn btn-sm" style="background:{% if current_status == s or (not current_status and not s) %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">
+        {{ label }}
+    </a>
+    {% endfor %}
+</div>
+
+{% if collaborators %}
+<div style="display:flex; justify-content:flex-end; margin-bottom:.75rem;">
+    <a href="{{ url_for('export_collaborators_csv') }}" class="btn btn-primary" style="font-size:.85rem;">
+        <i class="fas fa-download"></i> Exportar CSV
+    </a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Mensaje</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in collaborators %}
+        <tr style="{% if c.status == 'pendiente' %}background:#fffbf0;{% elif c.status == 'rechazado' %}background:#fff5f5;{% endif %}">
+            <td style="white-space:nowrap; font-size:0.85rem; color:#666;">{{ c.created_at[:10] }}</td>
+            <td>
+                {% set icons = {'socio':'id-card','padrino':'heart','voluntario':'users','acogida':'home','empresa':'building'} %}
+                {% set labels = {'socio':'Socio','padrino':'Padrino/Madrina','voluntario':'Voluntario','acogida':'Acogida','empresa':'Empresa'} %}
+                <i class="fas fa-{{ icons.get(c.type, 'user') }}"></i>
+                {{ labels.get(c.type, c.type) }}
+            </td>
+            <td><strong>{{ c.name }}</strong></td>
+            <td><a href="mailto:{{ c.email }}">{{ c.email }}</a></td>
+            <td>{{ c.phone or '—' }}</td>
+            <td style="max-width:250px; font-size:0.85rem; color:#555;">
+                {% if c.message %}
+                <details>
+                    <summary style="cursor:pointer; color:#F4A460;">Ver mensaje</summary>
+                    <p style="margin-top:0.5rem;">{{ c.message }}</p>
+                    {% if c.extra %}<p><em>Extra: {{ c.extra }}</em></p>{% endif %}
+                </details>
+                {% else %}—{% endif %}
+            </td>
+            <td>
+                {% if c.status == 'pendiente' %}
+                <span class="badge badge-warning">Pendiente</span>
+                {% elif c.status == 'activo' %}
+                <span class="badge badge-success">Activo</span>
+                {% else %}
+                <span class="badge badge-danger">Rechazado</span>
+                {% endif %}
+            </td>
+            <td style="white-space:nowrap;">
+                <form method="POST" action="{{ url_for('update_collaborator_status', collab_id=c.id) }}" style="display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <select name="status" onchange="this.form.submit()" style="padding:0.3rem; border-radius:4px; border:1px solid #ddd; font-size:0.85rem;">
+                        <option value="pendiente" {% if c.status=='pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="activo" {% if c.status=='activo' %}selected{% endif %}>Activo</option>
+                        <option value="rechazado" {% if c.status=='rechazado' %}selected{% endif %}>Rechazado</option>
+                    </select>
+                </form>
+                <form method="POST" action="{{ url_for('delete_collaborator', collab_id=c.id) }}" style="display:inline;"
+                      onsubmit="return confirm('¿Eliminar esta solicitud?');">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p style="color:#666; margin-top:1rem;">Total: <strong>{{ collaborators|length }}</strong> solicitudes</p>
+
+{% else %}
+<div style="text-align:center; padding:3rem;">
+    <i class="fas fa-users" style="font-size:4rem; color:#ddd; margin-bottom:1rem;"></i>
+    <h3 style="color:#666;">Sin solicitudes de colaboración</h3>
+    <p style="color:#999;">Las solicitudes enviadas desde la web aparecerán aquí.</p>
+</div>
+{% endif %}
+{% endblock %}

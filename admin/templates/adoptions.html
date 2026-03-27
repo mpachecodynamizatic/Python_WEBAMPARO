@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitudes de Adopción{% endblock %}
+{% block page_title %}Solicitudes de Adopción{% endblock %}
+
+{% block content %}
+<!-- Filtros por estado -->
+<div style="display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center;">
+    <strong>Estado:</strong>
+    {% for s, label in [('','Todas'),('pendiente','Pendiente'),('en_proceso','En proceso'),('aprobada','Aprobada'),('rechazada','Rechazada')] %}
+    <a href="{{ url_for('list_adoptions', status=s if s else None) }}"
+       class="btn btn-sm" style="background:{% if current_status == s or (not current_status and not s) %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">
+        {{ label }}
+    </a>
+    {% endfor %}
+</div>
+
+{% if adoptions %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Animal</th>
+            <th>Solicitante</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Mensaje</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in adoptions %}
+        <tr style="{% if r.status == 'pendiente' %}background:#fffbf0;{% elif r.status == 'rechazada' %}background:#fff5f5;{% elif r.status == 'aprobada' %}background:#f0fff4;{% endif %}">
+            <td style="white-space:nowrap; font-size:0.85rem; color:#666;">{{ r.created_at[:10] }}</td>
+            <td>
+                <strong>{{ r.animal_name or '—' }}</strong><br>
+                <a href="{{ url_for('edit_animal', animal_id=r.animal_id) }}" style="font-size:0.8rem; color:#F4A460;">
+                    #{{ r.animal_id }} ver animal
+                </a>
+            </td>
+            <td><strong>{{ r.name }}</strong></td>
+            <td><a href="mailto:{{ r.email }}">{{ r.email }}</a></td>
+            <td>{{ r.phone or '—' }}</td>
+            <td style="max-width:220px; font-size:0.85rem; color:#555;">
+                {% if r.message %}
+                <details>
+                    <summary style="cursor:pointer; color:#F4A460;">Ver mensaje</summary>
+                    <p style="margin-top:0.5rem;">{{ r.message }}</p>
+                </details>
+                {% else %}—{% endif %}
+            </td>
+            <td>
+                {% if r.status == 'pendiente' %}
+                <span class="badge badge-warning">Pendiente</span>
+                {% elif r.status == 'en_proceso' %}
+                <span class="badge" style="background:#3498db; color:white; padding:0.3rem 0.7rem; border-radius:20px; font-size:0.8rem;">En proceso</span>
+                {% elif r.status == 'aprobada' %}
+                <span class="badge badge-success">Aprobada</span>
+                {% else %}
+                <span class="badge badge-danger">Rechazada</span>
+                {% endif %}
+            </td>
+            <td style="white-space:nowrap;">
+                <form method="POST" action="{{ url_for('update_adoption_status', req_id=r.id) }}" style="display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <select name="status" onchange="this.form.submit()" style="padding:0.3rem; border-radius:4px; border:1px solid #ddd; font-size:0.85rem;">
+                        <option value="pendiente" {% if r.status=='pendiente' %}selected{% endif %}>Pendiente</option>
+                        <option value="en_proceso" {% if r.status=='en_proceso' %}selected{% endif %}>En proceso</option>
+                        <option value="aprobada" {% if r.status=='aprobada' %}selected{% endif %}>Aprobada</option>
+                        <option value="rechazada" {% if r.status=='rechazada' %}selected{% endif %}>Rechazada</option>
+                    </select>
+                </form>
+                <form method="POST" action="{{ url_for('delete_adoption_request', req_id=r.id) }}" style="display:inline;"
+                      onsubmit="return confirm('¿Eliminar esta solicitud?');">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p style="color:#666; margin-top:1rem;">Total: <strong>{{ adoptions|length }}</strong> solicitudes</p>
+
+{% else %}
+<div style="text-align:center; padding:3rem;">
+    <i class="fas fa-paw" style="font-size:4rem; color:#ddd; margin-bottom:1rem;"></i>
+    <h3 style="color:#666;">Sin solicitudes de adopción</h3>
+    <p style="color:#999;">Las solicitudes enviadas desde la web aparecerán aquí.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -188,10 +188,8 @@ echo ========================================================
 echo.
 echo Deseas abrir los navegadores automaticamente?
 echo.
-choice /C SN /M "Presiona S para Si, N para No"
 
-if errorlevel 2 goto :skip_browser
-if errorlevel 1 goto :open_browser
+goto :open_browser
 
 :open_browser
 echo.

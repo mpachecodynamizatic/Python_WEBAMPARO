@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Usuarios y roles{% endblock %}
+{% block page_title %}Usuarios y roles{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+    <h2 style="margin:0;"><i class="fas fa-user-shield"></i> Usuarios del panel</h2>
+    <a href="{{ url_for('new_user') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nuevo usuario
+    </a>
+</div>
+
+<!-- Tabla de usuarios -->
+{% if users %}
+<table class="table" style="margin-bottom:2rem;">
+    <thead>
+        <tr>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Creado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr {% if not u.is_active %}style="opacity:0.55;"{% endif %}>
+            <td>
+                <strong>{{ u.username }}</strong>
+                {% if u.id == session.user_id %}
+                <span style="font-size:0.75rem; background:#e8f5e9; color:#27ae60; padding:0.2rem 0.5rem; border-radius:10px; margin-left:0.5rem;">Tú</span>
+                {% endif %}
+            </td>
+            <td>{{ u.email or '—' }}</td>
+            <td>
+                {% if u.role == 'superadmin' %}
+                <span style="background:#8e44ad; color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.82rem; font-weight:600;">
+                    <i class="fas fa-crown"></i> Superadmin
+                </span>
+                {% elif u.role == 'editor' %}
+                <span style="background:#2980b9; color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.82rem; font-weight:600;">
+                    <i class="fas fa-edit"></i> Editor
+                </span>
+                {% else %}
+                <span style="background:#7f8c8d; color:white; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.82rem; font-weight:600;">
+                    <i class="fas fa-eye"></i> Visor
+                </span>
+                {% endif %}
+            </td>
+            <td>
+                {% if u.is_active %}
+                <span style="color:#27ae60; font-weight:600;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Activo</span>
+                {% else %}
+                <span style="color:#e74c3c; font-weight:600;"><i class="fas fa-circle" style="font-size:0.6rem;"></i> Inactivo</span>
+                {% endif %}
+            </td>
+            <td style="font-size:0.83rem; color:#888;">{{ u.created_at[:10] }}</td>
+            <td style="white-space:nowrap;">
+                <a href="{{ url_for('edit_user', user_id=u.id) }}" class="btn btn-primary btn-sm" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </a>
+                {% if u.username != 'admin' and u.id != session.user_id %}
+                <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}" style="display:inline;"
+                      onsubmit="return confirm('¿Eliminar al usuario {{ u.username }}? Esta acción no se puede deshacer.')">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="color:#666;">No hay usuarios registrados.</p>
+{% endif %}
+
+<!-- Tabla de permisos por rol -->
+<div style="background:#fff; border-radius:10px; padding:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <h3 style="margin:0 0 1rem; color:#555;"><i class="fas fa-table"></i> Permisos por rol</h3>
+    <table class="table" style="margin:0;">
+        <thead>
+            <tr>
+                <th>Módulo</th>
+                <th style="text-align:center;"><i class="fas fa-crown" style="color:#8e44ad;"></i> Superadmin</th>
+                <th style="text-align:center;"><i class="fas fa-edit" style="color:#2980b9;"></i> Editor</th>
+                <th style="text-align:center;"><i class="fas fa-eye" style="color:#7f8c8d;"></i> Visor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set modules = [
+                ('Dashboard', True, True, True),
+                ('Animales (lectura)', True, True, True),
+                ('Animales (crear/editar/eliminar)', True, True, False),
+                ('Noticias (lectura)', True, True, True),
+                ('Noticias (crear/editar/eliminar)', True, True, False),
+                ('Contactos', True, True, False),
+                ('Colaboradores', True, True, False),
+                ('Solicitudes de adopción', True, True, False),
+                ('Configuración del sitio', True, False, False),
+                ('Gestión de usuarios y roles', True, False, False),
+            ] %}
+            {% for module, sa, ed, vi in modules %}
+            <tr>
+                <td>{{ module }}</td>
+                <td style="text-align:center;">
+                    {% if sa %}<i class="fas fa-check-circle" style="color:#27ae60; font-size:1.1rem;"></i>
+                    {% else %}<i class="fas fa-times-circle" style="color:#ddd; font-size:1.1rem;"></i>{% endif %}
+                </td>
+                <td style="text-align:center;">
+                    {% if ed %}<i class="fas fa-check-circle" style="color:#27ae60; font-size:1.1rem;"></i>
+                    {% else %}<i class="fas fa-times-circle" style="color:#ddd; font-size:1.1rem;"></i>{% endif %}
+                </td>
+                <td style="text-align:center;">
+                    {% if vi %}<i class="fas fa-check-circle" style="color:#27ae60; font-size:1.1rem;"></i>
+                    {% else %}<i class="fas fa-times-circle" style="color:#ddd; font-size:1.1rem;"></i>{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p style="margin-top:1rem; color:#888; font-size:0.85rem;">
+        <i class="fas fa-info-circle"></i>
+        Los usuarios <strong>Visor</strong> pueden ver las listas de animales y noticias pero no pueden crear, editar ni eliminar registros.
+        Próximamente: control de escritura por módulo para el rol <em>Editor</em>.
+    </p>
+</div>
+{% endblock %}

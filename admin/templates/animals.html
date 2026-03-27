@@ -5,7 +5,9 @@
 
 {% block content %}
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h2><i class="fas fa-paw"></i> Todos los animales</h2>
+    <h2><i class="fas fa-paw"></i> Todos los animales
+        <small style="font-size:0.7em; color:#999; font-weight:normal;">{{ total }} registros</small>
+    </h2>
     <a href="{{ url_for('new_animal') }}" class="btn btn-primary">
         <i class="fas fa-plus"></i> Añadir animal
     </a>
@@ -44,13 +46,14 @@
             </td>
             <td>{{ animal.age }}</td>
             <td>
-                {% if animal.status == 'adoption' %}
-                <span class="badge badge-warning">En adopción</span>
-                {% elif animal.status == 'adopted' %}
-                <span class="badge badge-success">Adoptado</span>
-                {% else %}
-                <span class="badge badge-danger">{{ animal.status }}</span>
-                {% endif %}
+                <select class="status-select" data-id="{{ animal.id }}"
+                        style="padding:0.3rem 0.5rem; border-radius:4px; border:1px solid #ddd; font-size:0.82rem; cursor:pointer; background:#fff;">
+                    <option value="adoption" {% if animal.status == 'adoption' %}selected{% endif %}>En adopción</option>
+                    <option value="reserved"  {% if animal.status == 'reserved'  %}selected{% endif %}>Reservado</option>
+                    <option value="adopted"  {% if animal.status == 'adopted'  %}selected{% endif %}>Adoptado</option>
+                    <option value="foster"   {% if animal.status == 'foster'   %}selected{% endif %}>Acogida</option>
+                </select>
+                <span class="status-feedback-{{ animal.id }}" style="display:none; font-size:0.75rem; color:green; margin-left:4px;">✓</span>
             </td>
             <td>{{ animal.created_at }}</td>
             <td>
@@ -79,10 +82,60 @@
 </div>
 {% endif %}
 
+{% if total_pages > 1 %}
+<div style="display:flex; align-items:center; gap:0.5rem; margin-top:1.5rem; justify-content:center; flex-wrap:wrap;">
+    {% if page > 1 %}
+    <a href="{{ url_for('list_animals', page=page-1) }}" class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
+        <i class="fas fa-chevron-left"></i> Anterior
+    </a>
+    {% endif %}
+    {% for p in range(1, total_pages+1) %}
+    <a href="{{ url_for('list_animals', page=p) }}"
+       class="btn" style="padding:0.5rem 0.9rem; {{ 'background:#F4A460; color:white;' if p == page else 'background:#eee; color:#333;' }}">
+        {{ p }}
+    </a>
+    {% endfor %}
+    {% if page < total_pages %}
+    <a href="{{ url_for('list_animals', page=page+1) }}" class="btn" style="background:#eee; color:#333; padding:0.5rem 1rem;">
+        Siguiente <i class="fas fa-chevron-right"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
 <style>
     .btn-sm {
         padding: 0.5rem 0.75rem;
         font-size: 0.875rem;
     }
 </style>
+
+{% block extra_js %}
+<script>
+document.querySelectorAll('.status-select').forEach(function(sel) {
+    sel.addEventListener('change', async function() {
+        var id = this.dataset.id;
+        var status = this.value;
+        var feedback = document.querySelector('.status-feedback-' + id);
+        try {
+            var res = await fetch('/api/animals/' + id + '/status', {
+                method: 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({status: status})
+            });
+            if (!res.ok) throw new Error('Error');
+            if (feedback) {
+                feedback.style.display = 'inline';
+                setTimeout(function() { feedback.style.display = 'none'; }, 2000);
+            }
+        } catch(e) {
+            alert('Error al actualizar el estado. Recarga la página.');
+            this.value = this.dataset.original || this.value;
+        }
+    });
+    // Store original value
+    sel.dataset.original = sel.value;
+});
+</script>
+{% endblock %}
 {% endblock %}

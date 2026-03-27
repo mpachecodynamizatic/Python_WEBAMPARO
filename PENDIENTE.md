@@ -1,214 +1,423 @@
-# Pendiente e Mejoras — Protectora de Animales Burjassot
+﻿# Pendiente e Mejoras — Protectora de Animales Burjassot
 
-Prioridad: 🔴 Crítico · 🟠 Importante · 🟡 Mejora · 🟢 Opcional
-
----
-
-## 🔴 Bugs / Errores actuales
-
-### 1. Formulario de contacto no llama al backend
-`js/contact.js` tiene el `fetch` real comentado. El formulario solo simula un `setTimeout` y escribe en consola. **Los mensajes nunca llegan a la base de datos.**
-- **Archivo:** `js/contact.js` función `sendContactForm()`
-- **Fix:** Descomentar la llamada a `POST /api/contact` y eliminar el mock.
-
-### 2. El filtro `?type=perro` de la API no funciona
-`GET /api/animals?type=perro` no filtra por tipo. La ruta solo aplica el filtro `status`.
-- **Archivo:** `admin/app.py` función `api_animals()`
-- **Fix:** Añadir `AND type = ?` condicional cuando el parámetro `type` esté presente.
-
-### 3. No existe el endpoint `GET /api/animals/<id>`
-`adopcion.js` y el nav enlazan a `adopcion.html?id=X` pero no hay endpoint para obtener un animal por ID.
-- **Fix:** Añadir ruta `@app.route('/api/animals/<int:animal_id>')` en `app.py`.
-
-### 4. Al editar un animal, la imagen antigua no se borra del disco
-Cuando se sube una nueva imagen en el formulario de edición, la foto anterior queda huérfana en `uploads/fotos/`.
-- **Archivo:** `admin/app.py` función `edit_animal()`
-- **Fix:** Antes de guardar la nueva imagen, borrar el fichero anterior si existe y empieza por `uploads/`.
-
-### 5. `new_news` no guarda los datos de publicación correctamente
-El formulario de nueva noticia no tiene campo `published` (borrador vs publicado). Todo se publica directamente.
-- **Archivo:** `admin/templates/news_form.html`, `admin/app.py` función `new_news()`
+Prioridad: 🔴 Crítico · 🟠 Importante · 🟡 Mejora · 🟢 Opcional  
+Última actualización: 27/03/2026
 
 ---
 
-## 🔴 Páginas referenciadas en la navegación que no existen
+## ✅ Implementado (completo)
 
-Los enlaces del menú apuntan a páginas que no se han creado todavía:
+<details>
+<summary>Ver todo lo implementado</summary>
 
-| Archivo | Enlace desde |
-|---|---|
-| `pages/adoptados.html` | Nav de `adopcion.html` → "Adoptados" |
-| `pages/nosotros.html` | Nav de todas las páginas → "Nosotros" |
-| `pages/actualidad.html` | Nav de todas las páginas → "Actualidad" |
+- Conectar contact.js al backend real (`POST /api/contact`)
+- Crear páginas faltantes: adoptados.html, nosotros.html, actualidad.html
+- Endpoint `GET /api/animals/<id>` y `GET /api/news/<id>`
+- Filtro `?type=`, `?status=` y `?limit=` en `/api/animals`
+- Edit/delete de noticias en el admin (con modo borrador)
+- Página de gestión de contactos en el admin
+- Mensajes flash en el admin
+- Cambio de contraseña del admin
+- `secret_key` desde variable de entorno
+- Modo debug controlado por `FLASK_DEBUG`
+- Autenticación en `/api/upload`
+- Validación (nombre, email, mensaje) en `POST /api/contact`
+- CSRF en formularios del admin
+- Borrar imagen antigua al editar/eliminar animal o noticia
+- Filtro por tamaño en adopcion.html
+- El parámetro `?id=` en adopcion.html carga la ficha directamente
+- Rediseño completo del header: barra de nav arriba + logo/acciones abajo
+- Dropdowns con CSS puro (sin JS) en escritorio; JS solo en móvil
+- Hamburger menu funcional con animación X
+- SVG placeholders (perro.svg, gato.svg, noticia.svg)
+- 10 noticias de muestra (campañas, eventos, blog)
+- **Gestión de colaboradores** — tabla `collaborators`; `POST /api/collaborate`; panel `/admin/collaborators`; formularios de socio/voluntariado/acogida/padrino/empresa conectados
+- **Solicitudes de adopción** — tabla `adoption_requests`; `POST /api/animals/<id>/adopt`; panel `/admin/adoptions`; formulario inline en modal de adopcion.js
+- **Cambio rápido de estado de animal** — `PATCH /api/animals/<id>/status`; select inline en tabla de animales
+- **Editor Quill.js en noticias** — integrado en `news_form.html` vía CDN
+- **Gestión de usuarios y roles** — tabla `users` con `role`/`is_active`; rutas `/admin/users`; roles: superadmin, editor, visor
+- **Configuración del sitio** — tabla `site_settings`; ruta `/admin/settings`; `GET /api/settings` pública; carga dinámica en contacto.html
+- **Paginación en el admin** — 20 animales/página y 15 noticias/página con controles de navegación
+- **Favicon** — `images/favicon.svg` añadido en todas las páginas HTML
+- **robots.txt** — bloquea `/admin/` y `/uploads/` de los buscadores
+- **Formulario padrino/madrina** — sección de `colabora.html` conectada al backend
+- **Datos de contacto dinámicos** — `contacto.html` carga email, teléfono, dirección, horario y mapa desde `/api/settings`
+- **Fix imágenes de muestra** — migración en `init_db()` que limpia rutas `images/animales/*.jpg` → NULL
+- **Logging a fichero** — `logging.basicConfig` con `FileHandler('admin/app.log')` + `StreamHandler`; `logger` disponible en todo `app.py`
+- **Optimización de imágenes con Pillow** — helper `save_image()` redimensiona a máx 1200 px y convierte a JPEG 85%; se aplica en los 5 puntos de subida de fotos; fallback a `file.save()` si Pillow no está disponible
+- **Dashboard con tarjetas clicables** — 7 tarjetas que navegan a la sección correspondiente del admin; tamaño compacto
+- **BASE_URL via `<meta name="api-base">`** — todos los HTML públicos leen la URL del backend desde la meta; sin hardcoding en JS
+- **i18n.js — VAL en todas las páginas** — `js/i18n.js` con diccionario ES→VAL; incluido en todos los HTML; `changeLanguage()` lo llama; selector de idioma ya funciona en todas las páginas
+- **Open Graph** — meta tags `og:type`, `og:site_name`, `og:title`, `og:description` en los 8 HTML públicos
+- **Sitemap.xml dinámico** — ruta `/sitemap.xml` en Flask; incluye páginas estáticas + animales en adopción + noticias publicadas; URL base desde `site_settings`
+- **Exportar CSV** — botones "Exportar CSV" en contactos y colaboradores del admin; BOM UTF-8 para compatibilidad Excel
+- **Rate limiting** — Flask-Limiter en `/api/contact` (5/min), `/api/collaborate` (5/min), `/api/.../adopt` (3/min); stub inocuo si no está instalado
+- **Sección "En acogida" en adopcion.html** — tabs "En adopción" / "En acogida" con CSS propio; cambia el `?status=` de la API
+- **Estado `reserved`** — al enviar solicitud de adopción el animal pasa a `reserved` automáticamente; badge naranja en la tarjeta; gestionable desde el admin
 
-Al no existir, dan **404** y rompen la experiencia de usuario.
-
----
-
-## 🔴 Seguridad
-
-### 1. `app.secret_key` es débil y pública
-`app.secret_key = 'cambiar_en_produccion_por_clave_segura'` — está en el código fuente.
-- **Fix:** Leer desde variable de entorno: `os.environ.get('SECRET_KEY', os.urandom(32))`
-
-### 2. Flask corre con `debug=True`
-`app.run(debug=True, ...)` expone el debugger de Werkzeug en producción.
-- **Fix:** `debug = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'`
-
-### 3. `/api/upload` sin autenticación
-Cualquiera puede subir archivos al servidor llamando directamente a `POST /api/upload`. No requiere sesión de admin.
-- **Fix:** Añadir `@login_required` al endpoint o eliminarlo (ya existe la subida en los formularios de animales/noticias).
-
-### 4. Sin validación en `POST /api/contact`
-Si `name` o `email` llegan vacíos o como `None`, el `INSERT` guarda `None` en la base de datos sin error.
-- **Fix:** Validar campos obligatorios y devolver 400 si faltan.
-
-### 5. Sin protección CSRF en formularios del admin
-Los formularios de admin no tienen token CSRF. Un atacante podría crear/borrar animales o noticias engañando al admin.
-- **Fix:** Usar `flask-wtf` o implementar tokens CSRF manuales en los formularios.
-
----
-
-## 🟠 Funcionalidades del admin pendientes
-
-### 1. No hay ruta para editar noticias
-Existe `new_news` pero no hay `edit_news` ni `delete_news`.
-- **Archivos a crear/modificar:** `admin/app.py`, `admin/templates/news_form.html`
-- El formulario `news_form.html` tampoco tiene modo edición (no pre-rellena campos).
-
-### 2. No hay página de gestión de contactos
-Los mensajes del formulario se muestran resumidos en el dashboard pero no hay vista completa:
-- Ver el mensaje completo
-- Marcar como leído / pendiente
-- Responder por email
-
-### 3. No hay modo borrador en noticias
-El campo `published` existe en la BD pero no se puede gestionar desde el admin:
-- Publicar / despublicar una noticia
-- Guardar como borrador al crear
-
-### 4. No hay confirmación antes de borrar
-Al borrar un animal el formulario hace `POST` directo sin confirmación JavaScript.
-- **Fix:** Añadir `confirm()` o un modal de confirmación antes del submit.
-
-### 5. Sin mensajes flash de éxito/error en el admin
-Después de crear o editar un animal/noticia, el usuario es redirigido sin ningún feedback visual.
-- **Fix:** Usar `flask.flash()` y mostrar los mensajes en `base.html`.
-
-### 6. No hay gestión de usuarios
-Existe la tabla `users` pero no hay UI para:
-- Cambiar la contraseña del admin
-- Crear/eliminar usuarios adicionales
-
-### 7. Sin paginación en listas del admin
-`/admin/animals` y `/admin/news` devuelven todos los registros de una vez. Con muchos registros el rendimiento se degrada.
+</details>
 
 ---
 
-## 🟠 API — endpoints incompletos
+## 🟡 SEO y presencia web
 
-| Endpoint | Estado | Notas |
+| Mejora | Descripción | Estado |
 |---|---|---|
-| `GET /api/animals` | ✅ Funciona | Falta filtro por `type` |
-| `GET /api/animals/<id>` | ❌ No existe | Necesario para ficha de animal |
-| `GET /api/news` | ✅ Funciona | |
-| `GET /api/news/<id>` | ❌ No existe | Necesario para página de noticia individual |
-| `POST /api/contact` | ✅ Funciona | Sin validación |
-| `PATCH /api/animals/<id>/status` | ❌ No existe | Para marcar adoptado sin entrar al formulario |
+| **og:image** | Imagen de previsualización en redes sociales (requiere imagen pública) | Pendiente |
+| **Título dinámico** | Incluir nombre del animal o noticia en `<title>` al abrir modal | Pendiente |
+| **Mapa real en contacto.html** | El iframe usa URL de ejemplo — poner URL real de Google Maps en Configuración del sitio | Pendiente |
 
 ---
 
-## 🟡 Mejoras de experiencia de usuario (frontend)
+## 🟢 Opcionales / futuras
 
-### 1. Soporte multiidioma incompleto
-El selector ES/VAL solo afecta a `index.html` (vía `js/main.js`). Las páginas `adopcion.html`, `contacto.html`, `dona.html` y `colabora.html` no tienen traducciones al valenciano.
-
-### 2. Ficha individual de animal no implementada
-El botón "Conocer más" enlaza a `adopcion.html?id=X` pero no hay lógica en `adopcion.js` para detectar el parámetro `?id` y mostrar el animal preseleccionado. Requiere el endpoint `GET /api/animals/<id>`.
-
-### 3. Página de animales adoptados
-`pages/adoptados.html` no existe. Sería una galería de animales con `status = 'adopted'` usando `GET /api/animals?status=adopted`.
-
-### 4. Filtro por tamaño en adopción
-El formulario de animal tiene campo `size` (Pequeño/Mediano/Grande) pero la página de adopción no permite filtrar por tamaño.
-
-### 5. Galería de imágenes en la ficha de animal
-Actualmente solo se guarda una imagen por animal. Se podría añadir una tabla `animal_images` para múltiples fotos.
+| Idea | Detalle |
+|---|---|
+| **Notificaciones por email** | Al recibir solicitud de adopción o contacto → smtplib o SendGrid |
+| **Paginación en la API pública** | `?page=1&per_page=12` para escalar |
+| **Galería de varias fotos por animal** | Tabla `animal_images(animal_id, path, order)` |
+| **GDPR / cookies** | Banner de cookies + página de política de privacidad |
+| **PWA** | manifest.json + service worker para soporte offline |
+| **Modo oscuro** | Toggle en el header, guardar en localStorage |
+| **Exportar adoptados/animales a CSV** | Ampliar exportación CSV también para la tabla de animales |
+| **Contraseña olvidada** | Reset por email (requiere smtplib) |
+| **Multiidioma VAL ampliado** | Traducir el contenido de los artículos de noticias |
 
 ---
 
-## 🟡 Mejoras técnicas / deuda técnica
-
-### 1. `contact.js` conectar al backend real
-Descomentar el fetch y eliminar el mock. Sección marcada con `/* ... */` en `sendContactForm()`.
-
-### 2. `BASE_URL` hardcodeado a `localhost`
-`http://localhost:5000` aparece en `adopcion.js` y `main.js`. En producción apuntaría a una URL diferente.
-- **Fix:** Leer el API URL desde un `<meta>` tag o variable global inyectada desde el HTML.
-
-### 3. Optimización de imágenes subidas
-Las imágenes se guardan tal cual se suben. Si el usuario sube una foto de 10MB, así se sirve.
-- **Mejora:** Añadir redimensionado automático con `Pillow` al guardar (`pip install Pillow`).
-
-### 4. Las imágenes de muestra de la BD no existen
-Los 12 animales de ejemplo tienen `image = 'images/animales/luna.jpg'` etc. Esos archivos no existen y siempre caen al SVG placeholder.
-- **Fix A:** Actualizar la BD para poner `image = NULL` en los datos de ejemplo.
-- **Fix B:** Añadir imágenes reales de la protectora.
-
-### 5. Sin logging estructurado
-Flask corre con el logger por defecto. Los errores de la aplicación no se guardan a fichero.
-- **Fix:** Configurar `logging.FileHandler` o usar `flask.logging`.
-
-### 6. Sin backup automático de la BD
-`admin/protectora.db` es el único almacén de datos y no está en `.gitignore`.
-- hay un `hacer_backup.bat` pero no se ejecuta automáticamente.
-
----
-
-## 🟢 Mejoras opcionales / futuras
-
-- **Notificaciones por email** al admin cuando llega un contacto nuevo (hay un comentario en `api_contact()` pero no está implementado).
-- **Paginación en la API** con parámetros `?page=1&per_page=12` para escalar.
-- **Búsqueda de noticias** en la futura `actualidad.html`.
-- **Mapa de ubicación** en `contacto.html` (Google Maps embed o Leaflet.js).
-- **SEO / Open Graph** — las páginas no tienen meta tags `og:image`, `og:description` para compartir en redes.
-- **PWA** — añadir `manifest.json` y service worker para soporte offline básico.
-- **Favicon** — no hay `favicon.ico` ni `<link rel="icon">` en los HTML.
-- **Exportar contactos** a CSV desde el panel admin.
-- **GDPR / aviso de cookies** — la web no tiene banner de cookies ni política de privacidad enlazada correctamente.
-
----
-
-## Resumen de prioridades
+## Resumen de estado actual
 
 ```
-IMPLEMENTADO ✅:
-  [x] Conectar contact.js al backend real
-  [x] Crear páginas faltantes (adoptados, nosotros, actualidad)
-  [x] Endpoint GET /api/animals/<id>
-  [x] Endpoint GET /api/news/<id>
-  [x] Filtro ?type= en /api/animals
-  [x] Edit/delete de noticias en el admin
-  [x] Página de gestión de contactos
-  [x] Modo borrador en noticias
-  [x] Mensajes flash en el admin
-  [x] Cambio de contraseña
-  [x] secret_key desde variable de entorno
-  [x] Quitar debug=True
-  [x] Autenticación en /api/upload
-  [x] Validación en /api/contact
-  [x] CSRF en formularios admin
-  [x] Borrar imagen antigua al editar/eliminar animal o noticia
-  [x] Filtro por tamaño en adopcion.html
-  [x] ?id= en adopcion.html carga la ficha directamente
+BACKEND (Flask + SQLite)
+  OK  CRUD completo: animales, noticias, contactos
+  OK  Autenticacion admin (sesion) con roles: superadmin, editor, visor
+  OK  CSRF, secret_key env, debug env
+  OK  Gestion de colaboradores (socios, voluntarios, padrinos, acogida, empresa)
+  OK  Solicitudes de adopcion vinculadas a animal
+  OK  Estado 'reserved' — auto al recibir solicitud; gestionable en admin
+  OK  Cambio rapido de estado de animal (PATCH /api/animals/<id>/status)
+  OK  Paginacion en listas del admin (20 animales/pag, 15 noticias/pag)
+  OK  Configuracion del sitio editable en admin (/admin/settings)
+  OK  GET /api/settings publica para frontend
+  OK  Logging a fichero (admin/app.log) + consola
+  OK  Optimizacion de imagenes con Pillow (max 1200px, JPEG 85%)
+  OK  Rate limiting: contacto/colabora/adopcion (Flask-Limiter)
+  OK  Exportar CSV: contactos y colaboradores
+  OK  Sitemap.xml dinamico (/sitemap.xml)
 
-PENDIENTE (mejoras opcionales):
-  [ ] Notificaciones por email al recibir contacto
-  [ ] Paginación en la API y en el admin
-  [ ] Imágenes de muestra en la BD → null o añadir fotos reales
-  [ ] Optimización de imágenes subidas (redimensionar con Pillow)
-  [ ] SEO / Open Graph meta tags
-  [ ] Favicon
-  [ ] Mapa en contacto.html
-  [ ] Exportar contactos a CSV
+FRONTEND PUBLICO
+  OK  Todas las paginas del menu creadas y enlazadas
+  OK  Header rediseñado: nav arriba, logo/acciones abajo
+  OK  Filtros: tipo, estado, tamaño en adopcion
+  OK  Tabs "En adopcion" / "En acogida" en adopcion.html
+  OK  Badge "Reservado" en tarjetas de animales reservados
+  OK  Formulario de contacto conectado al backend
+  OK  Formularios de colabora.html conectados al backend
+  OK  Solicitud de adopcion desde la ficha de animal (formulario inline en modal)
+  OK  Busqueda por nombre de animal en adopcion.html
+  OK  Contacto.html carga email/telefono/direccion/horario y mapa desde API
+  OK  Favicon en todas las paginas
+  OK  robots.txt
+  OK  Open Graph meta tags en todos los HTML
+  OK  <meta name="api-base"> — sin BASE_URL hardcodeado en JS
+  OK  i18n.js — selector ES/VAL funciona en todas las paginas
+
+PANEL ADMIN
+  OK  Animales (nuevo, editar, borrar, imagen, cambio rapido de estado incl. reserved, paginacion)
+  OK  Noticias (nuevo, editar, borrar, borrador/publicado, editor Quill.js, paginacion)
+  OK  Contactos (lista, marcar leido, borrar, exportar CSV)
+  OK  Colaboradores (lista, filtros tipo/estado, cambio estado inline, eliminar, exportar CSV)
+  OK  Solicitudes de adopcion (lista, filtros, cambio estado inline, eliminar)
+  OK  Configuracion del sitio (datos de contacto, redes sociales, mapa, site_url)
+  OK  Usuarios y roles (crear, editar, activar/desactivar, eliminar)
+  OK  Dashboard con tarjetas clicables que navegan a cada seccion
+  OK  Cambiar contraseña
+```
+
+
+La sección "Hazte padrino/madrina" sigue redirigiendo a `adopcion.html`. Conectar con un formulario inline similar al de socio/acogida.
+
+---
+
+## 🟡 Mejoras técnicas
+
+### 1. Optimización de imágenes con Pillow
+
+Las imágenes se guardan sin redimensionar. Una foto de 8MB se sirve tal cual.
+
+- **Fix:** `pip install Pillow` y redimensionar a máximo 1200px en `app.py` al guardar.
+
+### 2. `BASE_URL` hardcodeado a `localhost:5000`
+
+Aparece en `adopcion.js`, `main.js`, `actualidad.html`, `adoptados.html`, `nosotros.html`.
+
+- **Fix:** Usar `<meta name="api-base" content="...">` en el HTML y leerlo desde JS.
+
+### 3. Multiidioma completo (VAL)
+
+El selector ES/VAL solo funciona en `index.html`. Las demás páginas no tienen traducciones.
+
+- **Fix:** Extraer `translations` a `js/i18n.js` e implementarlo en cada página.
+
+### 4. Imágenes de muestra → null en la BD
+
+Los 10 animales de ejemplo tienen rutas de imagen que no existen.
+
+- **Fix SQL:** `UPDATE animals SET image = NULL WHERE image LIKE 'images/animales/%'`
+
+### 5. Sin logging a fichero
+
+Los errores de Flask solo van a la consola.
+
+- **Fix:** Configurar `logging.FileHandler('admin/app.log')` en `app.py`.
+
+---
+
+## 🟡 SEO y presencia web
+
+| Mejora | Descripción |
+|---|---|
+| **Open Graph** | Meta tags `og:title`, `og:description`, `og:image` en cada página |
+| **Favicon** | No hay favicon en los HTML |
+| **Titulo dinamico** | Incluir nombre del animal o noticia en `<title>` |
+| **Sitemap.xml** | Para indexación en buscadores |
+| **robots.txt** | Bloquear `/admin` de los bots |
+
+---
+
+## 🟢 Opcionales / futuras
+
+| Idea | Detalle |
+|---|---|
+| **Notificaciones por email** | Al recibir solicitud de adopcion o contacto → smtplib o SendGrid |
+| **Paginación en la API pública** | `?page=1&per_page=12` para escalar |
+| **Galería de varias fotos por animal** | Tabla `animal_images(animal_id, path, order)` |
+| **Exportar contactos a CSV** | Boton en `/admin/contacts` → modulo csv de Python |
+| **Exportar colaboradores a CSV** | Igual para voluntarios/socios |
+| **Dashboard con gráficas** | Chart.js: animales por estado, contactos por mes, etc. |
+| **GDPR / cookies** | Banner de cookies + página de politica de privacidad |
+| **PWA** | manifest.json + service worker para soporte offline |
+| **Reserva de animal** | Estado `reserved` para animales con solicitud activa |
+| **Rate limiting en la API** | Evitar spam en el formulario de contacto (Flask-Limiter) |
+| **Modo oscuro** | Toggle en el header, guardar en localStorage |
+
+---
+
+## Resumen de estado actual
+
+```
+BACKEND (Flask + SQLite)
+  OK  CRUD completo: animales, noticias, contactos
+  OK  Autenticacion admin (sesion)
+  OK  CSRF, secret_key env, debug env
+  OK  Gestion de colaboradores (socios, voluntarios, padrinos, acogida, empresa)
+  OK  Solicitudes de adopcion vinculadas a animal
+  OK  Cambio rapido de estado de animal (PATCH /api/animals/<id>/status)
+  --  Sin paginacion
+
+FRONTEND PUBLICO
+  OK  Todas las paginas del menu creadas y enlazadas
+  OK  Header rediseñado: nav arriba, logo/acciones abajo
+  OK  Filtros: tipo, estado, tamaño en adopcion
+  OK  Formulario de contacto conectado al backend
+  OK  Formularios de colabora.html (socio, voluntariado, acogida, empresa) conectados
+  OK  Solicitud de adopcion desde la ficha de animal (formulario inline en modal)
+  OK  Búsqueda por nombre de animal en adopcion.html
+  --  Sin mapa en contacto
+  --  Padrino/madrina sigue sin formulario propio
+
+PANEL ADMIN
+  OK  Animales (nuevo, editar, borrar, imagen, cambio rapido de estado)
+  OK  Noticias (nuevo, editar, borrar, borrador/publicado, editor Quill.js)
+  OK  Contactos (lista, marcar leido, borrar)
+  OK  Colaboradores (lista, filtros tipo/estado, cambio estado inline, eliminar)
+  OK  Solicitudes de adopcion (lista, filtros, cambio estado inline, eliminar)
+  OK  Cambiar contraseña
+  --  Sin paginacion
+```
+
+
+---
+
+## 🔴 Crítico — Colaboradores sin gestión
+
+### La sección "Colabora" no guarda datos en ningún sitio
+
+`pages/colabora.html` muestra formularios de: socio, padrino/madrina, voluntariado, acogida, empresa solidaria. **Ninguno de ellos envía datos al backend.** Son formularios estáticos que o bien no hacen nada, o redirigen al email.
+
+Esto significa que la protectora **no puede gestionar quién quiere colaborar** desde ningún panel.
+
+**Lo que hay que construir:**
+
+| Pieza | Descripción |
+|---|---|
+| Tabla BD `collaborators` | `id, type, name, email, phone, message, status, created_at` |
+| `POST /api/collaborate` | Endpoint que recibe el formulario y guarda en BD |
+| `GET /admin/collaborators` | Lista en el admin con filtro por tipo y estado |
+| `POST /admin/collaborators/<id>/status` | Cambiar estado (pendiente/activo/rechazado) |
+| `admin/templates/collaborators.html` | Plantilla de la lista |
+| Conectar formularios en `colabora.html` | `fetch` a `/api/collaborate` con tipo correcto |
+
+**Respuesta directa:** Ahora mismo los colaboradores **no se gestionan desde ningún sitio**. Los formularios de colabora.html son decorativos. Hay que implementarlo desde cero.
+
+---
+
+## 🔴 Crítico — Formulario de solicitud de adopción
+
+No hay forma de solicitar la adopción de un animal concreto. El flujo termina en "Contacto general".
+
+**Lo que falta:**
+
+| Pieza | Descripción |
+|---|---|
+| Tabla BD `adoption_requests` | `id, animal_id, name, email, phone, message, status, created_at` |
+| `POST /api/animals/<id>/adopt` | Guarda la solicitud vinculada al animal |
+| `GET /admin/adoptions` | Lista de solicitudes en el admin |
+| Botón "Solicitar adopción" en ficha de animal | En `adopcion.html`, abre modal con formulario |
+
+---
+
+## 🟠 Importante — Acciones rápidas en el admin
+
+### Cambiar estado de animal sin entrar al formulario
+
+La única forma de marcar un animal como adoptado es entrar en el formulario completo.
+
+- **Fix:** Select de estado en la tabla de animales → `PATCH /api/animals/<id>/status`
+
+### Paginación en listas del admin
+
+`/admin/animals` y `/admin/news` devuelven todos los registros. Con muchos animales esto es lento.
+
+- **Fix:** Añadir `LIMIT/OFFSET` + controles de página en las plantillas.
+
+### Editor de texto enriquecido para noticias
+
+El campo "contenido" es un textarea plano. No permite negritas, listas ni enlaces.
+
+- **Fix:** Integrar Quill.js (CDN, sin npm) en `news_form.html`.
+
+---
+
+## 🟠 Importante — Mejoras de frontend
+
+### 1. Sección de animales en acogida
+
+Falta el estado `foster` (acogida temporal). La página de adopción podría tener una pestaña "En acogida".
+
+### 2. Modal de ficha de animal más completa
+
+Añadir en el modal:
+- Botón "Solicitar adopción" con formulario inline
+- Botón "Compartir" (URL directa `adopcion.html?id=X`)
+
+### 3. Mapa en contacto.html
+
+La dirección aparece como texto. Integrar un `<iframe>` de Google Maps o Leaflet.js.
+
+### 4. Búsqueda por nombre de animal
+
+En `adopcion.html` no hay búsqueda por nombre. Añadir `<input type="search">` con filtro en tiempo real.
+
+---
+
+## 🟡 Mejoras técnicas
+
+### 1. Optimización de imágenes con Pillow
+
+Las imágenes se guardan sin redimensionar. Una foto de 8MB se sirve tal cual.
+
+- **Fix:** `pip install Pillow` y redimensionar a máximo 1200px en `app.py` al guardar.
+
+### 2. `BASE_URL` hardcodeado a `localhost:5000`
+
+Aparece en `adopcion.js`, `main.js`, `actualidad.html`, `adoptados.html`, `nosotros.html`.
+
+- **Fix:** Usar `<meta name="api-base" content="...">` en el HTML y leerlo desde JS.
+
+### 3. Multiidioma completo (VAL)
+
+El selector ES/VAL solo funciona en `index.html`. Las demás páginas no tienen traducciones.
+
+- **Fix:** Extraer `translations` a `js/i18n.js` e implementarlo en cada página.
+
+### 4. Imágenes de muestra → null en la BD
+
+Los 10 animales de ejemplo tienen rutas de imagen que no existen.
+
+- **Fix SQL:** `UPDATE animals SET image = NULL WHERE image LIKE 'images/animales/%'`
+
+### 5. Sin logging a fichero
+
+Los errores de Flask solo van a la consola.
+
+- **Fix:** Configurar `logging.FileHandler('admin/app.log')` en `app.py`.
+
+---
+
+## 🟡 SEO y presencia web
+
+| Mejora | Descripción |
+|---|---|
+| **Open Graph** | Meta tags `og:title`, `og:description`, `og:image` en cada página |
+| **Favicon** | No hay favicon en los HTML |
+| **Titulo dinamico** | Incluir nombre del animal o noticia en `<title>` |
+| **Sitemap.xml** | Para indexación en buscadores |
+| **robots.txt** | Bloquear `/admin` de los bots |
+
+---
+
+## 🟢 Opcionales / futuras
+
+| Idea | Detalle |
+|---|---|
+| **Notificaciones por email** | Al recibir solicitud de adopcion o contacto → smtplib o SendGrid |
+| **Paginación en la API pública** | `?page=1&per_page=12` para escalar |
+| **Galería de varias fotos por animal** | Tabla `animal_images(animal_id, path, order)` |
+| **Exportar contactos a CSV** | Boton en `/admin/contacts` → modulo csv de Python |
+| **Exportar colaboradores a CSV** | Igual para voluntarios/socios |
+| **Dashboard con gráficas** | Chart.js: animales por estado, contactos por mes, etc. |
+| **GDPR / cookies** | Banner de cookies + página de politica de privacidad |
+| **PWA** | manifest.json + service worker para soporte offline |
+| **Reserva de animal** | Estado `reserved` para animales con solicitud activa |
+| **Rate limiting en la API** | Evitar spam en el formulario de contacto (Flask-Limiter) |
+| **Modo oscuro** | Toggle en el header, guardar en localStorage |
+
+---
+
+## Resumen de estado actual
+
+```
+BACKEND (Flask + SQLite)
+  OK  CRUD completo: animales, noticias, contactos
+  OK  Autenticacion admin (sesion)
+  OK  CSRF, secret_key env, debug env
+  --  Sin gestion de colaboradores (socios, voluntarios, padrinos...)
+  --  Sin solicitudes de adopcion
+  --  Sin paginacion
+
+FRONTEND PUBLICO
+  OK  Todas las paginas del menu creadas y enlazadas
+  OK  Header rediseñado: nav arriba, logo/acciones abajo
+  OK  Filtros: tipo, estado, tamaño en adopcion
+  OK  Formulario de contacto conectado al backend
+  --  Formularios de colabora.html no envian datos
+  --  No hay solicitud de adopcion desde la ficha de animal
+  --  Sin busqueda por nombre de animal
+  --  Sin mapa en contacto
+  --  Las secciones Aviso Legal | Política de Privacidad | Política de Cookies no sale nada.
+
+PANEL ADMIN
+  OK  Animales (nuevo, editar, borrar, imagen)
+  OK  Noticias (nuevo, editar, borrar, borrador/publicado)
+  OK  Contactos (lista, marcar leido, borrar)
+  OK  Cambiar contraseña
+  --  Sin gestion de colaboradores
+  --  Sin solicitudes de adopcion
+  --  Sin cambio rapido de estado de animal
+  --  Sin editor de texto enriquecido para noticias
+  --  Sin paginacion
+  --  Renombrar la seccion de Contactos por Mensajes
+  --  En los mensajes añadir una accion que sea visualizar, ha de abrir el mensaje para poder verlo completo.
+
 ```
