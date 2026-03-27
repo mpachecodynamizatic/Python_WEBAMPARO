@@ -1,0 +1,207 @@
+═══════════════════════════════════════════════════════════════
+  🐾 PROTECTORA DE ANIMALES BURJASSOT - GUÍA RÁPIDA 🐾
+═══════════════════════════════════════════════════════════════
+
+📋 ARCHIVOS PRINCIPALES:
+═══════════════════════════════════════════════════════════════
+
+  run.bat                    ➜ Iniciar todos los servidores
+  stop.bat                   ➜ Detener todos los servidores
+  instalar_dependencias.bat  ➜ Instalar/reinstalar dependencias
+  limpiar_entorno.bat        ➜ Limpiar entorno virtual
+  README.md                  ➜ Documentación completa
+  GUIA_INICIO_RAPIDO.md      ➜ Guía paso a paso
+
+═══════════════════════════════════════════════════════════════
+  🚀 INICIO RÁPIDO (Primera vez)
+═══════════════════════════════════════════════════════════════
+
+1. Haz doble clic en:  run.bat
+   (Automáticamente creará el entorno virtual e instalará dependencias)
+
+2. Espera mientras se configura todo (primera vez: ~2-3 minutos)
+
+3. Cuando te pregunte si quieres abrir los navegadores:
+   - Presiona "S" para abrir automáticamente
+   - Presiona "N" para abrir manualmente después
+
+4. ¡Listo! Ya puedes usar la web
+
+═══════════════════════════════════════════════════════════════
+  ⚡ INICIO RÁPIDO (Uso diario)
+═══════════════════════════════════════════════════════════════
+
+1. Haz doble clic en:  run.bat
+   (Verificará dependencias e iniciará en segundos)
+
+2. Presiona "S" para abrir los navegadores
+
+3. ¡A trabajar! 🎉
+
+═══════════════════════════════════════════════════════════════
+  🔐 CREDENCIALES DE ACCESO
+═══════════════════════════════════════════════════════════════
+
+Panel de Administración: http://localhost:5000/admin
+
+  Usuario:    admin
+  Contraseña: protectora2026
+
+  ⚠️ IMPORTANTE: Cambia la contraseña después del primer login
+
+═══════════════════════════════════════════════════════════════
+  🌐 URLs DISPONIBLES
+═══════════════════════════════════════════════════════════════
+
+  Panel Admin:    http://localhost:5000/admin
+  Sitio Público:  http://localhost:8000
+
+═══════════════════════════════════════════════════════════════
+  🛑 DETENER LOS SERVIDORES
+═══════════════════════════════════════════════════════════════
+
+Opción 1 (recomendada):
+  - Haz doble clic en: stop.bat
+
+Opción 2:
+  - Cierra las ventanas de comandos que se abrieron
+
+Opción 3:
+  - Presiona Ctrl+C en cada ventana de comandos
+
+═══════════════════════════════════════════════════════════════
+  📝 PRIMEROS PASOS
+═══════════════════════════════════════════════════════════════
+
+1. Accede al panel admin (http://localhost:5000/admin)
+
+2. Inicia sesión con las credenciales arriba
+
+3. Añade tu primer animal:
+   - Ve a "Animales" > "Añadir animal"
+   - Completa el formulario
+   - Sube una foto
+   - Guarda
+
+4. Publica una noticia:
+   - Ve a "Noticias" > "Nueva noticia"
+   - Escribe el contenido
+   - Publica
+
+5. Personaliza la web:
+   - Edita los archivos HTML con tus datos
+   - Actualiza emails, teléfonos, redes sociales
+   - Añade tu logo en images/logos/logo.png
+
+═══════════════════════════════════════════════════════════════
+  ⚙️ PERSONALIZACIÓN BÁSICA
+═══════════════════════════════════════════════════════════════
+
+Para cambiar datos de contacto:
+  - Edita: index.html, pages/contacto.html
+  - Busca y reemplaza: info@protectoraburjassot.com
+  - Busca y reemplaza: +34 XXX XXX XXX
+
+Para cambiar datos bancarios:
+  - Edita: pages/dona.html
+  - Busca: ES00 0000 0000 00 0000000000
+  - Reemplaza con tu IBAN real
+
+Para actualizar redes sociales:
+  - Busca en todos los HTML: facebook.com/protectoraburjassot
+  - Reemplaza con tus URLs reales
+
+═══════════════════════════════════════════════════════════════
+  🔧 ENTORNO VIRTUAL (venv)
+═══════════════════════════════════════════════════════════════
+
+run.bat ahora usa un entorno virtual Python aislado:
+
+✅ Ventajas:
+  • Dependencias separadas del Python del sistema
+  • No interfiere con otros proyectos Python
+  • Fácil de limpiar y reinstalar
+
+📁 Carpeta creada:
+  venv/ (se crea automáticamente la primera vez)
+
+🧹 Limpiar entorno:
+  Ejecuta: limpiar_entorno.bat
+  (Elimina venv y la base de datos para empezar de cero)
+
+🔄 Reinstalar dependencias:
+  Ejecuta: instalar_dependencias.bat
+  (O simplemente elimina la carpeta venv y ejecuta run.bat)
+
+═══════════════════════════════════════════════════════════════
+  ❓ PROBLEMAS COMUNES
+═══════════════════════════════════════════════════════════════
+
+Problema: "Python no está instalado"
+Solución: Instala Python desde https://www.python.org/
+  ⚠️ IMPORTANTE: Marca "Add Python to PATH" al instalar
+
+Problema: "No se pudo crear el entorno virtual"
+Solución:
+  1. Abre cmd como Administrador
+  2. Ejecuta: python -m pip install --upgrade pip
+  3. Ejecuta: python -m pip install virtualenv
+  4. Intenta ejecutar run.bat nuevamente
+
+Problema: "Error al instalar dependencias"
+Solución:
+  1. Verifica tu conexión a Internet
+  2. Ejecuta: limpiar_entorno.bat
+  3. Ejecuta: run.bat nuevamente
+
+Problema: "Puerto 5000/8000 ya en uso"
+Solución:
+  • run.bat te preguntará si quieres detener el proceso
+  • Presiona "S" para detenerlo automáticamente
+  • O ejecuta: stop.bat primero
+
+Problema: "Las páginas no se cargan"
+Solución:
+  - Asegúrate de que run.bat está corriendo
+  - Verifica que ambas ventanas de comandos estén abiertas
+  - Espera 5-10 segundos después de iniciar
+  - Prueba: stop.bat → run.bat
+
+Problema: "No puedo subir imágenes"
+Solución:
+  - Verifica que la carpeta 'uploads' existe
+  - Comprueba que las imágenes sean JPG, PNG o GIF
+  - Máximo 10MB por archivo
+  - Prueba desde el panel admin
+
+Problema: "Dependencias no se instalan"
+Solución:
+  1. Ejecuta como Administrador: run.bat
+  2. O ejecuta: limpiar_entorno.bat
+  3. Luego: instalar_dependencias.bat
+
+═══════════════════════════════════════════════════════════════
+  📚 MÁS INFORMACIÓN
+═══════════════════════════════════════════════════════════════
+
+Para documentación completa, lee:
+  - README.md
+  - GUIA_INICIO_RAPIDO.md
+
+═══════════════════════════════════════════════════════════════
+  💡 CONSEJOS
+═══════════════════════════════════════════════════════════════
+
+✓ Haz backup regular de la base de datos (protectora.db)
+✓ Guarda copias de las fotos subidas (carpeta uploads/)
+✓ Cambia la contraseña de admin regularmente
+✓ Prueba la web en diferentes dispositivos (móvil, tablet)
+✓ Antes de publicar, personaliza todos los datos
+
+═══════════════════════════════════════════════════════════════
+
+¡Buena suerte con tu proyecto! 🐾❤️
+
+Si necesitas ayuda, consulta la documentación completa.
+
+═══════════════════════════════════════════════════════════════

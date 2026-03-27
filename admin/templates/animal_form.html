@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{% if animal %}Editar{% else %}Nuevo{% endif %} Animal{% endblock %}
+{% block page_title %}{% if animal %}Editar{% else %}Nuevo{% endif %} Animal{% endblock %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+    <div class="form-group">
+        <label for="name">Nombre del animal *</label>
+        <input type="text" id="name" name="name" value="{% if animal %}{{ animal.name }}{% endif %}" required>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+            <label for="type">Tipo *</label>
+            <select id="type" name="type" required>
+                <option value="">Selecciona tipo</option>
+                <option value="perro" {% if animal and animal.type == 'perro' %}selected{% endif %}>Perro</option>
+                <option value="gato" {% if animal and animal.type == 'gato' %}selected{% endif %}>Gato</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="gender">Género *</label>
+            <select id="gender" name="gender" required>
+                <option value="">Selecciona género</option>
+                <option value="Macho" {% if animal and animal.gender == 'Macho' %}selected{% endif %}>Macho</option>
+                <option value="Hembra" {% if animal and animal.gender == 'Hembra' %}selected{% endif %}>Hembra</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+            <label for="age">Edad</label>
+            <input type="text" id="age" name="age" value="{% if animal %}{{ animal.age }}{% endif %}" placeholder="Ej: 2 años">
+        </div>
+
+        <div class="form-group">
+            <label for="size">Tamaño</label>
+            <select id="size" name="size">
+                <option value="">Selecciona tamaño</option>
+                <option value="Pequeño" {% if animal and animal.size == 'Pequeño' %}selected{% endif %}>Pequeño</option>
+                <option value="Mediano" {% if animal and animal.size == 'Mediano' %}selected{% endif %}>Mediano</option>
+                <option value="Grande" {% if animal and animal.size == 'Grande' %}selected{% endif %}>Grande</option>
+            </select>
+        </div>
+    </div>
+
+    {% if animal %}
+    <div class="form-group">
+        <label for="status">Estado</label>
+        <select id="status" name="status">
+            <option value="adoption" {% if animal.status == 'adoption' %}selected{% endif %}>En adopción</option>
+            <option value="adopted" {% if animal.status == 'adopted' %}selected{% endif %}>Adoptado</option>
+            <option value="fostered" {% if animal.status == 'fostered' %}selected{% endif %}>En acogida</option>
+        </select>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea id="description" name="description" placeholder="Cuéntanos sobre el animal...">{% if animal %}{{ animal.description }}{% endif %}</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="image">Foto del animal</label>
+        <input type="file" id="image" name="image" accept="image/*">
+        {% if animal and animal.image %}
+        <div style="margin-top: 1rem;">
+            <img src="/{{ animal.image }}" alt="{{ animal.name }}"
+                 style="max-width: 200px; border-radius: 8px;"
+                 onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
+        </div>
+        {% elif animal %}
+        <div style="margin-top: 1rem;">
+            <img src="/images/animales/{{ animal.type }}.svg" alt="{{ animal.name }}"
+                 style="max-width: 200px; border-radius: 8px;">
+        </div>
+        {% endif %}
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Guardar
+        </button>
+        <a href="{{ url_for('list_animals') }}" class="btn" style="background: #95a5a6; color: white;">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
+    </div>
+</form>
+{% endblock %}

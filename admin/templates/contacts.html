@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Mensajes de Contacto{% endblock %}
+{% block page_title %}Contactos{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2><i class="fas fa-envelope"></i> Mensajes recibidos</h2>
+    <span class="badge badge-warning" style="font-size: 1rem;">
+        {{ contacts | selectattr('read', 'equalto', 0) | list | length }} sin leer
+    </span>
+</div>
+
+{% if contacts %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Estado</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Asunto</th>
+            <th>Mensaje</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+        <tr style="{{ 'background:#fffde7;' if not contact.read else '' }}">
+            <td>
+                {% if contact.read %}
+                <span class="badge badge-success">Leído</span>
+                {% else %}
+                <span class="badge badge-warning">Nuevo</span>
+                {% endif %}
+            </td>
+            <td><strong>{{ contact.name }}</strong></td>
+            <td><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></td>
+            <td>{{ contact.phone or '—' }}</td>
+            <td>{{ contact.subject or '—' }}</td>
+            <td style="max-width: 250px; white-space: pre-wrap; word-break: break-word; font-size: 0.9rem;">
+                {{ contact.message[:120] }}{% if contact.message|length > 120 %}…{% endif %}
+            </td>
+            <td style="white-space: nowrap; font-size: 0.85rem;">{{ contact.created_at }}</td>
+            <td style="white-space: nowrap;">
+                {% if not contact.read %}
+                <form method="POST" action="{{ url_for('mark_contact_read', contact_id=contact.id) }}" style="display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-success btn-sm" title="Marcar como leído">
+                        <i class="fas fa-check"></i>
+                    </button>
+                </form>
+                {% endif %}
+                <form method="POST" action="{{ url_for('delete_contact', contact_id=contact.id) }}" style="display:inline;"
+                      onsubmit="return confirm('¿Eliminar este mensaje?');">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div style="text-align: center; padding: 3rem;">
+    <i class="fas fa-inbox" style="font-size: 4rem; color: #ddd; margin-bottom: 1rem;"></i>
+    <h3 style="color: #666;">No hay mensajes de contacto</h3>
+    <p style="color: #999;">Cuando alguien rellene el formulario de contacto, aparecerá aquí.</p>
+</div>
+{% endif %}
+{% endblock %}

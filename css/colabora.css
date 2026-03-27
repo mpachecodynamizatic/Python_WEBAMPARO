@@ -1,0 +1,213 @@
+/* Estilos para página de colaboración */
+
+.collaboration-section {
+    padding: var(--spacing-xl) 0;
+    background: var(--bg-white);
+}
+
+.collaboration-section.alt {
+    background: var(--bg-light);
+}
+
+.collab-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-lg);
+    align-items: start;
+}
+
+.collab-icon {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    flex-shrink: 0;
+}
+
+.collab-icon i {
+    font-size: 3.5rem;
+    color: var(--text-white);
+}
+
+.collab-content {
+    padding: var(--spacing-sm);
+}
+
+.collab-content h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.collab-content > p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Beneficios */
+.benefits {
+    background: var(--bg-cream);
+    padding: var(--spacing-md);
+    border-radius: 15px;
+    margin: var(--spacing-md) 0;
+}
+
+.benefits h3 {
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.3rem;
+}
+
+.benefits ul li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+}
+
+.benefits ul li i {
+    color: var(--success-color);
+    font-size: 1.2rem;
+}
+
+/* Precios */
+.pricing {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+    flex-wrap: wrap;
+}
+
+.price-option {
+    flex: 1;
+    min-width: 150px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    padding: var(--spacing-sm);
+    border-radius: 15px;
+    text-align: center;
+    color: var(--text-white);
+    box-shadow: var(--shadow-md);
+}
+
+.price-option .amount {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.price-option .label {
+    display: block;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Áreas de voluntariado */
+.volunteer-areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+}
+
+.area-card {
+    background: var(--bg-cream);
+    padding: var(--spacing-sm);
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+}
+
+.area-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.area-card i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.area-card h4 {
+    color: var(--text-dark);
+    margin-bottom: 0.3rem;
+    font-size: 1.1rem;
+}
+
+.area-card p {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Formulario de empresa */
+.company-form-container {
+    background: var(--bg-light);
+    padding: var(--spacing-md);
+    border-radius: 15px;
+    margin-top: var(--spacing-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.company-form-container h3 {
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-md);
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .collab-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .collab-icon {
+        margin: 0 auto;
+    }
+
+    .volunteer-areas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .collab-content h2 {
+        font-size: 2rem;
+    }
+
+    .pricing {
+        flex-direction: column;
+    }
+
+    .volunteer-areas {
+        grid-template-columns: 1fr;
+    }
+
+    .collab-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .collab-icon i {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .price-option .amount {
+        font-size: 1.5rem;
+    }
+}

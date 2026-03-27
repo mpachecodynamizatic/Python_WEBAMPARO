@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Gestión de Animales{% endblock %}
+{% block page_title %}Animales{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h2><i class="fas fa-paw"></i> Todos los animales</h2>
+    <a href="{{ url_for('new_animal') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Añadir animal
+    </a>
+</div>
+
+{% if animals %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Foto</th>
+            <th>Nombre</th>
+            <th>Tipo</th>
+            <th>Edad</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for animal in animals %}
+        <tr>
+            <td>
+                {% if animal.image %}
+                <img src="/{{ animal.image }}" alt="{{ animal.name }}"
+                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;"
+                     onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
+                {% else %}
+                <img src="/images/animales/{{ animal.type }}.svg" alt="{{ animal.name }}"
+                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                {% endif %}
+            </td>
+            <td><strong>{{ animal.name }}</strong></td>
+            <td>
+                <i class="fas fa-{% if animal.type == 'perro' %}dog{% else %}cat{% endif %}"></i>
+                {{ animal.type|capitalize }}
+            </td>
+            <td>{{ animal.age }}</td>
+            <td>
+                {% if animal.status == 'adoption' %}
+                <span class="badge badge-warning">En adopción</span>
+                {% elif animal.status == 'adopted' %}
+                <span class="badge badge-success">Adoptado</span>
+                {% else %}
+                <span class="badge badge-danger">{{ animal.status }}</span>
+                {% endif %}
+            </td>
+            <td>{{ animal.created_at }}</td>
+            <td>
+                <a href="{{ url_for('edit_animal', animal_id=animal.id) }}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <form method="POST" action="{{ url_for('delete_animal', animal_id=animal.id) }}" style="display: inline;" onsubmit="return confirm('¿Seguro que quieres eliminar este animal?');">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div style="text-align: center; padding: 3rem;">
+    <i class="fas fa-paw" style="font-size: 4rem; color: #ddd; margin-bottom: 1rem;"></i>
+    <h3 style="color: #666;">No hay animales registrados</h3>
+    <p style="color: #999; margin-bottom: 1.5rem;">Comienza añadiendo tu primer animal</p>
+    <a href="{{ url_for('new_animal') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Añadir primer animal
+    </a>
+</div>
+{% endif %}
+
+<style>
+    .btn-sm {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}

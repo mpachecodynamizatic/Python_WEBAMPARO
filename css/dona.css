@@ -1,0 +1,283 @@
+/* Estilos para página de donaciones */
+
+.impact-section {
+    background: linear-gradient(135deg, #FFE5D9 0%, #C9E4DE 100%);
+    padding: var(--spacing-xl) 0;
+}
+
+.impact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.impact-card {
+    background: var(--bg-white);
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease;
+}
+
+.impact-card:hover {
+    transform: translateY(-5px);
+}
+
+.impact-card i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.impact-card h3 {
+    font-size: 2.5rem;
+    color: var(--text-dark);
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.impact-card p {
+    color: var(--text-light);
+    font-size: 1.1rem;
+}
+
+/* Métodos de donación */
+.donation-section {
+    padding: var(--spacing-xl) 0;
+    background: var(--bg-white);
+}
+
+.donation-section.alt {
+    background: var(--bg-light);
+}
+
+.donation-method {
+    display: grid;
+    grid-template-columns: auto 1.5fr 1fr;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.donation-method.reverse {
+    grid-template-columns: auto 1.5fr 1fr;
+}
+
+.method-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+}
+
+.method-icon i {
+    font-size: 3rem;
+    color: var(--text-white);
+}
+
+.method-content {
+    padding: var(--spacing-md);
+}
+
+.method-content h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.method-content p {
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-sm);
+}
+
+.benefits-list {
+    margin: var(--spacing-sm) 0;
+}
+
+.benefits-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.benefits-list i {
+    color: var(--success-color);
+    font-size: 1.2rem;
+}
+
+.method-image {
+    width: 100%;
+    height: 300px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.method-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Códigos y detalles bancarios */
+.bizum-code,
+.bank-details {
+    background: var(--bg-light);
+    padding: var(--spacing-sm);
+    border-radius: 10px;
+    margin: var(--spacing-sm) 0;
+}
+
+.code-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--bg-white);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+}
+
+.code {
+    font-family: 'Courier New', monospace;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    flex: 1;
+}
+
+.bank-info p {
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.note {
+    background: #FFF9C4;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--warning-color);
+    margin-top: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.note i {
+    color: #F57C00;
+}
+
+/* Transparencia */
+.transparency-section {
+    background: linear-gradient(135deg, #E8F5E9 0%, #FFF9C4 100%);
+    padding: var(--spacing-xl) 0;
+}
+
+.expenses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.expense-card {
+    background: var(--bg-white);
+    padding: var(--spacing-md);
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.expense-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.percentage {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.expense-card i {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.expense-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.expense-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .donation-method,
+    .donation-method.reverse {
+        grid-template-columns: auto 1fr;
+    }
+
+    .method-image {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .donation-method,
+    .donation-method.reverse {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .method-icon {
+        margin: 0 auto;
+    }
+
+    .benefits-list li {
+        justify-content: center;
+    }
+
+    .impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .expenses-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .impact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .code {
+        font-size: 1rem;
+    }
+
+    .method-content h2 {
+        font-size: 1.5rem;
+    }
+}

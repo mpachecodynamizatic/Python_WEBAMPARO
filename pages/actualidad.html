@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Actualidad - Protectora de Animales Burjassot">
+    <title>Actualidad - Protectora de Animales Burjassot</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .news-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .news-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+        .news-card img {
+            width: 100%; height: 200px; object-fit: cover; display: block;
+        }
+        .news-body { padding: 1.5rem; }
+        .news-badge {
+            display: inline-block; padding: .25rem .75rem; border-radius: 20px;
+            font-size: .8rem; font-weight: 600; margin-bottom: .75rem;
+        }
+        .badge-campana { background: #fff3cd; color: #856404; }
+        .badge-evento  { background: #d1ecf1; color: #0c5460; }
+        .badge-blog    { background: #e8d5f5; color: #6f42c1; }
+        .news-date { color: #999; font-size: .85rem; margin-bottom: .5rem; }
+        .news-card h3 { font-size: 1.1rem; margin-bottom: .75rem; line-height: 1.4; }
+        .news-card p  { color: #666; font-size: .95rem; line-height: 1.6; }
+        .news-card .read-more {
+            display: inline-block; margin-top: 1rem; color: var(--primary-color, #F4A460);
+            font-weight: 600; text-decoration: none;
+        }
+        .news-card .read-more:hover { text-decoration: underline; }
+
+        .filter-tabs {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+            margin-bottom: 2rem; border-bottom: 2px solid #eee; padding-bottom: 1rem;
+        }
+        .tab-btn {
+            padding: .5rem 1.25rem; border: none; cursor: pointer;
+            border-radius: 20px; font-weight: 600; background: #f0f0f0;
+            color: #555; transition: all .2s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--primary-color, #F4A460); color: white;
+        }
+
+        .news-detail {
+            display: none; max-width: 720px; margin: 0 auto;
+            background: white; border-radius: 16px; padding: 2.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+        }
+        .news-detail.visible { display: block; }
+        .news-detail img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 1.5rem; }
+        .news-detail h1 { font-size: 1.8rem; margin-bottom: .5rem; }
+        .back-btn {
+            display: inline-flex; align-items: center; gap: .5rem;
+            margin-bottom: 1.5rem; color: #666; cursor: pointer;
+            font-weight: 600; border: none; background: none; font-size: 1rem;
+        }
+        .back-btn:hover { color: var(--primary-color, #F4A460); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-topbar">
+            <div class="container">
+                <button class="menu-toggle" aria-label="Menú"><span></span><span></span><span></span></button>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li class="dropdown">
+                            <a href="adopcion.html">Adopción <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="adopcion.html">En adopción</a></li>
+                                <li><a href="adoptados.html">Adoptados</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="colabora.html">Colabora <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="colabora.html#socio">Hazte socio</a></li>
+                                <li><a href="colabora.html#padrino">Hazte padrino/madrina</a></li>
+                                <li><a href="colabora.html#voluntariado">Voluntariado</a></li>
+                                <li><a href="colabora.html#acoge">Acoge</a></li>
+                                <li><a href="colabora.html#empresa">Empresa solidaria</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="dona.html">Dona <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="dona.html#teaming">Teaming</a></li>
+                                <li><a href="dona.html#bizum">Bizum</a></li>
+                                <li><a href="dona.html#cuenta">Cuenta bancaria</a></li>
+                                <li><a href="dona.html#amazon">Amazon Wishlist</a></li>
+                                <li><a href="dona.html#wallapop">Wallapop</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="nosotros.html">Nosotros</a></li>
+                        <li class="dropdown">
+                            <a href="actualidad.html" class="active">Actualidad <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="actualidad.html#campanas">Campañas</a></li>
+                                <li><a href="actualidad.html#eventos">Eventos</a></li>
+                                <li><a href="actualidad.html#blog">Blog</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </nav>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="es">ES</button>
+                    <button class="lang-btn" data-lang="val">VAL</button>
+                </div>
+            </div>
+        </div>
+        <div class="header-brand">
+            <div class="container">
+                <div class="logo">
+                    <img src="../images/logos/logo.png" alt="Protectora Burjassot" onerror="this.style.display='none'">
+                    <h1>Protectora de Animales Burjassot</h1>
+                </div>
+                <div class="main-actions">
+                    <a href="dona.html" class="btn btn-primary"><i class="fas fa-heart"></i> Dona</a>
+                    <a href="adopcion.html" class="btn btn-primary"><i class="fas fa-paw"></i> Adopta</a>
+                    <a href="colabora.html#voluntariado" class="btn btn-primary"><i class="fas fa-hands-helping"></i> Voluntariado</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-newspaper"></i> Actualidad</h1>
+            <p>Campañas, eventos y novedades de la protectora</p>
+        </div>
+    </section>
+
+    <section style="padding: 3rem 0;">
+        <div class="container">
+            <!-- Vista lista -->
+            <div id="list-view">
+                <div class="filter-tabs">
+                    <button class="tab-btn active" data-cat="all">Todas</button>
+                    <button class="tab-btn" data-cat="campana" id="tab-campanas">
+                        <i class="fas fa-bullhorn"></i> Campañas
+                    </button>
+                    <button class="tab-btn" data-cat="evento" id="tab-eventos">
+                        <i class="fas fa-calendar-alt"></i> Eventos
+                    </button>
+                    <button class="tab-btn" data-cat="blog" id="tab-blog">
+                        <i class="fas fa-pen"></i> Blog
+                    </button>
+                </div>
+
+                <div class="news-grid" id="newsGrid">
+                    <p style="grid-column:1/-1; text-align:center; padding:3rem; color:#666;">Cargando noticias...</p>
+                </div>
+            </div>
+
+            <!-- Vista detalle -->
+            <div id="detail-view" class="news-detail">
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i> Volver a actualidad
+                </button>
+                <img id="detail-img" src="" alt="" onerror="this.onerror=null; this.src='../images/noticia.svg'">
+                <div id="detail-badge"></div>
+                <p id="detail-date" class="news-date"></p>
+                <h1 id="detail-title"></h1>
+                <div id="detail-content" style="line-height:1.8; color:#444;"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Sobre nosotros</h3>
+                    <p>Protectora de Animales de Burjassot. Sin ánimo de lucro.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Actualidad</h3>
+                    <ul>
+                        <li><a href="#" onclick="filterNews('campana')">Campañas</a></li>
+                        <li><a href="#" onclick="filterNews('evento')">Eventos</a></li>
+                        <li><a href="#" onclick="filterNews('blog')">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> info@protectoraburjassot.com</li>
+                        <li><i class="fas fa-phone"></i> +34 XXX XXX XXX</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Protectora de Animales Burjassot. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-to-top" id="scrollToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        const BASE_URL = 'http://localhost:5000';
+        let allNews = [];
+        let currentCategory = 'all';
+
+        function getNewsImage(item) {
+            if (item.image && item.image.startsWith('uploads/')) return `${BASE_URL}/${item.image}`;
+            return '../images/noticia.svg';
+        }
+
+        function categoryLabel(cat) {
+            const map = { campana: 'Campaña', evento: 'Evento', blog: 'Blog' };
+            return map[cat] || cat;
+        }
+        function categoryClass(cat) {
+            const map = { campana: 'badge-campana', evento: 'badge-evento', blog: 'badge-blog' };
+            return map[cat] || '';
+        }
+
+        function formatDate(str) {
+            if (!str) return '';
+            const d = new Date(str + 'T00:00:00');
+            return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function filterNews(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.cat === cat);
+            });
+            const filtered = cat === 'all' ? allNews : allNews.filter(n => n.category === cat);
+            renderNews(filtered);
+        }
+
+        function renderNews(news) {
+            const grid = document.getElementById('newsGrid');
+            if (!news.length) {
+                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; padding:3rem; color:#666;">No hay noticias en esta categoría.</p>';
+                return;
+            }
+            grid.innerHTML = '';
+            news.forEach(item => {
+                const imgSrc = getNewsImage(item);
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <img src="${imgSrc}" alt="${item.title}"
+                         onerror="this.onerror=null; this.src='../images/noticia.svg'">
+                    <div class="news-body">
+                        <span class="news-badge ${categoryClass(item.category)}">${categoryLabel(item.category)}</span>
+                        <p class="news-date"><i class="fas fa-calendar"></i> ${formatDate(item.date)}</p>
+                        <h3>${item.title}</h3>
+                        <p>${item.excerpt || (item.content || '').substring(0, 120) + '…'}</p>
+                        <a class="read-more" href="#" data-id="${item.id}">Leer más <i class="fas fa-arrow-right"></i></a>
+                    </div>`;
+                card.querySelector('.read-more').addEventListener('click', e => {
+                    e.preventDefault();
+                    showDetail(item);
+                });
+                grid.appendChild(card);
+            });
+        }
+
+        function showDetail(item) {
+            const imgSrc = getNewsImage(item);
+            document.getElementById('detail-img').src = imgSrc;
+            document.getElementById('detail-badge').innerHTML =
+                `<span class="news-badge ${categoryClass(item.category)}">${categoryLabel(item.category)}</span>`;
+            document.getElementById('detail-date').innerHTML =
+                `<i class="fas fa-calendar"></i> ${formatDate(item.date)}`;
+            document.getElementById('detail-title').textContent = item.title;
+            document.getElementById('detail-content').textContent = item.content || '';
+
+            document.getElementById('list-view').style.display = 'none';
+            document.getElementById('detail-view').classList.add('visible');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Update URL hash
+            history.pushState(null, '', `#noticia-${item.id}`);
+        }
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            document.getElementById('list-view').style.display = '';
+            document.getElementById('detail-view').classList.remove('visible');
+            history.pushState(null, '', 'actualidad.html');
+        });
+
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => filterNews(btn.dataset.cat));
+        });
+
+        async function loadNews() {
+            const grid = document.getElementById('newsGrid');
+            try {
+                const resp = await fetch(`${API_URL}/news?limit=50`);
+                const data = await resp.json();
+                allNews = data.news || [];
+
+                // Check URL hash for section or specific news
+                const hash = window.location.hash;
+                if (hash === '#campanas') filterNews('campana');
+                else if (hash === '#eventos') filterNews('evento');
+                else if (hash === '#blog') filterNews('blog');
+                else if (hash.startsWith('#noticia-')) {
+                    const id = parseInt(hash.replace('#noticia-', ''));
+                    const item = allNews.find(n => n.id === id);
+                    if (item) { renderNews(allNews); showDetail(item); return; }
+                }
+
+                renderNews(allNews);
+            } catch (err) {
+                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#e74c3c; padding:3rem;">Error al cargar las noticias.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadNews);
+
+        // Scroll to top
+        const scrollBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => scrollBtn.classList.toggle('visible', window.scrollY > 300));
+        scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Mobile menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mainNav = document.querySelector('.main-nav');
+        if (menuToggle) menuToggle.addEventListener('click', () => mainNav.classList.toggle('active'));
+    </script>
+</body>
+</html>

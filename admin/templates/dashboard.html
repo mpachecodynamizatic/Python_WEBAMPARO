@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card" style="background: linear-gradient(135deg, #F4A460, #FF8C42);">
+        <i class="fas fa-paw" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+        <h3>{{ stats.total_animals }}</h3>
+        <p>En adopción</p>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #87CEEB, #5DADE2);">
+        <i class="fas fa-home" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+        <h3>{{ stats.total_adopted }}</h3>
+        <p>Adoptados</p>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #98D8C8, #76C7B8);">
+        <i class="fas fa-newspaper" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+        <h3>{{ stats.total_news }}</h3>
+        <p>Noticias publicadas</p>
+    </div>
+    <div class="stat-card" style="background: linear-gradient(135deg, #FFB6C1, #FF8FA3);">
+        <i class="fas fa-envelope" style="font-size: 2rem; margin-bottom: 0.5rem;"></i>
+        <h3>{{ stats.unread_contacts }}</h3>
+        <p>Mensajes sin leer</p>
+    </div>
+</div>
+
+<h2 style="margin-bottom: 1rem;">
+    <i class="fas fa-envelope"></i> Últimos contactos
+</h2>
+
+{% if contacts %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Asunto</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+        <tr>
+            <td>{{ contact.name }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.subject }}</td>
+            <td>{{ contact.created_at }}</td>
+            <td>
+                {% if contact.read %}
+                <span class="badge badge-success">Leído</span>
+                {% else %}
+                <span class="badge badge-warning">Pendiente</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="text-align: center; color: #666; padding: 2rem;">No hay mensajes recientes</p>
+{% endif %}
+
+<div style="margin-top: 2rem;">
+    <h2 style="margin-bottom: 1rem;">
+        <i class="fas fa-rocket"></i> Accesos rápidos
+    </h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <a href="{{ url_for('new_animal') }}" class="btn btn-primary" style="text-align: center;">
+            <i class="fas fa-plus"></i> Añadir animal
+        </a>
+        <a href="{{ url_for('new_news') }}" class="btn btn-success" style="text-align: center;">
+            <i class="fas fa-plus"></i> Nueva noticia
+        </a>
+        <a href="{{ url_for('list_animals') }}" class="btn btn-primary" style="text-align: center;">
+            <i class="fas fa-list"></i> Ver animales
+        </a>
+        <a href="{{ url_for('list_news') }}" class="btn btn-success" style="text-align: center;">
+            <i class="fas fa-list"></i> Ver noticias
+        </a>
+    </div>
+</div>
+{% endblock %}

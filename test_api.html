@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API - Protectora</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFE5D9 0%, #C9E4DE 100%);
+            padding: 2rem;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        h1 {
+            color: #F4A460;
+            margin-bottom: 1rem;
+        }
+        .status {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border-color: #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #dc3545;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-color: #17a2b8;
+        }
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffc107;
+        }
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        button {
+            background: linear-gradient(135deg, #F4A460, #FF8C42);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .card h3 {
+            color: #F4A460;
+            margin-bottom: 0.5rem;
+        }
+        .card .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            background: #87CEEB;
+            color: white;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .card .details {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+        .card .description {
+            color: #333;
+            line-height: 1.6;
+            margin-top: 1rem;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .stats {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #F4A460, #FF8C42);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            text-align: center;
+            min-width: 150px;
+        }
+        .stat-box .number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .stat-box .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .news-date {
+            color: #999;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        .category-badge {
+            background: #FFB6C1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 Test de API - Protectora Burjassot</h1>
+            <p>Prueba de conexión con la base de datos y visualización de datos</p>
+        </div>
+
+        <div class="section">
+            <h2>📊 Pruebas Disponibles</h2>
+            <div class="buttons">
+                <button onclick="testAll()">🚀 Probar Todo</button>
+                <button onclick="testAnimals()">🐾 Ver Animales</button>
+                <button onclick="testNews()">📰 Ver Noticias</button>
+                <button onclick="testFlask()">🔌 Test Conexión</button>
+                <button onclick="clearResults()">🗑️ Limpiar</button>
+            </div>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testAll() {
+            clearResults();
+            await testFlask();
+            await new Promise(r => setTimeout(r, 500));
+            await testAnimals();
+            await new Promise(r => setTimeout(r, 500));
+            await testNews();
+        }
+
+        async function testFlask() {
+            const results = document.getElementById('results');
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = '<h2>🔌 Test de Conexión</h2><div class="status info">Probando conexión con Flask...</div>';
+            results.appendChild(section);
+
+            try {
+                const response = await fetch('http://localhost:5000/');
+
+                if (response.ok || response.status === 302) {
+                    section.innerHTML = `
+                        <h2>🔌 Test de Conexión</h2>
+                        <div class="status success">
+                            ✅ <strong>Servidor Flask está corriendo correctamente</strong>
+                            <br>Estado: ${response.status} ${response.statusText}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                section.innerHTML = `
+                    <h2>🔌 Test de Conexión</h2>
+                    <div class="status error">
+                        ❌ <strong>No se puede conectar con Flask</strong>
+                        <br>Error: ${error.message}
+                        <br><br>
+                        <strong>Solución:</strong> Ejecuta run.bat y asegúrate de que la ventana "CMS - Panel Admin" esté abierta
+                    </div>
+                `;
+            }
+        }
+
+        async function testAnimals() {
+            const results = document.getElementById('results');
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = '<h2>🐾 Animales en Adopción</h2><div class="status info">Cargando animales...</div>';
+            results.appendChild(section);
+
+            try {
+                const response = await fetch(`${API_URL}/animals?status=adoption`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const animals = data.animals || [];
+
+                if (animals.length === 0) {
+                    section.innerHTML = `
+                        <h2>🐾 Animales en Adopción</h2>
+                        <div class="status warning">
+                            ⚠️ <strong>La API funciona pero no hay animales en la base de datos</strong>
+                            <br><br>
+                            <strong>Solución:</strong> Ejecuta limpiar_entorno.bat y luego run.bat
+                        </div>
+                    `;
+                } else {
+                    const perros = animals.filter(a => a.type === 'perro').length;
+                    const gatos = animals.filter(a => a.type === 'gato').length;
+
+                    let html = `
+                        <h2>🐾 Animales en Adopción</h2>
+                        <div class="status success">
+                            ✅ <strong>API funcionando correctamente</strong>
+                        </div>
+                        <div class="stats">
+                            <div class="stat-box">
+                                <div class="number">${animals.length}</div>
+                                <div class="label">Total Animales</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">${perros}</div>
+                                <div class="label">Perros</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">${gatos}</div>
+                                <div class="label">Gatos</div>
+                            </div>
+                        </div>
+                        <div class="grid">
+                    `;
+
+                    animals.slice(0, 6).forEach(animal => {
+                        const icon = animal.type === 'perro' ? '🐕' : '🐱';
+                        html += `
+                            <div class="card">
+                                <h3>${icon} ${animal.name}</h3>
+                                <span class="badge">${animal.type.charAt(0).toUpperCase() + animal.type.slice(1)}</span>
+                                <div class="details">
+                                    <strong>Edad:</strong> ${animal.age || 'Desconocida'}<br>
+                                    <strong>Género:</strong> ${animal.gender || 'No especificado'}<br>
+                                    <strong>Tamaño:</strong> ${animal.size || 'No especificado'}
+                                </div>
+                                <div class="description">${animal.description || 'Sin descripción'}</div>
+                            </div>
+                        `;
+                    });
+
+                    html += '</div>';
+                    section.innerHTML = html;
+                }
+            } catch (error) {
+                section.innerHTML = `
+                    <h2>🐾 Animales en Adopción</h2>
+                    <div class="status error">
+                        ❌ <strong>Error al cargar animales</strong>
+                        <br>Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testNews() {
+            const results = document.getElementById('results');
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = '<h2>📰 Noticias y Actualidad</h2><div class="status info">Cargando noticias...</div>';
+            results.appendChild(section);
+
+            try {
+                const response = await fetch(`${API_URL}/news?limit=10`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const news = data.news || [];
+
+                if (news.length === 0) {
+                    section.innerHTML = `
+                        <h2>📰 Noticias y Actualidad</h2>
+                        <div class="status warning">
+                            ⚠️ <strong>La API funciona pero no hay noticias en la base de datos</strong>
+                        </div>
+                    `;
+                } else {
+                    const eventos = news.filter(n => n.category === 'evento').length;
+                    const campanas = news.filter(n => n.category === 'campana').length;
+                    const blogs = news.filter(n => n.category === 'blog').length;
+
+                    let html = `
+                        <h2>📰 Noticias y Actualidad</h2>
+                        <div class="status success">
+                            ✅ <strong>API funcionando correctamente</strong>
+                        </div>
+                        <div class="stats">
+                            <div class="stat-box">
+                                <div class="number">${news.length}</div>
+                                <div class="label">Total Noticias</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">${eventos}</div>
+                                <div class="label">Eventos</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">${campanas}</div>
+                                <div class="label">Campañas</div>
+                            </div>
+                            <div class="stat-box">
+                                <div class="number">${blogs}</div>
+                                <div class="label">Blog</div>
+                            </div>
+                        </div>
+                        <div class="grid">
+                    `;
+
+                    news.forEach(item => {
+                        const icon = item.category === 'evento' ? '📅' :
+                                    item.category === 'campana' ? '🎯' : '📝';
+                        const categoryName = item.category === 'evento' ? 'Evento' :
+                                           item.category === 'campana' ? 'Campaña' : 'Blog';
+
+                        html += `
+                            <div class="card">
+                                <h3>${icon} ${item.title}</h3>
+                                <span class="badge category-badge">${categoryName}</span>
+                                <div class="news-date">📅 ${formatDate(item.date)}</div>
+                                <div class="description">${item.excerpt || item.content.substring(0, 150) + '...'}</div>
+                            </div>
+                        `;
+                    });
+
+                    html += '</div>';
+                    section.innerHTML = html;
+                }
+            } catch (error) {
+                section.innerHTML = `
+                    <h2>📰 Noticias y Actualidad</h2>
+                    <div class="status error">
+                        ❌ <strong>Error al cargar noticias</strong>
+                        <br>Error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', options);
+        }
+
+        // Probar todo automáticamente al cargar
+        window.onload = function() {
+            testAll();
+        };
+    </script>
+</body>
+</html>

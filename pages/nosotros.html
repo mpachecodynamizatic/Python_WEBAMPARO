@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quiénes somos - Protectora de Animales Burjassot">
+    <title>Nosotros - Protectora de Animales Burjassot</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .about-section { padding: 4rem 0; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } }
+        .about-image {
+            border-radius: 16px; overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+        .about-image img { width: 100%; height: 350px; object-fit: cover; display: block; }
+        .about-text h2 { font-size: 2rem; color: var(--primary-color, #F4A460); margin-bottom: 1rem; }
+        .about-text p { color: #555; line-height: 1.8; margin-bottom: 1rem; }
+        .values-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+            gap: 1.5rem; margin-top: 2rem;
+        }
+        .value-card {
+            background: white; border-radius: 12px; padding: 2rem;
+            text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            border-top: 4px solid var(--primary-color, #F4A460);
+        }
+        .value-card i { font-size: 2.5rem; color: var(--primary-color, #F4A460); margin-bottom: 1rem; }
+        .value-card h3 { margin-bottom: .5rem; }
+        .value-card p { color: #666; font-size: .95rem; }
+        .team-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+            gap: 1.5rem; margin-top: 2rem;
+        }
+        .team-card {
+            background: white; border-radius: 12px; padding: 1.5rem;
+            text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+        }
+        .team-avatar {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: var(--secondary-color, #87CEEB);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem; font-size: 2rem; color: white;
+        }
+        .team-card h3 { font-size: 1rem; margin-bottom: .25rem; }
+        .team-card p { color: #888; font-size: .9rem; }
+        .stats-row {
+            display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+            padding: 3rem 0;
+        }
+        .stat-item { text-align: center; }
+        .stat-item .number { font-size: 3rem; font-weight: 700; color: var(--primary-color, #F4A460); }
+        .stat-item .label { color: #666; }
+        .section-bg { background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-topbar">
+            <div class="container">
+                <button class="menu-toggle" aria-label="Menú"><span></span><span></span><span></span></button>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="../index.html">Inicio</a></li>
+                        <li class="dropdown">
+                            <a href="adopcion.html">Adopción <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="adopcion.html">En adopción</a></li>
+                                <li><a href="adoptados.html">Adoptados</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="colabora.html">Colabora <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="colabora.html#socio">Hazte socio</a></li>
+                                <li><a href="colabora.html#padrino">Hazte padrino/madrina</a></li>
+                                <li><a href="colabora.html#voluntariado">Voluntariado</a></li>
+                                <li><a href="colabora.html#acoge">Acoge</a></li>
+                                <li><a href="colabora.html#empresa">Empresa solidaria</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="dona.html">Dona <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="dona.html#teaming">Teaming</a></li>
+                                <li><a href="dona.html#bizum">Bizum</a></li>
+                                <li><a href="dona.html#cuenta">Cuenta bancaria</a></li>
+                                <li><a href="dona.html#amazon">Amazon Wishlist</a></li>
+                                <li><a href="dona.html#wallapop">Wallapop</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="nosotros.html" class="active">Nosotros</a></li>
+                        <li class="dropdown">
+                            <a href="actualidad.html">Actualidad <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="actualidad.html#campanas">Campañas</a></li>
+                                <li><a href="actualidad.html#eventos">Eventos</a></li>
+                                <li><a href="actualidad.html#blog">Blog</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </nav>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="es">ES</button>
+                    <button class="lang-btn" data-lang="val">VAL</button>
+                </div>
+            </div>
+        </div>
+        <div class="header-brand">
+            <div class="container">
+                <div class="logo">
+                    <img src="../images/logos/logo.png" alt="Protectora Burjassot" onerror="this.style.display='none'">
+                    <h1>Protectora de Animales Burjassot</h1>
+                </div>
+                <div class="main-actions">
+                    <a href="dona.html" class="btn btn-primary"><i class="fas fa-heart"></i> Dona</a>
+                    <a href="adopcion.html" class="btn btn-primary"><i class="fas fa-paw"></i> Adopta</a>
+                    <a href="colabora.html#voluntariado" class="btn btn-primary"><i class="fas fa-hands-helping"></i> Voluntariado</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-users"></i> Quiénes somos</h1>
+            <p>Conoce la historia y las personas que hacen posible nuestra labor</p>
+        </div>
+    </section>
+
+    <!-- Quiénes somos -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Nuestra historia</h2>
+                    <p>La Protectora de Animales de Burjassot nació de la unión de un grupo de vecinos comprometidos con el bienestar animal que decidieron hacer algo para ayudar a los animales abandonados de la ciudad.</p>
+                    <p>Desde entonces, hemos rescatado, cuidado y encontrado hogar para cientos de animales. Somos una asociación sin ánimo de lucro que funciona gracias al voluntariado y a las donaciones de personas comprometidas como tú.</p>
+                    <p>Nuestra misión es clara: <strong>ningún animal debería quedarse sin hogar</strong>. Trabajamos cada día para hacer eso posible.</p>
+                </div>
+                <div class="about-image">
+                    <img src="../images/animales/perro.svg" alt="Nuestros animales"
+                         onerror="this.onerror=null; this.src='../images/animales/perro.svg'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="section-bg">
+        <div class="container">
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="number" id="stat-adopted">—</div>
+                    <div class="label">Animales adoptados</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number" id="stat-adoption">—</div>
+                    <div class="label">En búsqueda de hogar</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">100%</div>
+                    <div class="label">Voluntarios</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">0</div>
+                    <div class="label">Ánimo de lucro</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Valores -->
+    <section class="about-section">
+        <div class="container">
+            <h2 class="section-title" style="text-align:center; margin-bottom:2rem;">Nuestros valores</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Amor y respeto</h3>
+                    <p>Tratamos a cada animal con el amor y el respeto que merece, independientemente de su estado o historia.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-hands-helping"></i>
+                    <h3>Compromiso</h3>
+                    <p>Nos comprometemos con cada animal hasta que encuentra un hogar definitivo y seguro.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Responsabilidad</h3>
+                    <p>Promovemos la tenencia responsable y la esterilización como pilares del bienestar animal.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Comunidad</h3>
+                    <p>Creemos en el poder de la comunidad. Juntos podemos cambiar la vida de muchos animales.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipo -->
+    <section class="about-section section-bg">
+        <div class="container">
+            <h2 class="section-title" style="text-align:center; margin-bottom:2rem;">Nuestro equipo</h2>
+            <p style="text-align:center; color:#666; margin-bottom:2rem;">Todas las personas que forman parte de la protectora son voluntarias. ¡Gracias a todas ellas!</p>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-user"></i></div>
+                    <h3>Presidenta</h3>
+                    <p>Coordinación general y representación</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-user"></i></div>
+                    <h3>Secretaría</h3>
+                    <p>Gestión administrativa y documental</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-user"></i></div>
+                    <h3>Tesorería</h3>
+                    <p>Gestión económica y cuentas</p>
+                </div>
+                <div class="team-card">
+                    <div class="team-avatar"><i class="fas fa-paw"></i></div>
+                    <h3>Voluntarios</h3>
+                    <p>Cuidado, paseos, eventos y adopciones</p>
+                </div>
+            </div>
+            <div style="text-align:center; margin-top:2.5rem;">
+                <a href="colabora.html#voluntariado" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Únete al equipo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Sobre nosotros</h3>
+                    <p>Protectora de Animales de Burjassot. Sin ánimo de lucro. 100% voluntarios.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Enlaces</h3>
+                    <ul>
+                        <li><a href="adopcion.html">Adopción</a></li>
+                        <li><a href="colabora.html">Colabora</a></li>
+                        <li><a href="dona.html">Dona</a></li>
+                        <li><a href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> info@protectoraburjassot.com</li>
+                        <li><i class="fas fa-phone"></i> +34 XXX XXX XXX</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Burjassot, Valencia</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Protectora de Animales Burjassot. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <button class="scroll-to-top" id="scrollToTop"><i class="fas fa-arrow-up"></i></button>
+
+    <script>
+        // Load live stats
+        fetch('http://localhost:5000/api/animals?status=adopted')
+            .then(r => r.json())
+            .then(d => { document.getElementById('stat-adopted').textContent = d.animals.length; })
+            .catch(() => {});
+        fetch('http://localhost:5000/api/animals?status=adoption')
+            .then(r => r.json())
+            .then(d => { document.getElementById('stat-adoption').textContent = d.animals.length; })
+            .catch(() => {});
+
+        // Scroll to top
+        const scrollBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => scrollBtn.classList.toggle('visible', window.scrollY > 300));
+        scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Mobile menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mainNav = document.querySelector('.main-nav');
+        if (menuToggle) menuToggle.addEventListener('click', () => mainNav.classList.toggle('active'));
+    </script>
+</body>
+</html>
