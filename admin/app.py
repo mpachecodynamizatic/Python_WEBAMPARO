@@ -490,6 +490,36 @@ def init_db():
             )
         ''')
 
+        # Migración: añadir columnas extendidas a adoption_requests en DBs pre-existentes (solo SQLite)
+        if not USE_POSTGRES:
+            adoption_extra_cols = [
+                ('age',                'INTEGER'),
+                ('address',            'TEXT'),
+                ('city',               'TEXT'),
+                ('living_situation',   'TEXT'),
+                ('own_or_rent',        'TEXT'),
+                ('has_yard',           'TEXT'),
+                ('landlord_permission','TEXT'),
+                ('household_members',  'INTEGER'),
+                ('has_children',       'TEXT'),
+                ('children_ages',      'TEXT'),
+                ('current_pets',       'TEXT'),
+                ('pet_experience',     'TEXT'),
+                ('work_schedule',      'TEXT'),
+                ('hours_home_per_day', 'TEXT'),
+                ('why_adopt',          'TEXT'),
+                ('vet_name',           'TEXT'),
+                ('vet_phone',          'TEXT'),
+                ('reference_name',     'TEXT'),
+                ('reference_phone',    'TEXT'),
+                ('comments',           'TEXT'),
+            ]
+            for col, definition in adoption_extra_cols:
+                try:
+                    cursor.execute(f'ALTER TABLE adoption_requests ADD COLUMN {col} {definition}')
+                except Exception:
+                    pass  # columna ya existe
+
         # Crear usuario admin por defecto
         placeholder = get_placeholder()
         try:

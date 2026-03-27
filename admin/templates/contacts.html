@@ -17,47 +17,34 @@
 </div>
 
 {% if contacts %}
-<table class="table">
-    <thead>
-        <tr>
-            <th>Estado</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Teléfono</th>
-            <th>Asunto</th>
-            <th>Mensaje</th>
-            <th>Fecha</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for contact in contacts %}
-        <tr style="{{ 'background:#fffde7;' if not contact.read else '' }}">
-            <td>
-                {% if contact.read %}
-                <span class="badge badge-success">Leído</span>
-                {% else %}
-                <span class="badge badge-warning">Nuevo</span>
-                {% endif %}
-            </td>
-            <td><strong>{{ contact.name }}</strong></td>
-            <td><a href="mailto:{{ contact.email }}">{{ contact.email }}</a></td>
-            <td>{{ contact.phone or '—' }}</td>
-            <td>{{ contact.subject or '—' }}</td>
-            <td style="max-width: 250px; white-space: pre-wrap; word-break: break-word; font-size: 0.9rem;">
-                {{ contact.message[:120] }}{% if contact.message|length > 120 %}…{% endif %}
-            </td>
-            <td style="white-space: nowrap; font-size: 0.85rem;">{{ contact.created_at }}</td>
-            <td style="white-space: nowrap;">
-                <button type="button" class="btn btn-primary btn-sm" title="Ver mensaje completo"
-                        onclick="verMensaje({{ contact.id }}, '{{ contact.name|e }}', '{{ contact.email|e }}', '{{ (contact.phone or '')|e }}', '{{ (contact.subject or '')|e }}', {{ contact.message|tojson }}, '{{ contact.created_at }}')">
-                    <i class="fas fa-eye"></i>
-                </button>
+<div style="display: grid; gap: 1.25rem;">
+    {% for contact in contacts %}
+    <div style="background:{% if not contact.read %}#fffbf0{% else %}white{% endif %}; border-radius:10px; padding:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06); border-left:4px solid {% if not contact.read %}#FFB347{% else %}#ccc{% endif %};">
+
+        <!-- Cabecera -->
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+            <div>
+                <h3 style="margin:0 0 0.4rem; color:#333;">
+                    <i class="fas fa-user"></i> {{ contact.name }}
+                    {% if not contact.read %}
+                    <span class="badge badge-warning" style="font-size:0.75rem; vertical-align:middle; margin-left:.5rem;">Nuevo</span>
+                    {% else %}
+                    <span class="badge badge-success" style="font-size:0.75rem; vertical-align:middle; margin-left:.5rem;">Leído</span>
+                    {% endif %}
+                </h3>
+                <div style="font-size:0.88rem; color:#888;">
+                    <i class="fas fa-calendar"></i> {{ contact.created_at[:10] if contact.created_at else '—' }}
+                    {% if contact.subject %}
+                    &nbsp;·&nbsp; <i class="fas fa-tag"></i> {{ contact.subject }}
+                    {% endif %}
+                </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; align-items:center; flex-shrink:0;">
                 {% if not contact.read %}
                 <form method="POST" action="{{ url_for('mark_contact_read', contact_id=contact.id) }}" style="display:inline;">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-success btn-sm" title="Marcar como leído">
-                        <i class="fas fa-check"></i>
+                        <i class="fas fa-check"></i> Leído
                     </button>
                 </form>
                 {% endif %}
@@ -68,11 +55,45 @@
                         <i class="fas fa-trash"></i>
                     </button>
                 </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            </div>
+        </div>
+
+        <!-- Info de contacto -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem; padding:1rem; background:white; border-radius:8px; margin-bottom:1rem;">
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:0.82rem; margin-bottom:.2rem;">Email:</strong>
+                <a href="mailto:{{ contact.email }}" style="color:#333; word-break:break-all;">{{ contact.email }}</a>
+            </div>
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:0.82rem; margin-bottom:.2rem;">Teléfono:</strong>
+                <span>{{ contact.phone or '—' }}</span>
+            </div>
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:0.82rem; margin-bottom:.2rem;">Asunto:</strong>
+                <span>{{ contact.subject or '—' }}</span>
+            </div>
+        </div>
+
+        <!-- Vista previa + expandible -->
+        <details>
+            <summary style="cursor:pointer; color:#F4A460; font-weight:600; padding:.5rem .75rem; border-radius:6px; background:rgba(244,164,96,0.1); list-style:none; display:flex; align-items:center; gap:.4rem;">
+                <i class="fas fa-chevron-down" style="font-size:.8rem;"></i> Ver mensaje completo
+            </summary>
+            <div style="margin-top:1rem; background:white; border-radius:8px; padding:1rem;">
+                <div style="white-space:pre-wrap; word-break:break-word; line-height:1.75; color:#333; font-size:.95rem; border-left:3px solid #F4A460; padding-left:1rem;">{{ contact.message or '—' }}</div>
+                <div style="margin-top:1rem; text-align:right;">
+                    <a href="mailto:{{ contact.email }}?subject=Re%3A%20{{ (contact.subject or '') | urlencode }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-reply"></i> Responder por email
+                    </a>
+                </div>
+            </div>
+        </details>
+
+    </div>
+    {% endfor %}
+</div>
+<p style="color:#666; margin-top:1.5rem;">Total: <strong>{{ contacts|length }}</strong> mensajes</p>
+
 {% else %}
 <div style="text-align: center; padding: 3rem;">
     <i class="fas fa-inbox" style="font-size: 4rem; color: #ddd; margin-bottom: 1rem;"></i>
@@ -82,54 +103,3 @@
 {% endif %}
 {% endblock %}
 
-{% block extra_js %}
-<!-- Modal visualizar mensaje -->
-<div id="modal-mensaje" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
-    <div style="background:white; border-radius:12px; padding:2rem; max-width:640px; width:90%; max-height:80vh; overflow-y:auto; position:relative; box-shadow:0 8px 32px rgba(0,0,0,0.25);">
-        <button onclick="cerrarModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.4rem; cursor:pointer; color:#888;">&times;</button>
-        <h3 style="margin:0 0 1.25rem; color:#333;"><i class="fas fa-envelope-open-text" style="color:var(--primary-color,#F4A460);"></i> Mensaje completo</h3>
-        <dl style="display:grid; grid-template-columns:130px 1fr; gap:.6rem 1rem; font-size:.93rem;">
-            <dt style="color:#888; font-weight:600;">Nombre</dt>      <dd id="m-nombre" style="margin:0;"></dd>
-            <dt style="color:#888; font-weight:600;">Email</dt>       <dd id="m-email" style="margin:0;"></dd>
-            <dt style="color:#888; font-weight:600;">Teléfono</dt>    <dd id="m-telefono" style="margin:0;"></dd>
-            <dt style="color:#888; font-weight:600;">Asunto</dt>      <dd id="m-asunto" style="margin:0;"></dd>
-            <dt style="color:#888; font-weight:600;">Fecha</dt>       <dd id="m-fecha" style="margin:0;"></dd>
-        </dl>
-        <hr style="margin:1.25rem 0; border:none; border-top:1px solid #eee;">
-        <p style="font-size:.88rem; color:#888; margin:0 0 .5rem; text-transform:uppercase; letter-spacing:.05em;">Mensaje</p>
-        <div id="m-mensaje" style="white-space:pre-wrap; word-break:break-word; line-height:1.7; color:#333; background:#f9f9f9; padding:1rem; border-radius:8px; font-size:.95rem;"></div>
-        <div style="text-align:right; margin-top:1.5rem;">
-            <a id="m-mailto" href="#" class="btn btn-primary" style="margin-right:.5rem;">
-                <i class="fas fa-reply"></i> Responder
-            </a>
-            <button onclick="cerrarModal()" class="btn" style="background:#eee; color:#555;">Cerrar</button>
-        </div>
-    </div>
-</div>
-
-<script>
-function verMensaje(id, nombre, email, telefono, asunto, mensaje, fecha) {
-    document.getElementById('m-nombre').textContent   = nombre   || '—';
-    document.getElementById('m-email').textContent    = email    || '—';
-    document.getElementById('m-telefono').textContent = telefono || '—';
-    document.getElementById('m-asunto').textContent   = asunto   || '—';
-    document.getElementById('m-fecha').textContent    = fecha    || '—';
-    document.getElementById('m-mensaje').textContent  = mensaje  || '';
-    const ml = document.getElementById('m-mailto');
-    ml.href = 'mailto:' + encodeURIComponent(email) + '?subject=Re%3A%20' + encodeURIComponent(asunto || '');
-    const modal = document.getElementById('modal-mensaje');
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-function cerrarModal() {
-    document.getElementById('modal-mensaje').style.display = 'none';
-    document.body.style.overflow = '';
-}
-document.getElementById('modal-mensaje').addEventListener('click', function(e) {
-    if (e.target === this) cerrarModal();
-});
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') cerrarModal();
-});
-</script>
-{% endblock %}

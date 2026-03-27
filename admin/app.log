@@ -1965,3 +1965,344 @@ sqlite3.OperationalError: incomplete input
 2026-03-27 22:11:17,435 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
 2026-03-27 22:11:17,438 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
 2026-03-27 22:11:17,761 [INFO] 127.0.0.1 - - [27/Mar/2026 22:11:17] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:19:52,836 [INFO] 127.0.0.1 - - [27/Mar/2026 22:19:52] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:20:55,780 [INFO] 127.0.0.1 - - [27/Mar/2026 22:20:55] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:20:57,215 [INFO] 127.0.0.1 - - [27/Mar/2026 22:20:57] "GET /admin/news HTTP/1.1" 200 -
+2026-03-27 22:20:58,605 [INFO] 127.0.0.1 - - [27/Mar/2026 22:20:58] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-27 22:20:58,924 [INFO] 127.0.0.1 - - [27/Mar/2026 22:20:58] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:20:58,942 [INFO] 127.0.0.1 - - [27/Mar/2026 22:20:58] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:20:58,947 [INFO] 127.0.0.1 - - [27/Mar/2026 22:20:58] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 22:20:58,948 [INFO] 127.0.0.1 - - [27/Mar/2026 22:20:58] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 22:21:01,031 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:01] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 22:21:02,626 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:02] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:21:04,215 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:04] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:21:06,903 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:06] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:21:08,437 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:08] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:21:10,297 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:10] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:21:15,726 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:15] "[36mGET /pages/adopcion.html HTTP/1.1[0m" 304 -
+2026-03-27 22:21:16,042 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:21:16,066 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[36mGET /css/adopcion.css HTTP/1.1[0m" 304 -
+2026-03-27 22:21:16,070 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:21:16,072 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:16,082 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:16,088 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:16,374 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:16,398 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 22:21:16,422 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "[36mGET /js/adopcion.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 22:21:16,761 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:16] "GET /api/animals?status=adoption HTTP/1.1" 200 -
+2026-03-27 22:21:17,011 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:17] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:21:17,114 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:17] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:21:17,122 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:17] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 22:21:17,125 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:17] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 22:21:25,941 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:25] "[36mGET /pages/contacto.html HTTP/1.1[0m" 304 -
+2026-03-27 22:21:26,267 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:21:26,286 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:26,287 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[36mGET /css/forms.css HTTP/1.1[0m" 304 -
+2026-03-27 22:21:26,291 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:21:26,298 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:26,325 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:26,603 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 22:21:26,616 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 22:21:26,646 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "[36mGET /js/contact.js HTTP/1.1[0m" 304 -
+2026-03-27 22:21:26,976 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:26] "GET /api/settings HTTP/1.1" 200 -
+2026-03-27 22:21:48,525 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:48] "POST /api/contact HTTP/1.1" 200 -
+2026-03-27 22:21:52,876 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:52] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:21:54,122 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:54] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:21:55,784 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:55] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:21:57,394 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:57] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:21:58,579 [INFO] 127.0.0.1 - - [27/Mar/2026 22:21:58] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:22:07,938 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:07] "[36mGET /index.html HTTP/1.1[0m" 304 -
+2026-03-27 22:22:08,259 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:08] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:22:08,273 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:08] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:22:08,277 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:08] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:22:08,299 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:08] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:22:08,593 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:08] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:22:09,747 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:09] "[36mGET /pages/adopcion.html HTTP/1.1[0m" 304 -
+2026-03-27 22:22:10,008 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:22:10,009 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[36mGET /css/adopcion.css HTTP/1.1[0m" 304 -
+2026-03-27 22:22:10,091 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:22:10,093 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:22:10,098 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 22:22:10,115 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 22:22:10,331 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 22:22:10,343 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 22:22:10,446 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "[36mGET /js/adopcion.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 22:22:10,775 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:10] "GET /api/animals?status=adoption HTTP/1.1" 200 -
+2026-03-27 22:22:11,040 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:11] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:22:11,133 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:11] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:22:11,142 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:11] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 22:22:11,154 [INFO] 127.0.0.1 - - [27/Mar/2026 22:22:11] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 22:23:28,022 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 22:23:28,024 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 22:23:28,201 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 22:23:28,219 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 22:23:28,219 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 22:23:33,746 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:33] "GET /admin HTTP/1.1" 200 -
+2026-03-27 22:23:33,779 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:33] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:23:33,906 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:33] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:23:34,111 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:34] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:23:34,117 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:34] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:23:34,131 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:34] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:23:34,226 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:34] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:23:58,822 [ERROR] Exception on /api/adoption-request [POST]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 1769, in api_adoption_request
+    db.execute(f'''
+    ~~~~~~~~~~^^^^^
+        INSERT INTO adoption_requests (
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<20 lines>...
+        comments
+        ^^^^^^^^
+    ))
+    ^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 267, in execute
+    cursor.execute(query, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table adoption_requests has no column named age
+2026-03-27 22:23:58,834 [INFO] 127.0.0.1 - - [27/Mar/2026 22:23:58] "[35m[1mPOST /api/adoption-request HTTP/1.1[0m" 500 -
+2026-03-27 22:24:27,659 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 22:24:27,668 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 22:24:27,835 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 22:24:27,852 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 22:24:27,852 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 22:24:32,750 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:32] "GET /admin HTTP/1.1" 200 -
+2026-03-27 22:24:32,813 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:32] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:24:32,907 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:32] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:24:33,146 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:33] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:24:33,153 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:33] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:24:33,173 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:33] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:24:33,230 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:33] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:24:36,766 [ERROR] Exception on /api/adoption-request [POST]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 1769, in api_adoption_request
+    db.execute(f'''
+    ~~~~~~~~~~^^^^^
+        INSERT INTO adoption_requests (
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<20 lines>...
+        comments
+        ^^^^^^^^
+    ))
+    ^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 267, in execute
+    cursor.execute(query, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table adoption_requests has no column named age
+2026-03-27 22:24:36,782 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:36] "[35m[1mPOST /api/adoption-request HTTP/1.1[0m" 500 -
+2026-03-27 22:24:38,012 [ERROR] Exception on /api/adoption-request [POST]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 1769, in api_adoption_request
+    db.execute(f'''
+    ~~~~~~~~~~^^^^^
+        INSERT INTO adoption_requests (
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<20 lines>...
+        comments
+        ^^^^^^^^
+    ))
+    ^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 267, in execute
+    cursor.execute(query, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table adoption_requests has no column named age
+2026-03-27 22:24:38,020 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:38] "[35m[1mPOST /api/adoption-request HTTP/1.1[0m" 500 -
+2026-03-27 22:24:49,218 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:49] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:24:49,257 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:49] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:24:49,543 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:49] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:24:49,563 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:49] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:24:49,572 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:49] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:24:49,581 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:49] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:24:53,905 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:53] "[36mGET /pages/adopcion.html HTTP/1.1[0m" 304 -
+2026-03-27 22:24:54,101 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:24:54,150 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[36mGET /css/adopcion.css HTTP/1.1[0m" 304 -
+2026-03-27 22:24:54,252 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:24:54,258 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 22:24:54,261 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:24:54,268 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 22:24:54,436 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 22:24:54,471 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 22:24:54,581 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "[36mGET /js/adopcion.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 22:24:54,935 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:54] "GET /api/animals?status=adoption HTTP/1.1" 200 -
+2026-03-27 22:24:55,174 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:55] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:24:55,273 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:55] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:24:55,281 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:55] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 22:24:55,300 [INFO] 127.0.0.1 - - [27/Mar/2026 22:24:55] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 22:26:07,153 [ERROR] Exception on /api/adoption-request [POST]
+Traceback (most recent call last):
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask_cors\extension.py", line 176, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ~^^^^^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\venv\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 1769, in api_adoption_request
+    db.execute(f'''
+    ~~~~~~~~~~^^^^^
+        INSERT INTO adoption_requests (
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<20 lines>...
+        comments
+        ^^^^^^^^
+    ))
+    ^^
+  File "C:\Users\mpacheco\Documents\GITHUB\PYTHON\Python_WEBAMPARO\admin\app.py", line 267, in execute
+    cursor.execute(query, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: table adoption_requests has no column named age
+2026-03-27 22:26:07,162 [INFO] 127.0.0.1 - - [27/Mar/2026 22:26:07] "[35m[1mPOST /api/adoption-request HTTP/1.1[0m" 500 -
+2026-03-27 22:28:02,616 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 22:28:02,617 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 22:28:03,202 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 22:28:03,226 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 22:28:03,227 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 22:28:07,313 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:07] "GET /api/animals?limit=1 HTTP/1.1" 200 -
+2026-03-27 22:28:07,745 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:07] "GET /admin HTTP/1.1" 200 -
+2026-03-27 22:28:07,792 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:07] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:28:07,909 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:07] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:28:08,125 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:08] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:28:08,129 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:08] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:28:08,131 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:08] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:28:08,141 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:08] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:28:35,713 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 22:28:35,714 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 22:28:35,869 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 22:28:35,889 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 22:28:35,890 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 22:28:41,796 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:41] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:28:41,830 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:41] "[32mGET /admin HTTP/1.1[0m" 302 -
+2026-03-27 22:28:42,001 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:42] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:28:42,148 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:42] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:28:42,149 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:42] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:28:42,153 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:42] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:28:42,163 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:42] "GET /admin/login HTTP/1.1" 200 -
+2026-03-27 22:28:42,324 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:42] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:28:42,482 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:42] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:28:53,932 [INFO] 127.0.0.1 - - [27/Mar/2026 22:28:53] "POST /admin/login HTTP/1.1" 200 -
+2026-03-27 22:29:04,531 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:04] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-27 22:29:04,584 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:04] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 22:29:12,596 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[36mGET /pages/adopcion.html HTTP/1.1[0m" 304 -
+2026-03-27 22:29:12,662 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:29:12,857 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[36mGET /css/adopcion.css HTTP/1.1[0m" 304 -
+2026-03-27 22:29:12,947 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:29:12,948 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:29:12,956 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 22:29:12,962 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 22:29:12,970 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:12] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 22:29:13,182 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:13] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2026-03-27 22:29:13,279 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:13] "[36mGET /js/adopcion.js?v=4 HTTP/1.1[0m" 304 -
+2026-03-27 22:29:13,636 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:13] "GET /api/animals?status=adoption HTTP/1.1" 200 -
+2026-03-27 22:29:13,876 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:13] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:29:13,971 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:13] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-27 22:29:13,979 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:13] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-03-27 22:29:13,987 [INFO] 127.0.0.1 - - [27/Mar/2026 22:29:13] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-03-27 22:30:26,547 [INFO] 127.0.0.1 - - [27/Mar/2026 22:30:26] "POST /api/adoption-request HTTP/1.1" 200 -
+2026-03-27 22:30:36,309 [INFO] 127.0.0.1 - - [27/Mar/2026 22:30:36] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:30:48,951 [INFO] 127.0.0.1 - - [27/Mar/2026 22:30:48] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:37:06,579 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:06] "GET /admin/news HTTP/1.1" 200 -
+2026-03-27 22:37:08,492 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:08] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:37:20,206 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:20] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:37:20,506 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:20] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:37:21,303 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:21] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:37:21,441 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:21] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:37:21,561 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:21] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:37:21,765 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:21] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:37:22,064 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:22] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:37:46,493 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 22:37:46,496 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 22:37:46,660 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 22:37:46,679 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 22:37:46,680 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 22:37:51,754 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:51] "[32mGET /admin HTTP/1.1[0m" 302 -
+2026-03-27 22:37:51,762 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:51] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:37:51,928 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:51] "GET /admin/login HTTP/1.1" 200 -
+2026-03-27 22:37:52,076 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:52] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:37:52,094 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-27 22:37:52,095 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:52] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:37:52,096 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:52] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:37:52,313 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:52] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:37:52,385 [INFO] 127.0.0.1 - - [27/Mar/2026 22:37:52] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:38:01,671 [INFO] 127.0.0.1 - - [27/Mar/2026 22:38:01] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-27 22:38:01,734 [INFO] 127.0.0.1 - - [27/Mar/2026 22:38:01] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-27 22:38:04,072 [INFO] 127.0.0.1 - - [27/Mar/2026 22:38:04] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:38:11,403 [INFO] 127.0.0.1 - - [27/Mar/2026 22:38:11] "[32mPOST /admin/contacts/5/read HTTP/1.1[0m" 302 -
+2026-03-27 22:38:11,425 [INFO] 127.0.0.1 - - [27/Mar/2026 22:38:11] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:39:06,160 [INFO] 127.0.0.1 - - [27/Mar/2026 22:39:06] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:39:08,638 [INFO] 127.0.0.1 - - [27/Mar/2026 22:39:08] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:42:21,899 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 22:42:21,902 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-27 22:42:22,065 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-27 22:42:22,086 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.63:5000
+2026-03-27 22:42:22,086 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 22:42:27,733 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:27] "GET /admin HTTP/1.1" 200 -
+2026-03-27 22:42:27,776 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:27] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-27 22:42:27,927 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:27] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-27 22:42:28,120 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:28] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 22:42:28,124 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:28] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-27 22:42:28,126 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:28] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-27 22:42:28,246 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:28] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 22:42:31,066 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:31] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-27 22:42:50,844 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:50] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-27 22:42:53,303 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:53] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-27 22:42:55,068 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:55] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-27 22:42:56,401 [INFO] 127.0.0.1 - - [27/Mar/2026 22:42:56] "GET /admin/dashboard HTTP/1.1" 200 -
