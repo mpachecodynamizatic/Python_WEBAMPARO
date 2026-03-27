@@ -63,7 +63,7 @@ Website for "Protectora de Animales Burjassot" (animal shelter). **Single-server
 
 - `admin/app.py` - **Single file containing ALL backend logic** (no blueprints, no modules)
 - `admin/protectora.db` - SQLite database (auto-created on first run with sample data)
-- `admin/requirements.txt` - Flask==3.0.0, Flask-CORS==4.0.0, Werkzeug==3.0.1
+- `requirements.txt` - Flask==3.0.0, Flask-CORS==4.0.0, Werkzeug==3.0.1 (root level for deployment)
 - `js/main.js` - Homepage: loads featured animals + news from API
 - `js/adopcion.js` - Adoption page: filters, search, animal cards with modals
 - `test_api.html` - Diagnostic tool for testing API endpoints

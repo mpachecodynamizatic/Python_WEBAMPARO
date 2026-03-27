@@ -3,7 +3,7 @@ services:
   - type: web
     name: protectora-burjassot
     runtime: python
-    buildCommand: pip install -r admin/requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 2 --chdir admin app:app
     envVars:
       - key: PYTHON_VERSION

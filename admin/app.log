@@ -236,3 +236,20 @@ jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endblock'. You p
 2026-03-27 19:17:26,638 [INFO] 127.0.0.1 - - [27/Mar/2026 19:17:26] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
 2026-03-27 19:17:35,279 [INFO] 127.0.0.1 - - [27/Mar/2026 19:17:35] "[32mGET / HTTP/1.1[0m" 302 -
 2026-03-27 19:17:35,287 [INFO] 127.0.0.1 - - [27/Mar/2026 19:17:35] "GET /admin/login HTTP/1.1" 200 -
+2026-03-27 19:23:35,484 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-27 19:23:35,663 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.66:5000
+2026-03-27 19:23:35,663 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-27 19:23:40,849 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:40] "GET / HTTP/1.1" 200 -
+2026-03-27 19:23:40,877 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:40] "GET /css/styles.css HTTP/1.1" 200 -
+2026-03-27 19:23:40,964 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:40] "GET /js/i18n.js HTTP/1.1" 200 -
+2026-03-27 19:23:41,184 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:41] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-27 19:23:41,199 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:41] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-27 19:23:41,203 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:41] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-03-27 19:23:41,216 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:41] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-03-27 19:23:41,219 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:41] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-03-27 19:23:41,282 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:41] "GET /js/main.js?v=4 HTTP/1.1" 200 -
+2026-03-27 19:23:41,620 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:41] "GET /images/favicon.svg HTTP/1.1" 200 -
+2026-03-27 19:23:52,156 [INFO] 127.0.0.1 - - [27/Mar/2026 19:23:52] "GET /admin/login HTTP/1.1" 200 -

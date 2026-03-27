@@ -16,7 +16,7 @@ Render es una plataforma moderna de deployment similar a Heroku/Railway, con:
 ### 1.1 Asegúrate de tener estos archivos
 
 Ya están creados en tu proyecto:
-- ✅ `admin/requirements.txt` (con gunicorn y psycopg2-binary)
+- ✅ `requirements.txt` (con gunicorn y psycopg2-binary)
 - ✅ `render.yaml` (configuración automática)
 
 ### 1.2 Sube tu código a GitHub
@@ -69,7 +69,7 @@ Si prefieres configurarlo manualmente:
    ```
    Name: protectora-burjassot
    Runtime: Python 3
-   Build Command: pip install -r admin/requirements.txt
+   Build Command: pip install -r requirements.txt
    Start Command: gunicorn --bind 0.0.0.0:$PORT --workers 2 --chdir admin app:app
    ```
 
@@ -260,7 +260,7 @@ Modifica `admin/app.py` para subir a Cloudinary en lugar de disco local.
 ### Error: "Module not found"
 
 **Solución:**
-1. Añade el módulo faltante a `admin/requirements.txt`
+1. Añade el módulo faltante a `requirements.txt`
 2. Haz commit y push
 3. Render redesplegará automáticamente
 
@@ -344,7 +344,7 @@ git push origin main
 Antes de desplegar, verifica:
 
 - [ ] Código subido a GitHub
-- [ ] `admin/requirements.txt` incluye gunicorn y psycopg2-binary
+- [ ] `requirements.txt` incluye gunicorn y psycopg2-binary
 - [ ] Cambiaste la `SECRET_KEY` en variables de entorno
 - [ ] PostgreSQL creada y conectada
 - [ ] Probado localmente con `run.bat`
