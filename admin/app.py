@@ -196,6 +196,34 @@ def compress_image_to_base64(file, max_size=800, quality=75):
         return f"data:image/jpeg;base64,{b64}"
 
 
+def send_notification_email(subject, body):
+    """Envío de email de notificación al administrador vía SMTP"""
+    import smtplib
+    from email.message import EmailMessage
+    try:
+        smtp_host    = get_setting('smtp_host', '').strip()
+        smtp_port    = int(get_setting('smtp_port', '587') or '587')
+        smtp_user    = get_setting('smtp_user', '').strip()
+        smtp_pass    = get_setting('smtp_password', '').strip()
+        smtp_from    = get_setting('smtp_from', '').strip() or smtp_user
+        notify_email = get_setting('notify_email', '').strip()
+        if not smtp_host or not smtp_user or not notify_email:
+            return  # no configurado, ignorar silenciosamente
+        msg = EmailMessage()
+        msg['Subject'] = subject
+        msg['From']    = smtp_from
+        msg['To']      = notify_email
+        msg.set_content(body)
+        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(smtp_user, smtp_pass)
+            server.send_message(msg)
+        logger.info('Email de notificacion enviado a %s', notify_email)
+    except Exception as e:
+        logger.warning('Error al enviar email de notificacion: %s', e)
+
+
 def get_setting(key, default=None):
     """Obtener un valor de configuración de site_settings"""
     try:
@@ -519,6 +547,28 @@ def init_db():
                     cursor.execute(f'ALTER TABLE adoption_requests ADD COLUMN {col} {definition}')
                 except Exception:
                     pass  # columna ya existe
+            # Migración: columna notes para seguimiento interno
+            try:
+                cursor.execute('ALTER TABLE adoption_requests ADD COLUMN notes TEXT')
+            except Exception:
+                pass
+
+        # Tabla de solicitudes de visita
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS visit_requests (
+                id {auto_id},
+                animal_id INTEGER,
+                animal_name TEXT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                phone TEXT,
+                preferred_date TEXT,
+                preferred_time TEXT,
+                notes TEXT,
+                status TEXT DEFAULT 'pendiente',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
 
         # Crear usuario admin por defecto
         placeholder = get_placeholder()
@@ -550,6 +600,21 @@ def init_db():
             ('donation_teaming_url', 'https://www.teaming.net/protectoraburjassot'),
             ('donation_amazon_wishlist', 'https://www.amazon.es/hz/wishlist/ls/XXXXXXXXX'),
             ('donation_wallapop_url', 'https://es.wallapop.com/u/protectoraburjassot'),
+            # Email SMTP para notificaciones
+            ('smtp_host', ''),
+            ('smtp_port', '587'),
+            ('smtp_user', ''),
+            ('smtp_password', ''),
+            ('smtp_from', ''),
+            ('notify_email', ''),
+            # Página Nosotros
+            ('about_title', 'Sobre Nosotros'),
+            ('about_subtitle', 'Trabajamos cada día para dar una segunda oportunidad a los animales más vulnerables'),
+            ('about_mission', 'Nuestra misión es el rescate, recuperación y adopción responsable de animales abandonados o maltratados en Burjassot y sus alrededores. Somos una asociación sin ánimo de lucro, formada por voluntarios comprometidos con el bienestar animal.'),
+            ('about_history', 'La Protectora de Animales Burjassot nació gracias a un grupo de vecinos y amantes de los animales preocupados por el abandono animal en el municipio. Desde entonces, hemos rescatado y dado en adopción a cientos de animales.'),
+            ('about_team', ''),
+            ('about_founded_year', '2008'),
+            ('about_animals_rescued', ''),
         ]
         # Insertar settings por defecto solo si no existen (INSERT ... ON CONFLICT)
         for key, value in default_settings:
@@ -1328,31 +1393,57 @@ def new_news():
 @app.route('/admin/contacts')
 @login_required
 def list_contacts():
-    """Listar mensajes de contacto"""
+    """Listar mensajes de contacto con filtro y búsqueda"""
     db = get_db()
-    contacts = db.execute('SELECT * FROM contacts ORDER BY created_at DESC').fetchall()
-    return render_template('contacts.html', contacts=contacts)
+    read_filter = request.args.get('filter', '')  # 'unread', 'read' o ''
+    search      = request.args.get('search', '').strip()
+    placeholder = get_placeholder()
+
+    query  = 'SELECT * FROM contacts WHERE 1=1'
+    params = []
+
+    if read_filter == 'unread':
+        query += ' AND read = 0'
+    elif read_filter == 'read':
+        query += ' AND read = 1'
+
+    if search:
+        query += f' AND (name LIKE {placeholder} OR email LIKE {placeholder} OR subject LIKE {placeholder} OR message LIKE {placeholder})'
+        params.extend([f'%{search}%'] * 4)
+
+    query += ' ORDER BY created_at DESC'
+    contacts     = db.execute(query, params).fetchall()
+    total_unread = db.execute('SELECT COUNT(*) as c FROM contacts WHERE read = 0').fetchone()['c']
+    return render_template('contacts.html', contacts=contacts,
+                           read_filter=read_filter, search=search, total_unread=total_unread)
 
 
 @app.route('/admin/contacts/<int:contact_id>/read', methods=['POST'])
 @login_required
 def mark_contact_read(contact_id):
     """Marcar contacto como leído"""
+    validate_csrf()
     db = get_db()
     db.execute('UPDATE contacts SET read = 1 WHERE id = ?', (contact_id,))
     db.commit()
-    return redirect(url_for('list_contacts'))
+    # Preservar filtros al redirigir
+    return redirect(url_for('list_contacts',
+                            filter=request.form.get('filter', ''),
+                            search=request.form.get('search', '')))
 
 
 @app.route('/admin/contacts/<int:contact_id>/delete', methods=['POST'])
 @login_required
 def delete_contact(contact_id):
     """Eliminar mensaje de contacto"""
+    validate_csrf()
     db = get_db()
     db.execute('DELETE FROM contacts WHERE id = ?', (contact_id,))
     db.commit()
     flash('Mensaje eliminado.', 'success')
-    return redirect(url_for('list_contacts'))
+    return redirect(url_for('list_contacts',
+                            filter=request.form.get('filter', ''),
+                            search=request.form.get('search', '')))
 
 
 # ============================================
@@ -1488,6 +1579,9 @@ def admin_settings():
             'maps_embed_url',
             'donation_bizum', 'donation_iban', 'donation_paypal',
             'donation_teaming_url', 'donation_amazon_wishlist', 'donation_wallapop_url',
+            'smtp_host', 'smtp_port', 'smtp_user', 'smtp_password', 'smtp_from', 'notify_email',
+            'about_title', 'about_subtitle', 'about_mission', 'about_history', 'about_team',
+            'about_founded_year', 'about_animals_rescued',
         ]
         for key in keys:
             value = request.form.get(key, '').strip()
@@ -1749,6 +1843,15 @@ def api_contact():
     ''', (name, email, phone, subject, message))
     db.commit()
 
+    # Notificación por email al administrador
+    try:
+        send_notification_email(
+            subject=f'[Protectora] Nuevo mensaje de {name}',
+            body=f'Nombre: {name}\nEmail: {email}\nTeléfono: {phone or "-"}\nAsunto: {subject or "-"}\n\nMensaje:\n{message}'
+        )
+    except Exception:
+        pass
+
     return jsonify({'success': True, 'message': 'Mensaje recibido correctamente'})
 
 @app.route('/api/adoption-request', methods=['POST'])
@@ -1821,6 +1924,15 @@ def api_adoption_request():
         comments
     ))
     db.commit()
+
+    # Notificación por email al administrador
+    try:
+        send_notification_email(
+            subject=f'[Protectora] Solicitud de adopción: {animal_name} — {name}',
+            body=f'Solicitante: {name}\nEmail: {email}\nTeléfono: {phone}\nAnimal: {animal_name} (ID {animal_id})\nCiudad: {city or "-"}\n\nMensaje:\n{message or "-"}'
+        )
+    except Exception:
+        pass
 
     return jsonify({'success': True, 'message': 'Solicitud de adopción recibida correctamente'})
 
@@ -1974,7 +2086,28 @@ def list_collaborators():
         query += ' AND status = ?'
         params.append(status)
     query += ' ORDER BY created_at DESC'
-    collaborators = db.execute(query, params).fetchall()
+    collaborators_raw = db.execute(query, params).fetchall()
+    # Pre-format JSON in extra field for readability in template
+    collaborators = []
+    for c in collaborators_raw:
+        c = dict(c)
+        if c.get('extra') and c['extra'].startswith('{'):
+            try:
+                parsed = json.loads(c['extra'])
+                label_map = {
+                    'living_situation': 'Vivienda', 'has_yard': 'Jardín/patio',
+                    'space_available': 'Espacio disponible', 'current_pets': 'Mascotas actuales',
+                    'pet_experience': 'Experiencia', 'hours_home_per_day': 'Horas en casa/día',
+                    'foster_duration': 'Duración acogida', 'species_preference': 'Especie preferida',
+                    'household_members': 'Personas en hogar', 'city': 'Municipio',
+                }
+                lines = [f"{label_map.get(k, k)}: {v}" for k, v in parsed.items() if v]
+                c['extra_pretty'] = '\n'.join(lines)
+            except Exception:
+                c['extra_pretty'] = c['extra']
+        else:
+            c['extra_pretty'] = c.get('extra', '')
+        collaborators.append(c)
     return render_template('collaborators.html', collaborators=collaborators,
                            current_type=collab_type, current_status=status)
 
@@ -2054,15 +2187,41 @@ def api_adopt(animal_id):
 @login_required
 def list_adoptions():
     db = get_db()
-    status = request.args.get('status')
-    query = 'SELECT * FROM adoption_requests WHERE 1=1'
+    placeholder  = get_placeholder()
+    current_status = request.args.get('status', '')
+    search         = request.args.get('search', '').strip()
+    animal_filter  = request.args.get('animal', '').strip()
+    query  = 'SELECT * FROM adoption_requests WHERE 1=1'
     params = []
-    if status:
-        query += ' AND status = ?'
-        params.append(status)
+    if current_status:
+        query += f' AND status = {placeholder}'
+        params.append(current_status)
+    if search:
+        query += f' AND (name LIKE {placeholder} OR email LIKE {placeholder} OR phone LIKE {placeholder})'
+        params.extend([f'%{search}%'] * 3)
+    if animal_filter:
+        query += f' AND animal_name LIKE {placeholder}'
+        params.append(f'%{animal_filter}%')
     query += ' ORDER BY created_at DESC'
     adoptions = db.execute(query, params).fetchall()
-    return render_template('adoptions.html', adoptions=adoptions, current_status=status)
+    return render_template('adoptions.html', adoptions=adoptions, current_status=current_status,
+                           search=search, animal_filter=animal_filter)
+
+
+@app.route('/admin/adoptions/<int:req_id>/notes', methods=['POST'])
+@login_required
+def save_adoption_notes(req_id):
+    """Guardar notas internas de seguimiento en una solicitud de adopción"""
+    validate_csrf()
+    notes = request.form.get('notes', '').strip()
+    db = get_db()
+    db.execute('UPDATE adoption_requests SET notes = ? WHERE id = ?', (notes, req_id))
+    db.commit()
+    flash('Notas guardadas.', 'success')
+    return redirect(url_for('list_adoptions',
+                            status=request.form.get('current_status', ''),
+                            search=request.form.get('search', ''),
+                            animal=request.form.get('animal_filter', '')))
 
 
 @app.route('/admin/adoptions/<int:req_id>/status', methods=['POST'])
@@ -2089,6 +2248,134 @@ def delete_adoption_request(req_id):
     db.commit()
     flash('Solicitud eliminada.', 'success')
     return redirect(url_for('list_adoptions'))
+
+
+# ============================================
+# API — SOLICITUD DE VISITA
+# ============================================
+
+@app.route('/api/visit-request', methods=['POST'])
+@limiter.limit('5 per minute; 20 per day')
+def api_visit_request():
+    """Registrar solicitud de visita para conocer un animal"""
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({'error': 'Datos inválidos'}), 400
+    name = data.get('name', '').strip()
+    email = data.get('email', '').strip()
+    phone = data.get('phone', '').strip()
+    animal_id = data.get('animal_id')
+    animal_name = data.get('animal_name', '').strip()
+    preferred_date = data.get('preferred_date', '').strip()
+    preferred_time = data.get('preferred_time', '').strip()
+    notes = data.get('notes', '').strip()
+    if not name or not email:
+        return jsonify({'error': 'Nombre y email son obligatorios'}), 400
+    if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
+        return jsonify({'error': 'Email no válido'}), 400
+    db = get_db()
+    db.execute(
+        'INSERT INTO visit_requests (animal_id, animal_name, name, email, phone, preferred_date, preferred_time, notes) '
+        'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        (animal_id, animal_name, name, email, phone, preferred_date, preferred_time, notes)
+    )
+    db.commit()
+    send_notification_email(
+        f'Nueva solicitud de visita: {animal_name or "(sin animal especificado)"}',
+        f'Nombre: {name}\nEmail: {email}\nTeléfono: {phone or "—"}\n'
+        f'Animal: {animal_name or "—"}\nFecha preferida: {preferred_date or "—"}\n'
+        f'Hora preferida: {preferred_time or "—"}\nNotas: {notes or "—"}'
+    )
+    return jsonify({'success': True, 'message': 'Solicitud de visita enviada correctamente'})
+
+
+# ============================================
+# ADMIN — GESTIÓN DE VISITAS / CITAS
+# ============================================
+
+@app.route('/admin/visits')
+@login_required
+def list_visits():
+    db = get_db()
+    current_status = request.args.get('status', '')
+    search = request.args.get('search', '').strip()
+    query = 'SELECT * FROM visit_requests WHERE 1=1'
+    params = []
+    if current_status:
+        query += ' AND status = ?'
+        params.append(current_status)
+    if search:
+        query += ' AND (name LIKE ? OR email LIKE ? OR animal_name LIKE ?)'
+        like = f'%{search}%'
+        params.extend([like, like, like])
+    query += ' ORDER BY created_at DESC'
+    visits = [dict(v) for v in db.execute(query, params).fetchall()]
+    total_pending = db.execute("SELECT COUNT(*) as c FROM visit_requests WHERE status='pendiente'").fetchone()['c']
+    return render_template('visits.html', visits=visits, current_status=current_status,
+                           search=search, total_pending=total_pending)
+
+
+@app.route('/admin/visits/<int:visit_id>/status', methods=['POST'])
+@login_required
+def update_visit_status(visit_id):
+    validate_csrf()
+    new_status = request.form.get('status')
+    if new_status not in ('pendiente', 'confirmada', 'cancelada', 'completada'):
+        flash('Estado no válido.', 'error')
+        return redirect(url_for('list_visits'))
+    db = get_db()
+    db.execute('UPDATE visit_requests SET status = ? WHERE id = ?', (new_status, visit_id))
+    db.commit()
+    flash('Estado de visita actualizado.', 'success')
+    return redirect(url_for('list_visits',
+                            status=request.form.get('current_status', ''),
+                            search=request.form.get('search', '')))
+
+
+@app.route('/admin/visits/<int:visit_id>/delete', methods=['POST'])
+@login_required
+def delete_visit(visit_id):
+    validate_csrf()
+    db = get_db()
+    db.execute('DELETE FROM visit_requests WHERE id = ?', (visit_id,))
+    db.commit()
+    flash('Solicitud de visita eliminada.', 'success')
+    return redirect(url_for('list_visits',
+                            status=request.form.get('current_status', ''),
+                            search=request.form.get('search', '')))
+
+
+# ============================================
+# PÁGINA PÚBLICA — NOSOTROS
+# ============================================
+
+@app.route('/nosotros')
+def public_nosotros():
+    """Página pública 'Sobre nosotros', contenido editable desde el admin"""
+    db = get_db()
+    settings = {r['key']: r['value'] for r in db.execute('SELECT key, value FROM site_settings').fetchall()}
+    return render_template('nosotros.html', settings=settings)
+
+
+# ============================================
+# FICHA PÚBLICA DE ANIMAL
+# ============================================
+
+@app.route('/animal/<int:animal_id>')
+@app.route('/animal/<int:animal_id>/<slug>')
+def public_animal_page(animal_id, slug=None):
+    """Página pública con ficha completa de un animal (URL propia para SEO)"""
+    db = get_db()
+    animal = db.execute('SELECT * FROM animals WHERE id = ?', (animal_id,)).fetchone()
+    if not animal:
+        abort(404)
+    animal = dict(animal)
+    # Normalizar slug para URL canónica
+    correct_slug = re.sub(r'[^a-z0-9]+', '-', (animal['name'] or '').lower()).strip('-')
+    if slug != correct_slug:
+        return redirect(url_for('public_animal_page', animal_id=animal_id, slug=correct_slug), 301)
+    settings = {r['key']: r['value'] for r in db.execute('SELECT key, value FROM site_settings').fetchall()}
+    return render_template('animal_public.html', animal=animal, settings=settings)
 
 
 # ============================================

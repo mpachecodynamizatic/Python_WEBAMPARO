@@ -195,6 +195,66 @@
         </div>
     </section>
 
+    <section class="map-section" id="visita" style="background:#fffdf0; padding:3rem 0;">
+        <div class="container">
+            <h2 class="section-title" style="color:#856404;">
+                <i class="fas fa-calendar-check"></i> Solicitar visita a la protectora
+            </h2>
+            <p style="text-align:center; color:#777; margin-bottom:2rem; max-width:600px; margin-left:auto; margin-right:auto;">
+                ¿Quieres venir a conocer a nuestros animales sin compromiso? Rellena el formulario y te confirmaremos la cita.
+            </p>
+            <div style="max-width:680px; margin:0 auto; background:white; border-radius:14px; padding:2rem; box-shadow:0 2px 12px rgba(0,0,0,.08); border:1px solid #f0d070;">
+                <div id="visit-alert-general" style="display:none; padding:.9rem 1.25rem; border-radius:8px; margin-bottom:1rem; font-weight:600;"></div>
+                <form id="visitFormGeneral">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                        <div class="form-group">
+                            <label for="vg-name">Nombre completo *</label>
+                            <input type="text" id="vg-name" required placeholder="Tu nombre y apellidos">
+                        </div>
+                        <div class="form-group">
+                            <label for="vg-email">Email *</label>
+                            <input type="email" id="vg-email" required placeholder="tu@email.com">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                        <div class="form-group">
+                            <label for="vg-phone">Teléfono</label>
+                            <input type="tel" id="vg-phone" placeholder="600 000 000">
+                        </div>
+                        <div class="form-group">
+                            <label for="vg-animal">¿Algún animal en especial? (opcional)</label>
+                            <input type="text" id="vg-animal" placeholder="Nombre del animal o déjalo vacío">
+                        </div>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                        <div class="form-group">
+                            <label for="vg-date">Fecha preferida</label>
+                            <input type="date" id="vg-date" style="cursor:pointer;">
+                        </div>
+                        <div class="form-group">
+                            <label for="vg-time">Franja horaria</label>
+                            <select id="vg-time">
+                                <option value="">Sin preferencia</option>
+                                <option value="10:00-12:00">Mañana (10:00–12:00)</option>
+                                <option value="12:00-14:00">Mediodía (12:00–14:00)</option>
+                                <option value="17:00-19:00">Tarde (17:00–19:00)</option>
+                                <option value="19:00-20:00">Última hora (19:00–20:00)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:1.25rem;">
+                        <label for="vg-notes">Notas adicionales</label>
+                        <input type="text" id="vg-notes" placeholder="Vendremos dos personas, tengo niños de 5 años…">
+                    </div>
+                    <button type="submit" id="vg-btn" class="btn btn-primary btn-large"
+                            style="background:#F4A460; width:100%;">
+                        <i class="fas fa-paper-plane"></i> Enviar solicitud de visita
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
     <section class="map-section">
         <div class="container">
             <h2 class="section-title">¿Dónde estamos?</h2>
@@ -297,6 +357,58 @@
                 document.getElementById('contact-map').src = s.maps_embed_url;
             }
         } catch(e) { /* Servidor no disponible: se mantienen los valores por defecto */ }
+    })();
+
+    // Formulario de visita general
+    (function() {
+        const vgDate = document.getElementById('vg-date');
+        if (vgDate) vgDate.min = new Date().toISOString().split('T')[0];
+
+        document.getElementById('visitFormGeneral').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn     = document.getElementById('vg-btn');
+            const alertEl = document.getElementById('visit-alert-general');
+            const name    = document.getElementById('vg-name').value.trim();
+            const email   = document.getElementById('vg-email').value.trim();
+            const phone   = document.getElementById('vg-phone').value.trim();
+            const animalName = document.getElementById('vg-animal').value.trim();
+            const preferred_date = vgDate.value;
+            const preferred_time = document.getElementById('vg-time').value;
+            const notes   = document.getElementById('vg-notes').value.trim();
+
+            if (!name || !email) {
+                alertEl.style.cssText = 'display:block; background:#fdecea; color:#b91c1c;';
+                alertEl.textContent = 'Por favor, introduce tu nombre y email.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando…';
+
+            try {
+                const res = await fetch(`${window.location.origin}/api/visit-request`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, animal_name: animalName,
+                                          preferred_date, preferred_time, notes })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alertEl.style.cssText = 'display:block; background:#d5f5e3; color:#1a7a4a;';
+                    alertEl.innerHTML = '<i class="fas fa-check-circle"></i> ¡Solicitud enviada! Te confirmaremos la cita pronto.';
+                    this.reset();
+                } else {
+                    throw new Error(data.error || 'Error desconocido');
+                }
+            } catch(err) {
+                alertEl.style.cssText = 'display:block; background:#fdecea; color:#b91c1c;';
+                alertEl.textContent = 'Error: ' + err.message;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud de visita';
+                alertEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        });
     })();
     </script>
 </body>

@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Solicitudes de visita{% endblock %}
+{% block page_title %}Solicitudes de visita{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem; flex-wrap:wrap; gap:1rem;">
+    <h2><i class="fas fa-calendar-check"></i> Solicitudes de visita</h2>
+    <span class="badge badge-warning" style="font-size:1rem;">
+        {{ total_pending }} pendientes
+    </span>
+</div>
+
+<!-- Filtros de estado -->
+<div style="display:flex; gap:.6rem; margin-bottom:1rem; flex-wrap:wrap; align-items:center;">
+    <strong style="color:#555;">Estado:</strong>
+    {% for status_val, label, color in [
+        ('', 'Todos', '#aaa'),
+        ('pendiente', 'Pendientes', '#FFB347'),
+        ('confirmada', 'Confirmadas', '#27ae60'),
+        ('cancelada', 'Canceladas', '#e74c3c'),
+        ('completada', 'Completadas', '#6c757d')
+    ] %}
+    <a href="{{ url_for('list_visits', status=status_val, search=search) }}"
+       class="btn btn-sm"
+       style="background:{% if current_status == status_val %}{{ color }}; color:white{% else %}#eee; color:#333{% endif %}">
+        {{ label }}
+    </a>
+    {% endfor %}
+</div>
+
+<!-- Búsqueda -->
+<form method="GET" style="display:flex; gap:.75rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+    {% if current_status %}<input type="hidden" name="status" value="{{ current_status }}">{% endif %}
+    <input type="text" name="search" value="{{ search }}" placeholder="Buscar por nombre, email o animal…"
+           style="flex:1; min-width:220px; padding:.45rem .75rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem;">
+    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+    {% if search %}
+    <a href="{{ url_for('list_visits', status=current_status or None) }}" class="btn btn-sm" style="background:#eee; color:#333;">✕ Limpiar</a>
+    {% endif %}
+</form>
+
+{% if visits %}
+<div style="display:grid; gap:1.25rem;">
+    {% for v in visits %}
+    {% set status_styles = {
+        'pendiente':  ('FFB347', '856404', 'fff3cd', 'Pendiente'),
+        'confirmada': ('27ae60', 'fff', 'd5f5e3', 'Confirmada'),
+        'cancelada':  ('e74c3c', 'fff', 'fde8e8', 'Cancelada'),
+        'completada': ('6c757d', 'fff', 'f0f0f0', 'Completada')
+    } %}
+    {% set ss = status_styles.get(v.status, ('aaa', '333', '#eee', v.status)) %}
+    <div style="background:{% if v.status == 'pendiente' %}#fffbf0{% elif v.status == 'confirmada' %}#f0fff4{% elif v.status == 'cancelada' %}#fff5f5{% else %}white{% endif %};
+                border-radius:10px; padding:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,.06);
+                border-left:4px solid #{{ ss[0] }};">
+
+        <!-- Cabecera -->
+        <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
+            <div>
+                <h3 style="margin:0 0 .4rem; color:#333;">
+                    <i class="fas fa-user"></i> {{ v.name }}
+                </h3>
+                <div style="font-size:.88rem; color:#888;">
+                    <i class="fas fa-calendar"></i> Solicitada el {{ v.created_at[:10] if v.created_at else '—' }}
+                    {% if v.animal_name %}
+                    &nbsp;·&nbsp; <i class="fas fa-paw"></i>
+                    <a href="{{ url_for('edit_animal', animal_id=v.animal_id) }}" style="color:#F4A460;" title="Ver animal en admin">
+                        {{ v.animal_name }}
+                    </a>
+                    &nbsp;<a href="/animal/{{ v.animal_id }}" target="_blank" style="color:#aaa; font-size:.8rem;" title="Ver ficha pública">
+                        <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Selector de estado + eliminar -->
+            <div style="display:flex; gap:.5rem; align-items:center;">
+                <form method="POST" action="{{ url_for('update_visit_status', visit_id=v.id) }}" style="display:inline;">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="current_status" value="{{ current_status }}">
+                    <input type="hidden" name="search" value="{{ search }}">
+                    <select name="status" onchange="this.form.submit()"
+                            style="padding:.4rem .6rem; border-radius:6px; border:1px solid #ddd; font-size:.9rem;">
+                        <option value="pendiente"  {% if v.status == 'pendiente'  %}selected{% endif %}>Pendiente</option>
+                        <option value="confirmada" {% if v.status == 'confirmada' %}selected{% endif %}>Confirmada</option>
+                        <option value="cancelada"  {% if v.status == 'cancelada'  %}selected{% endif %}>Cancelada</option>
+                        <option value="completada" {% if v.status == 'completada' %}selected{% endif %}>Completada</option>
+                    </select>
+                </form>
+                <form method="POST" action="{{ url_for('delete_visit', visit_id=v.id) }}" style="display:inline;"
+                      onsubmit="return confirm('¿Eliminar esta solicitud de visita?');">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="current_status" value="{{ current_status }}">
+                    <input type="hidden" name="search" value="{{ search }}">
+                    <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Datos de contacto y visita -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:1rem;
+                    padding:1rem; background:white; border-radius:8px;">
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:.82rem; margin-bottom:.2rem;">Email:</strong>
+                <a href="mailto:{{ v.email }}" style="color:#333; word-break:break-all;">{{ v.email }}</a>
+            </div>
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:.82rem; margin-bottom:.2rem;">Teléfono:</strong>
+                <span>{{ v.phone or '—' }}</span>
+            </div>
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:.82rem; margin-bottom:.2rem;">Fecha preferida:</strong>
+                <span>{{ v.preferred_date or '—' }}</span>
+            </div>
+            <div>
+                <strong style="color:#F4A460; display:block; font-size:.82rem; margin-bottom:.2rem;">Hora preferida:</strong>
+                <span>{{ v.preferred_time or '—' }}</span>
+            </div>
+        </div>
+
+        {% if v.notes %}
+        <div style="margin-top:.9rem; padding:.75rem 1rem; background:#f9f9f9; border-radius:8px;
+                    border-left:3px solid #F4A460;">
+            <strong style="font-size:.85rem; color:#777;"><i class="fas fa-comment"></i> Notas del solicitante:</strong>
+            <p style="margin:.35rem 0 0; color:#555; font-size:.95rem;">{{ v.notes }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Acciones rápidas -->
+        <div style="margin-top:1rem; display:flex; gap:.5rem; flex-wrap:wrap;">
+            <a href="mailto:{{ v.email }}?subject=Solicitud de visita - {{ v.animal_name or 'Protectora Burjassot' }}"
+               class="btn btn-sm btn-primary">
+                <i class="fas fa-reply"></i> Responder por email
+            </a>
+            {% if v.phone %}
+            <a href="tel:{{ v.phone }}" class="btn btn-sm" style="background:#25D366; color:white;">
+                <i class="fas fa-phone"></i> Llamar
+            </a>
+            <a href="https://wa.me/{{ v.phone | replace(' ','') | replace('+','') }}" target="_blank"
+               class="btn btn-sm" style="background:#25D366; color:white;">
+                <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<p style="color:#666; margin-top:1.5rem;">Total: <strong>{{ visits|length }}</strong> solicitudes</p>
+
+{% else %}
+<div style="text-align:center; padding:3rem;">
+    <i class="fas fa-calendar-times" style="font-size:4rem; color:#ddd; margin-bottom:1rem;"></i>
+    <h3 style="color:#666;">No hay solicitudes de visita</h3>
+    <p style="color:#999;">Cuando alguien solicite una visita desde la web, aparecerá aquí.</p>
+</div>
+{% endif %}
+{% endblock %}

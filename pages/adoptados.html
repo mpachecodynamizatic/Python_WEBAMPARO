@@ -184,6 +184,11 @@
                     const fallback = `../images/animales/${animal.type === 'gato' ? 'gato' : 'perro'}.svg`;
                     const card = document.createElement('div');
                     card.className = 'animal-card';
+                    card.style.cursor = 'pointer';
+                    card.title = `Ver ficha de ${animal.name}`;
+                    card.addEventListener('click', () => {
+                        window.location.href = `${BASE_URL}/animal/${animal.id}`;
+                    });
                     card.innerHTML = `
                         <img src="${imgSrc}" alt="${animal.name}" class="animal-image"
                              onerror="this.onerror=null; this.src='${fallback}'">
@@ -197,6 +202,9 @@
                                 <p><i class="fas fa-venus-mars"></i> ${animal.gender || 'No especificado'}</p>
                             </div>
                             <p style="color:#666;font-size:.9rem;">${animal.description ? animal.description.substring(0,100) + '…' : ''}</p>
+                            <p style="margin-top:.75rem; color:#F4A460; font-size:.88rem; font-weight:600;">
+                                <i class="fas fa-arrow-right"></i> Ver su historia
+                            </p>
                         </div>`;
                     grid.appendChild(card);
                 });

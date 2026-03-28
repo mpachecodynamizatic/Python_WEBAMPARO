@@ -8,13 +8,34 @@
     <h2><i class="fas fa-envelope"></i> Mensajes recibidos</h2>
     <div style="display:flex; gap:.75rem; align-items:center;">
         <span class="badge badge-warning" style="font-size: 1rem;">
-            {{ contacts | selectattr('read', 'equalto', 0) | list | length }} sin leer
+            {{ total_unread }} sin leer
         </span>
         <a href="{{ url_for('export_contacts_csv') }}" class="btn btn-primary" style="font-size:.85rem;">
             <i class="fas fa-download"></i> Exportar CSV
         </a>
     </div>
 </div>
+
+<!-- Barra de filtros -->
+<div style="display:flex; gap:.75rem; margin-bottom:1.25rem; flex-wrap:wrap; align-items:center;">
+    <strong style="color:#555;">Filtrar:</strong>
+    <a href="{{ url_for('list_contacts', search=search) }}"
+       class="btn btn-sm" style="background:{% if not read_filter %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">Todos</a>
+    <a href="{{ url_for('list_contacts', filter='unread', search=search) }}"
+       class="btn btn-sm" style="background:{% if read_filter == 'unread' %}#FFB347; color:white{% else %}#eee; color:#333{% endif %}">
+       Sin leer{% if total_unread %} <span class="badge badge-warning">{{ total_unread }}</span>{% endif %}</a>
+    <a href="{{ url_for('list_contacts', filter='read', search=search) }}"
+       class="btn btn-sm" style="background:{% if read_filter == 'read' %}#27ae60; color:white{% else %}#eee; color:#333{% endif %}">Leídos</a>
+</div>
+<form method="GET" style="display:flex; gap:.75rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+    {% if read_filter %}<input type="hidden" name="filter" value="{{ read_filter }}">{% endif %}
+    <input type="text" name="search" value="{{ search }}" placeholder="Buscar por nombre, email o mensaje…"
+           style="flex:1; min-width:200px; padding:.45rem .75rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem;">
+    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+    {% if search %}
+    <a href="{{ url_for('list_contacts', filter=read_filter or None) }}" class="btn btn-sm" style="background:#eee; color:#333;">✕ Limpiar</a>
+    {% endif %}
+</form>
 
 {% if contacts %}
 <div style="display: grid; gap: 1.25rem;">
@@ -43,6 +64,8 @@
                 {% if not contact.read %}
                 <form method="POST" action="{{ url_for('mark_contact_read', contact_id=contact.id) }}" style="display:inline;">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="filter" value="{{ read_filter }}">
+                    <input type="hidden" name="search" value="{{ search }}">
                     <button type="submit" class="btn btn-success btn-sm" title="Marcar como leído">
                         <i class="fas fa-check"></i> Leído
                     </button>
@@ -50,6 +73,8 @@
                 {% endif %}
                 <form method="POST" action="{{ url_for('delete_contact', contact_id=contact.id) }}" style="display:inline;"
                       onsubmit="return confirm('¿Eliminar este mensaje?');">
+                    <input type="hidden" name="filter" value="{{ read_filter }}">
+                    <input type="hidden" name="search" value="{{ search }}">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-danger btn-sm" title="Eliminar">
                         <i class="fas fa-trash"></i>

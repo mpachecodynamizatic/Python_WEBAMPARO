@@ -295,7 +295,13 @@ function showAnimalDetails(animalId) {
             margin-bottom: 1.5rem;
         " onerror="this.onerror=null; this.src='${modalFallback}'">
 
-        <h2 style="font-size: 2rem; margin-bottom: 1rem; color: #333;">${animal.name}</h2>
+        <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:.75rem; margin-bottom:1rem;">
+            <h2 style="font-size: 2rem; margin:0; color: #333;">${animal.name}</h2>
+            <a href="${BASE_URL}/animal/${animal.id}" target="_blank"
+               style="background:#f5f0ea; color:#F4A460; padding:.4rem 1rem; border-radius:8px; text-decoration:none; font-size:.88rem; font-weight:600; white-space:nowrap;">
+                <i class="fas fa-external-link-alt"></i> Ver ficha completa
+            </a>
+        </div>
 
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
             <span style="background: #87CEEB; color: white; padding: 0.5rem 1rem; border-radius: 20px;">
@@ -435,6 +441,50 @@ function showAnimalDetails(animalId) {
                     <i class="fas fa-paper-plane"></i> Enviar solicitud de pre-adopción
                 </button>
                 <p id="adopt-feedback-${animal.id}" style="display:none; margin-top:0.75rem; padding:0.6rem 1rem; border-radius:6px; font-weight:500;"></p>
+
+                <!-- Solicitar visita -->
+                <hr style="margin:1.75rem 0 1.25rem; border:none; border-top:2px solid #f0f0f0;">
+                <div style="text-align:center; margin-bottom:.75rem;">
+                    <p style="color:#888; font-size:.9rem; margin:0 0 .75rem;">
+                        ¿Prefieres conocer a <strong>${animal.name}</strong> en persona antes de decidir?
+                    </p>
+                    <button type="button"
+                            onclick="document.getElementById('visit-box-${animal.id}').style.display = document.getElementById('visit-box-${animal.id}').style.display === 'none' ? 'block' : 'none'"
+                            style="background:#fff3cd; color:#856404; border:1px solid #f0d070; padding:.6rem 1.5rem; border-radius:8px; font-size:.95rem; cursor:pointer; font-weight:600;">
+                        <i class="fas fa-calendar-check"></i> Concertar visita
+                    </button>
+                </div>
+                <div id="visit-box-${animal.id}" style="display:none; background:#fffdf0; border:1px solid #f0d070; border-radius:10px; padding:1.25rem; margin-top:.5rem;">
+                    <h4 style="margin:0 0 1rem; color:#856404;"><i class="fas fa-calendar-check"></i> Solicitar visita con ${animal.name}</h4>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:.65rem; margin-bottom:.65rem;">
+                        <input type="text" id="visit-name-${animal.id}" placeholder="Nombre completo *" required
+                               style="padding:.55rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem; box-sizing:border-box;">
+                        <input type="email" id="visit-email-${animal.id}" placeholder="Email *" required
+                               style="padding:.55rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem; box-sizing:border-box;">
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:.65rem; margin-bottom:.65rem;">
+                        <input type="tel" id="visit-phone-${animal.id}" placeholder="Teléfono"
+                               style="padding:.55rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem; box-sizing:border-box;">
+                        <input type="date" id="visit-date-${animal.id}"
+                               min="${new Date().toISOString().split('T')[0]}"
+                               style="padding:.55rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem; box-sizing:border-box; cursor:pointer;">
+                    </div>
+                    <select id="visit-time-${animal.id}"
+                            style="width:100%; padding:.55rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem; margin-bottom:.65rem; box-sizing:border-box;">
+                        <option value="">Franja horaria preferida (opcional)</option>
+                        <option value="10:00-12:00">Mañana (10:00–12:00)</option>
+                        <option value="12:00-14:00">Mediodía (12:00–14:00)</option>
+                        <option value="17:00-19:00">Tarde (17:00–19:00)</option>
+                        <option value="19:00-20:00">Última hora (19:00–20:00)</option>
+                    </select>
+                    <input type="text" id="visit-notes-${animal.id}" placeholder="Notas adicionales (opcional)"
+                           style="width:100%; padding:.55rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem; margin-bottom:.75rem; box-sizing:border-box;">
+                    <button type="button" onclick="submitVisitRequest(${animal.id}, '${animal.name}')"
+                            style="background:#F4A460; color:white; border:none; padding:.65rem 1.5rem; border-radius:8px; font-size:.95rem; cursor:pointer; font-weight:600; width:100%;">
+                        <i class="fas fa-paper-plane"></i> Enviar solicitud de visita
+                    </button>
+                    <p id="visit-feedback-${animal.id}" style="display:none; margin-top:.6rem; padding:.6rem 1rem; border-radius:6px; font-weight:500;"></p>
+                </div>
             </form>
         </div>
     `;
@@ -557,6 +607,58 @@ async function submitAdoptRequest(animalId, animalName) {
         feedback.textContent = 'Error de conexión. Por favor, verifica tu conexión a internet e inténtalo de nuevo.';
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud de pre-adopción';
+    }
+}
+
+async function submitVisitRequest(animalId, animalName) {
+    const name  = document.getElementById('visit-name-'  + animalId).value.trim();
+    const email = document.getElementById('visit-email-' + animalId).value.trim();
+    const phone = document.getElementById('visit-phone-' + animalId).value.trim();
+    const preferred_date = document.getElementById('visit-date-' + animalId).value;
+    const preferred_time = document.getElementById('visit-time-' + animalId).value;
+    const notes = document.getElementById('visit-notes-' + animalId).value.trim();
+    const feedback = document.getElementById('visit-feedback-' + animalId);
+    const btn = feedback.previousElementSibling;
+
+    if (!name || !email) {
+        feedback.style.cssText = 'display:block; background:#fdecea; color:#e74c3c; margin-top:.6rem; padding:.6rem 1rem; border-radius:6px; font-weight:500;';
+        feedback.textContent = 'Por favor, introduce tu nombre y email.';
+        return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        feedback.style.cssText = 'display:block; background:#fdecea; color:#e74c3c; margin-top:.6rem; padding:.6rem 1rem; border-radius:6px; font-weight:500;';
+        feedback.textContent = 'Email no válido.';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando…';
+
+    try {
+        const res = await fetch(`${API_BASE}/api/visit-request`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ animal_id: animalId, animal_name: animalName, name, email, phone, preferred_date, preferred_time, notes })
+        });
+        const data = await res.json();
+        feedback.style.display = 'block';
+        if (res.ok) {
+            feedback.style.cssText = 'display:block; background:#eafaf1; color:#27ae60; margin-top:.6rem; padding:.6rem 1rem; border-radius:6px; font-weight:500;';
+            feedback.innerHTML = '<i class="fas fa-check-circle"></i> ¡Solicitud de visita enviada! Te confirmaremos la cita pronto.';
+            btn.style.display = 'none';
+            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+            feedback.style.cssText = 'display:block; background:#fdecea; color:#e74c3c; margin-top:.6rem; padding:.6rem 1rem; border-radius:6px; font-weight:500;';
+            feedback.textContent = data.error || 'Error al enviar. Inténtalo de nuevo.';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud de visita';
+        }
+    } catch(e) {
+        feedback.style.cssText = 'display:block; background:#fdecea; color:#e74c3c; margin-top:.6rem; padding:.6rem 1rem; border-radius:6px; font-weight:500;';
+        feedback.textContent = 'Error de conexión. Inténtalo de nuevo.';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud de visita';
     }
 }
 

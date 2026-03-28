@@ -5,15 +5,28 @@
 
 {% block content %}
 <!-- Filtros por estado -->
-<div style="display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center;">
+<div style="display:flex; gap:0.75rem; margin-bottom:1rem; flex-wrap:wrap; align-items:center;">
     <strong>Estado:</strong>
     {% for s, label in [('','Todas'),('pendiente','Pendiente'),('en_proceso','En proceso'),('aprobada','Aprobada'),('rechazada','Rechazada')] %}
-    <a href="{{ url_for('list_adoptions', status=s if s else None) }}"
+    <a href="{{ url_for('list_adoptions', status=s if s else None, search=search, animal=animal_filter) }}"
        class="btn btn-sm" style="background:{% if current_status == s or (not current_status and not s) %}#F4A460; color:white{% else %}#eee; color:#333{% endif %}">
         {{ label }}
     </a>
     {% endfor %}
 </div>
+
+<!-- Búsqueda y filtro por animal -->
+<form method="GET" action="{{ url_for('list_adoptions') }}" style="display:flex; gap:.75rem; margin-bottom:1.5rem; flex-wrap:wrap;">
+    {% if current_status %}<input type="hidden" name="status" value="{{ current_status }}">{% endif %}
+    <input type="text" name="search" value="{{ search }}" placeholder="Buscar por nombre, email o teléfono…"
+           style="flex:1; min-width:200px; padding:.45rem .75rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem;">
+    <input type="text" name="animal" value="{{ animal_filter }}" placeholder="Filtrar por animal…"
+           style="width:170px; padding:.45rem .75rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem;">
+    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-search"></i> Buscar</button>
+    {% if search or animal_filter %}
+    <a href="{{ url_for('list_adoptions', status=current_status or None) }}" class="btn btn-sm" style="background:#eee; color:#333;">Limpiar</a>
+    {% endif %}
+</form>
 
 {% if adoptions %}
 <div style="display: grid; gap: 1.5rem;">
@@ -188,6 +201,22 @@
                 {% endif %}
             </div>
         </details>
+
+        <!-- Notas internas de seguimiento -->
+        <form method="POST" action="{{ url_for('save_adoption_notes', req_id=r.id) }}" style="margin-top:1rem;">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="current_status" value="{{ current_status }}">
+            <input type="hidden" name="search" value="{{ search }}">
+            <input type="hidden" name="animal_filter" value="{{ animal_filter }}">
+            <label style="font-size:.85rem; color:#888; font-weight:600; display:block; margin-bottom:.35rem;">
+                <i class="fas fa-sticky-note"></i> Notas internas de seguimiento
+            </label>
+            <textarea name="notes" rows="2" placeholder="Anotaciones privadas: visita domiciliaria, firma contrato…"
+                      style="width:100%; border:1px solid #ddd; border-radius:6px; padding:.5rem; font-size:.9rem; resize:vertical; box-sizing:border-box;">{{ r.notes or '' }}</textarea>
+            <button type="submit" class="btn btn-sm" style="margin-top:.4rem; background:#6c757d; color:white;">
+                <i class="fas fa-save"></i> Guardar notas
+            </button>
+        </form>
     </div>
     {% endfor %}
 </div>

@@ -56,11 +56,20 @@
             <td><a href="mailto:{{ c.email }}">{{ c.email }}</a></td>
             <td>{{ c.phone or '—' }}</td>
             <td style="max-width:250px; font-size:0.85rem; color:#555;">
-                {% if c.message %}
+                {% if c.message or c.extra %}
                 <details>
-                    <summary style="cursor:pointer; color:#F4A460;">Ver mensaje</summary>
-                    <p style="margin-top:0.5rem;">{{ c.message }}</p>
-                    {% if c.extra %}<p><em>Extra: {{ c.extra }}</em></p>{% endif %}
+                    <summary style="cursor:pointer; color:#F4A460;">Ver detalles</summary>
+                    {% if c.message %}<p style="margin-top:0.5rem;">{{ c.message }}</p>{% endif %}
+                    {% if c.extra %}
+                    <div style="margin-top:.5rem; background:#f9f9f9; border-radius:6px; padding:.5rem; font-size:.82rem;">
+                        {% if c.extra.startswith('{') %}
+                        <strong style="color:#888; display:block; margin-bottom:.3rem;">Campos adicionales:</strong>
+                        <pre style="margin:0; white-space:pre-wrap; word-break:break-word; color:#555; font-family:inherit;">{{ c.extra_pretty or c.extra }}</pre>
+                        {% else %}
+                        <em>{{ c.extra }}</em>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </details>
                 {% else %}—{% endif %}
             </td>

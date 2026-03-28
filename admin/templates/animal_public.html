@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ animal.name }} - {{ animal.type|capitalize }} en {{ animal.status }} - Protectora de Animales Burjassot">
+    <title>{{ animal.name }} - Protectora de Animales Burjassot</title>
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Protectora de Animales Burjassot">
+    <meta property="og:title" content="{{ animal.name }} - Protectora de Animales Burjassot">
+    <meta property="og:description" content="{{ (animal.description or '') | truncate(160, True, '…') }}">
+    {% if animal.image and animal.image.startswith('uploads/') %}
+    <meta property="og:image" content="/{{ animal.image }}">
+    {% endif %}
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/adopcion.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- JSON-LD structured data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Thing",
+        "name": "{{ animal.name }}",
+        "description": "{{ (animal.description or '') | replace('"', '\\"') | truncate(250, True, '…') }}",
+        "url": "{{ request.url }}"
+    }
+    </script>
+    <style>
+        .animal-detail-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 768px) {
+            .animal-detail-hero { grid-template-columns: 1fr; }
+        }
+        .animal-hero-img {
+            width: 100%;
+            border-radius: 16px;
+            object-fit: cover;
+            max-height: 420px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .animal-hero-info h1 {
+            font-size: 2.2rem;
+            margin: 0 0 0.5rem;
+            color: #333;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: .35rem 1rem;
+            border-radius: 20px;
+            font-size: .9rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+        .status-adoption  { background: #fff3cd; color: #856404; }
+        .status-reserved  { background: #cfe2ff; color: #084298; }
+        .status-fostered  { background: #d1e7dd; color: #0a3622; }
+        .status-adopted   { background: #d5f5e3; color: #1a7a4a; }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .75rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+        .info-item strong { display: block; font-size: .8rem; color: #F4A460; text-transform: uppercase; letter-spacing: .05em; }
+        .info-item span   { font-size: 1rem; color: #333; }
+        .adoption-form-box {
+            background: #fffbf5;
+            border: 1px solid #f0dbc0;
+            border-radius: 14px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .adoption-form-box h2 {
+            color: #F4A460;
+            margin: 0 0 1.25rem;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+        .alert { padding: .9rem 1.25rem; border-radius: 8px; margin-bottom: 1rem; font-weight: 600; }
+        .alert-success { background: #d5f5e3; color: #1a7a4a; }
+        .alert-error   { background: #fde8e8; color: #b91c1c; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-topbar">
+            <div class="container">
+                <button class="menu-toggle" aria-label="Menú">
+                    <span></span><span></span><span></span>
+                </button>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="/">Inicio</a></li>
+                        <li class="dropdown">
+                            <a href="/pages/adopcion.html" class="active">Adopción <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/pages/adopcion.html">En adopción</a></li>
+                                <li><a href="/pages/adoptados.html">Adoptados</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="/pages/colabora.html">Colabora <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/pages/colabora.html#socio">Hazte socio</a></li>
+                                <li><a href="/pages/colabora.html#padrino">Hazte padrino/madrina</a></li>
+                                <li><a href="/pages/colabora.html#voluntariado">Voluntariado</a></li>
+                                <li><a href="/pages/acogida.html">Acoge temporalmente</a></li>
+                                <li><a href="/pages/colabora.html#empresa">Empresa solidaria</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="/pages/dona.html">Dona <i class="fas fa-chevron-down"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/pages/dona.html#teaming">Teaming</a></li>
+                                <li><a href="/pages/dona.html#bizum">Bizum</a></li>
+                                <li><a href="/pages/dona.html#cuenta">Cuenta bancaria</a></li>
+                                <li><a href="/pages/dona.html#amazon">Amazon Wishlist</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/pages/contacto.html">Contacto</a></li>
+                    </ul>
+                </nav>
+                <div class="language-selector">
+                    <button class="lang-btn active" data-lang="es">ES</button>
+                    <button class="lang-btn" data-lang="val">VAL</button>
+                </div>
+            </div>
+        </div>
+        <div class="header-brand">
+            <div class="container">
+                <div class="logo">
+                    <img src="/images/logos/logo.png" alt="Protectora Burjassot" onerror="this.style.display='none'">
+                    <h1>Protectora de Animales Burjassot</h1>
+                </div>
+                <div class="main-actions">
+                    <a href="/pages/dona.html" class="btn btn-primary"><i class="fas fa-heart"></i> Dona</a>
+                    <a href="/pages/adopcion.html" class="btn btn-primary"><i class="fas fa-paw"></i> Adopta</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <section class="page-header" style="padding: 1.5rem 0;">
+        <div class="container">
+            <p style="margin:0; font-size:.9rem;">
+                <a href="/" style="color:white; opacity:.8;">Inicio</a>
+                &rsaquo; <a href="/pages/adopcion.html" style="color:white; opacity:.8;">Adopción</a>
+                &rsaquo; <strong>{{ animal.name }}</strong>
+            </p>
+        </div>
+    </section>
+
+    <section style="padding: 3rem 0;">
+        <div class="container">
+            <!-- Ficha principal -->
+            <div class="animal-detail-hero">
+                <!-- Imagen -->
+                <div>
+                    {% if animal.image and animal.image.startswith('uploads/') %}
+                    <img src="/{{ animal.image }}" alt="{{ animal.name }}" class="animal-hero-img"
+                         onerror="this.onerror=null; this.src='/images/animales/{{ 'gato' if animal.type == 'gato' else 'perro' }}.svg'">
+                    {% else %}
+                    <img src="/images/animales/{{ 'gato' if animal.type == 'gato' else 'perro' }}.svg"
+                         alt="{{ animal.name }}" class="animal-hero-img">
+                    {% endif %}
+                </div>
+
+                <!-- Info -->
+                <div class="animal-hero-info">
+                    <h1>{{ animal.name }}</h1>
+
+                    {% set status_map = {'adoption': ('En adopción', 'adoption'), 'reserved': ('Reservado', 'reserved'), 'fostered': ('En acogida', 'fostered'), 'adopted': ('Adoptado', 'adopted')} %}
+                    {% set status_info = status_map.get(animal.status, (animal.status, 'adoption')) %}
+                    <span class="status-badge status-{{ status_info[1] }}">
+                        <i class="fas fa-circle" style="font-size:.55rem; vertical-align:middle;"></i>
+                        {{ status_info[0] }}
+                    </span>
+
+                    <div class="info-grid">
+                        {% if animal.type %}
+                        <div class="info-item">
+                            <strong><i class="fas fa-paw"></i> Especie</strong>
+                            <span>{{ 'Gato' if animal.type == 'gato' else 'Perro' }}</span>
+                        </div>
+                        {% endif %}
+                        {% if animal.age %}
+                        <div class="info-item">
+                            <strong><i class="fas fa-birthday-cake"></i> Edad</strong>
+                            <span>{{ animal.age }}</span>
+                        </div>
+                        {% endif %}
+                        {% if animal.gender %}
+                        <div class="info-item">
+                            <strong><i class="fas fa-venus-mars"></i> Sexo</strong>
+                            <span>{{ animal.gender }}</span>
+                        </div>
+                        {% endif %}
+                        {% if animal.size %}
+                        <div class="info-item">
+                            <strong><i class="fas fa-ruler"></i> Tamaño</strong>
+                            <span>{{ animal.size }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if animal.description %}
+                    <div style="margin-top:1rem; color:#555; line-height:1.75; font-size:1rem;">
+                        {{ animal.description }}
+                    </div>
+                    {% endif %}
+
+                    <div style="margin-top:1.5rem; display:flex; gap:.75rem; flex-wrap:wrap;">
+                        {% if animal.status in ('adoption', 'reserved') %}
+                        <a href="#adoptar" class="btn btn-primary">
+                            <i class="fas fa-heart"></i> Solicitar adopción
+                        </a>
+                        {% elif animal.status == 'fostered' %}
+                        <a href="/pages/acogida.html" class="btn btn-primary">
+                            <i class="fas fa-home"></i> Acoger temporalmente
+                        </a>
+                        {% endif %}
+                        {% if animal.status in ('adoption', 'reserved', 'fostered') %}
+                        <a href="#visita" class="btn" style="background:#fff3cd; color:#856404; border:1px solid #f0d070;">
+                            <i class="fas fa-calendar-check"></i> Concertar visita
+                        </a>
+                        {% endif %}
+                        <a href="/pages/adopcion.html" class="btn btn-secondary" style="background:#eee; color:#555; border:none;">
+                            <i class="fas fa-arrow-left"></i> Ver todos los animales
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de adopción -->
+            {% if animal.status in ('adoption', 'reserved') %}
+            <div class="adoption-form-box" id="adoptar">
+                <h2><i class="fas fa-heart"></i> Solicitar la adopción de {{ animal.name }}</h2>
+                <p style="color:#777; margin-bottom:1.5rem;">Rellena el formulario y nos pondremos en contacto contigo lo antes posible.</p>
+
+                <div id="form-alert" style="display:none;"></div>
+
+                <form id="adoptionForm">
+                    <input type="hidden" name="animal_id" value="{{ animal.id }}">
+                    <input type="hidden" name="animal_name" value="{{ animal.name }}">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre completo *</label>
+                            <input type="text" name="name" required class="form-control" placeholder="Tu nombre y apellidos">
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" name="email" required class="form-control" placeholder="tu@email.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="600 000 000">
+                        </div>
+                        <div class="form-group">
+                            <label>Ciudad</label>
+                            <input type="text" name="city" class="form-control" placeholder="Tu ciudad">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Motivo de adopción *</label>
+                        <textarea name="why_adopt" required rows="4" class="form-control"
+                                  placeholder="¿Por qué quieres adoptar a {{ animal.name }}? Cuéntanos un poco sobre ti y tu situación familiar…"></textarea>
+                    </div>
+                    <p style="font-size:.8rem; color:#999; margin-bottom:1rem;">
+                        * Campos obligatorios. Tus datos se usarán únicamente para gestionar tu solicitud.
+                    </p>
+                    <button type="submit" class="btn btn-primary btn-large" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Enviar solicitud
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+            <!-- Formulario de visita -->
+            {% if animal.status in ('adoption', 'reserved', 'fostered') %}
+            <div class="adoption-form-box" id="visita"
+                 style="border-color:#f0d070; background:#fffdf0; margin-top:2rem;">
+                <h2 style="color:#856404;">
+                    <i class="fas fa-calendar-check"></i> Concertar una visita con {{ animal.name }}
+                </h2>
+                <p style="color:#777; margin-bottom:1.5rem;">
+                    Ven a conocernos en la protectora. Rellena el formulario y te confirmaremos la cita.
+                </p>
+                <div id="visit-alert" style="display:none;"></div>
+                <form id="visitForm">
+                    <input type="hidden" name="animal_id" value="{{ animal.id }}">
+                    <input type="hidden" name="animal_name" value="{{ animal.name }}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre completo *</label>
+                            <input type="text" name="name" required class="form-control"
+                                   placeholder="Tu nombre y apellidos">
+                        </div>
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" name="email" required class="form-control"
+                                   placeholder="tu@email.com">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="tel" name="phone" class="form-control"
+                                   placeholder="600 000 000">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha preferida</label>
+                            <input type="date" name="preferred_date" class="form-control"
+                                   id="visitDate" style="cursor:pointer;">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Franja horaria preferida</label>
+                            <select name="preferred_time" class="form-control">
+                                <option value="">Sin preferencia</option>
+                                <option value="10:00-12:00">Mañana (10:00-12:00)</option>
+                                <option value="12:00-14:00">Mediodía (12:00-14:00)</option>
+                                <option value="17:00-19:00">Tarde (17:00-19:00)</option>
+                                <option value="19:00-20:00">Última hora (19:00-20:00)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Notas</label>
+                            <input type="text" name="notes" class="form-control"
+                                   placeholder="Ej: vendremos dos personas, tengo niños…">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-large" id="visitBtn"
+                            style="background:#F4A460; color:white; margin-top:.5rem;">
+                        <i class="fas fa-calendar-check"></i> Solicitar visita
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Sobre nosotros</h3>
+                    <p>Somos una protectora de animales sin ánimo de lucro. Rescatamos, cuidamos y buscamos hogares para animales heridos o abandonados.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Adopción</h3>
+                    <ul>
+                        <li><a href="/pages/adopcion.html">En adopción</a></li>
+                        <li><a href="/pages/adoptados.html">Adoptados</a></li>
+                        <li><a href="/pages/acogida.html">Acoge temporalmente</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contacto</h3>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-envelope"></i> {{ settings.get('email', 'info@protectoraburjassot.org') }}</li>
+                        <li><i class="fas fa-phone"></i> {{ settings.get('phone', '') or '+34 XXX XXX XXX' }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Protectora de Animales Burjassot. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+        // Adoption form submission
+        const form = document.getElementById('adoptionForm');
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = document.getElementById('submitBtn');
+                const alert = document.getElementById('form-alert');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando…';
+
+                const data = {};
+                new FormData(form).forEach((v, k) => data[k] = v);
+
+                try {
+                    const resp = await fetch('/api/adoption-request', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await resp.json();
+                    if (resp.ok) {
+                        alert.className = 'alert alert-success';
+                        alert.textContent = '¡Solicitud enviada! Nos pondremos en contacto contigo pronto.';
+                        alert.style.display = 'block';
+                        form.reset();
+                        document.querySelector('input[name="animal_id"]').value = '{{ animal.id }}';
+                        document.querySelector('input[name="animal_name"]').value = '{{ animal.name }}';
+                    } else {
+                        throw new Error(result.error || 'Error al enviar');
+                    }
+                } catch (err) {
+                    alert.className = 'alert alert-error';
+                    alert.textContent = 'Error: ' + err.message;
+                    alert.style.display = 'block';
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar solicitud';
+                    document.getElementById('form-alert').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
+
+        // Set min date for visit form
+        const visitDate = document.getElementById('visitDate');
+        if (visitDate) visitDate.min = new Date().toISOString().split('T')[0];
+
+        // Visit form submission
+        const visitForm = document.getElementById('visitForm');
+        if (visitForm) {
+            visitForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = document.getElementById('visitBtn');
+                const alertEl = document.getElementById('visit-alert');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando…';
+                const data = {};
+                new FormData(visitForm).forEach((v, k) => data[k] = v);
+                try {
+                    const resp = await fetch('/api/visit-request', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await resp.json();
+                    if (resp.ok) {
+                        alertEl.className = 'alert alert-success';
+                        alertEl.textContent = '¡Solicitud de visita enviada! Te confirmaremos la cita pronto.';
+                        alertEl.style.display = 'block';
+                        visitForm.reset();
+                        visitForm.querySelector('[name="animal_id"]').value = '{{ animal.id }}';
+                        visitForm.querySelector('[name="animal_name"]').value = '{{ animal.name }}';
+                    } else {
+                        throw new Error(result.error || 'Error al enviar');
+                    }
+                } catch (err) {
+                    alertEl.className = 'alert alert-error';
+                    alertEl.textContent = 'Error: ' + err.message;
+                    alertEl.style.display = 'block';
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-calendar-check"></i> Solicitar visita';
+                    alertEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }
+
+        // Mobile menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mainNav = document.querySelector('.main-nav');
+        if (menuToggle) menuToggle.addEventListener('click', () => mainNav.classList.toggle('active'));
+    </script>
+</body>
+</html>

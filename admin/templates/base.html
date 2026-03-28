@@ -295,6 +295,9 @@
                 <li><a href="{{ url_for('list_adoptions') }}" {% if 'adoption' in request.endpoint %}class="active"{% endif %}>
                     <i class="fas fa-heart"></i> Solicitudes adopción
                 </a></li>
+                <li><a href="{{ url_for('list_visits') }}" {% if 'visit' in request.endpoint %}class="active"{% endif %}>
+                    <i class="fas fa-calendar-check"></i> Solicitudes de visita
+                </a></li>
                 {% endif %}
                 {% if session.role == 'superadmin' %}
                 <li style="margin-top: 1rem; padding: 0.4rem 1.5rem; font-size: 0.7rem; text-transform: uppercase; color: #aaa; letter-spacing: 0.08em;">
