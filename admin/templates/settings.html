@@ -162,40 +162,107 @@
         <h3 style="margin:0 0 1.2rem; color:#F4A460; border-bottom:2px solid #f5f5f5; padding-bottom:0.75rem;">
             <i class="fas fa-bell"></i> Notificaciones por email
         </h3>
-        <p style="color:#888; font-size:.9rem; margin-bottom:1rem;">
+        <p style="color:#888; font-size:.9rem; margin-bottom:1.2rem;">
             Recibe un aviso cada vez que llegue un mensaje de contacto o una solicitud de adopción.
-            Si los campos están vacíos, las notificaciones están desactivadas.
+            Elige el proveedor de correo y rellena sus credenciales.
         </p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-            <div class="form-group">
-                <label for="smtp_host">Servidor SMTP</label>
-                <input type="text" id="smtp_host" name="smtp_host"
-                       value="{{ settings.get('smtp_host', '') }}"
-                       placeholder="smtp.gmail.com">
-            </div>
-            <div class="form-group">
-                <label for="smtp_port">Puerto SMTP</label>
-                <input type="number" id="smtp_port" name="smtp_port"
-                       value="{{ settings.get('smtp_port', '587') }}"
-                       placeholder="587">
-            </div>
+
+        <!-- Selector de proveedor -->
+        <div class="form-group" style="margin-bottom:1.2rem;">
+            <label for="email_provider" style="font-weight:600;">Proveedor de email</label>
+            <select id="email_provider" name="email_provider"
+                    style="width:100%; max-width:320px; padding:.5rem .75rem; border:1px solid #ddd; border-radius:6px; font-size:.95rem;"
+                    onchange="showEmailPanel(this.value)">
+                <option value="smtp"     {% if settings.get('email_provider','smtp')=='smtp'     %}selected{% endif %}>SMTP clásico (Gmail, Outlook…)</option>
+                <option value="sendgrid" {% if settings.get('email_provider','smtp')=='sendgrid' %}selected{% endif %}>SendGrid (API)</option>
+                <option value="mailgun"  {% if settings.get('email_provider','smtp')=='mailgun'  %}selected{% endif %}>Mailgun (API)</option>
+            </select>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
-            <div class="form-group">
-                <label for="smtp_user">Usuario SMTP (email de envío)</label>
-                <input type="text" id="smtp_user" name="smtp_user"
-                       value="{{ settings.get('smtp_user', '') }}"
-                       placeholder="protectora@gmail.com">
+
+        <!-- Panel SMTP -->
+        <div id="panel-smtp" class="email-panel">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                <div class="form-group">
+                    <label for="smtp_host">Servidor SMTP</label>
+                    <input type="text" id="smtp_host" name="smtp_host"
+                           value="{{ settings.get('smtp_host', '') }}"
+                           placeholder="smtp.gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="smtp_port">Puerto SMTP</label>
+                    <input type="number" id="smtp_port" name="smtp_port"
+                           value="{{ settings.get('smtp_port', '587') }}"
+                           placeholder="587">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="smtp_password">Contraseña / App Password</label>
-                <input type="password" id="smtp_password" name="smtp_password"
-                       value="{{ settings.get('smtp_password', '') }}"
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem;">
+                <div class="form-group">
+                    <label for="smtp_user">Usuario SMTP (email de envío)</label>
+                    <input type="text" id="smtp_user" name="smtp_user"
+                           value="{{ settings.get('smtp_user', '') }}"
+                           placeholder="protectora@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="smtp_password">Contraseña / App Password</label>
+                    <input type="password" id="smtp_password" name="smtp_password"
+                           value="{{ settings.get('smtp_password', '') }}"
+                           autocomplete="new-password"
+                           placeholder="••••••••••••••••">
+                </div>
+            </div>
+            <small style="color:#888; display:block; margin-bottom:.5rem;">
+                <i class="fas fa-info-circle"></i>
+                Para Gmail: activa la verificación en 2 pasos y crea una <em>App Password</em>
+                en tu cuenta Google &rarr; Seguridad &rarr; Contraseñas de aplicaciones.
+            </small>
+        </div>
+
+        <!-- Panel SendGrid -->
+        <div id="panel-sendgrid" class="email-panel" style="display:none;">
+            <div class="form-group" style="max-width:520px;">
+                <label for="sendgrid_api_key">SendGrid API Key</label>
+                <input type="password" id="sendgrid_api_key" name="sendgrid_api_key"
+                       value="{{ settings.get('sendgrid_api_key', '') }}"
                        autocomplete="new-password"
-                       placeholder="••••••••••••••••">
+                       placeholder="SG.xxxxxxxxxxxxxxxx">
+                <small style="color:#888; display:block; margin-top:.4rem;">
+                    <i class="fas fa-info-circle"></i>
+                    Obtén tu API key en
+                    <a href="https://app.sendgrid.com/settings/api_keys" target="_blank" rel="noopener" style="color:#F4A460;">
+                        app.sendgrid.com</a> con permiso <em>Mail Send</em>.
+                    El campo «Email remitente» debe ser una dirección verificada (Sender Authentication).
+                </small>
             </div>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+
+        <!-- Panel Mailgun -->
+        <div id="panel-mailgun" class="email-panel" style="display:none;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:.5rem;">
+                <div class="form-group">
+                    <label for="mailgun_api_key">Mailgun API Key</label>
+                    <input type="password" id="mailgun_api_key" name="mailgun_api_key"
+                           value="{{ settings.get('mailgun_api_key', '') }}"
+                           autocomplete="new-password"
+                           placeholder="key-xxxxxxxxxxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label for="mailgun_domain">Dominio Mailgun</label>
+                    <input type="text" id="mailgun_domain" name="mailgun_domain"
+                           value="{{ settings.get('mailgun_domain', '') }}"
+                           placeholder="mg.tudominio.org">
+                </div>
+            </div>
+            <small style="color:#888; display:block; margin-bottom:.5rem;">
+                <i class="fas fa-info-circle"></i>
+                Configura y verifica tu dominio en
+                <a href="https://app.mailgun.com/app/sending/domains" target="_blank" rel="noopener" style="color:#F4A460;">
+                    app.mailgun.com</a>.
+                La API key la encuentras en <em>Settings &rarr; API Keys</em>.
+            </small>
+        </div>
+
+        <!-- Campos comunes (siempre visibles) -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:1.2rem;">
             <div class="form-group">
                 <label for="smtp_from">Email remitente (From)</label>
                 <input type="email" id="smtp_from" name="smtp_from"
@@ -203,18 +270,31 @@
                        placeholder="protectora@gmail.com">
             </div>
             <div class="form-group">
-                <label for="notify_email">Email donde recibir alertas</label>
+                <label for="notify_email"><strong>Email donde recibir alertas</strong></label>
                 <input type="email" id="notify_email" name="notify_email"
                        value="{{ settings.get('notify_email', '') }}"
                        placeholder="admin@protectoraburjassot.org">
+                <small style="color:#888; display:block; margin-top:.3rem;">
+                    Si está vacío, las notificaciones estarán desactivadas.
+                </small>
             </div>
         </div>
-        <small style="color:#888;">
-            <i class="fas fa-info-circle"></i>
-            Para Gmail: activa la verificación en 2 pasos y crea una <em>App Password</em>
-            en tu cuenta Google &rarr; Seguridad &rarr; Contraseñas de aplicaciones.
-        </small>
     </div>
+
+    <script>
+    function showEmailPanel(provider) {
+        document.querySelectorAll('.email-panel').forEach(function(el) {
+            el.style.display = 'none';
+        });
+        var panel = document.getElementById('panel-' + provider);
+        if (panel) panel.style.display = 'block';
+    }
+    // Activar panel según valor guardado al cargar la página
+    (function() {
+        var sel = document.getElementById('email_provider');
+        if (sel) showEmailPanel(sel.value);
+    })();
+    </script>
 
     <!-- PÁGINA NOSOTROS -->
     <div style="background:#fff; border-radius:10px; padding:1.5rem; margin-bottom:1.5rem; box-shadow:0 2px 8px rgba(0,0,0,0.06);">

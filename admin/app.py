@@ -197,29 +197,77 @@ def compress_image_to_base64(file, max_size=800, quality=75):
 
 
 def send_notification_email(subject, body):
-    """Envío de email de notificación al administrador vía SMTP"""
-    import smtplib
-    from email.message import EmailMessage
+    """Envío de email de notificación al administrador vía SMTP, SendGrid o Mailgun"""
     try:
-        smtp_host    = get_setting('smtp_host', '').strip()
-        smtp_port    = int(get_setting('smtp_port', '587') or '587')
-        smtp_user    = get_setting('smtp_user', '').strip()
-        smtp_pass    = get_setting('smtp_password', '').strip()
-        smtp_from    = get_setting('smtp_from', '').strip() or smtp_user
+        provider     = get_setting('email_provider', 'smtp').strip().lower()
         notify_email = get_setting('notify_email', '').strip()
-        if not smtp_host or not smtp_user or not notify_email:
-            return  # no configurado, ignorar silenciosamente
-        msg = EmailMessage()
-        msg['Subject'] = subject
-        msg['From']    = smtp_from
-        msg['To']      = notify_email
-        msg.set_content(body)
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
-            server.ehlo()
-            server.starttls()
-            server.login(smtp_user, smtp_pass)
-            server.send_message(msg)
-        logger.info('Email de notificacion enviado a %s', notify_email)
+        if not notify_email:
+            return  # sin destino, ignorar silenciosamente
+
+        if provider == 'sendgrid':
+            import requests as req
+            api_key   = get_setting('sendgrid_api_key', '').strip()
+            smtp_from = get_setting('smtp_from', '').strip() or 'noreply@protectoraburjassot.org'
+            if not api_key:
+                logger.warning('SendGrid: api_key no configurada')
+                return
+            resp = req.post(
+                'https://api.sendgrid.com/v3/mail/send',
+                headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+                json={
+                    'personalizations': [{'to': [{'email': notify_email}]}],
+                    'from': {'email': smtp_from},
+                    'subject': subject,
+                    'content': [{'type': 'text/plain', 'value': body}]
+                },
+                timeout=10
+            )
+            if resp.status_code not in (200, 202):
+                logger.warning('SendGrid error %s: %s', resp.status_code, resp.text[:200])
+            else:
+                logger.info('Email SendGrid enviado a %s', notify_email)
+
+        elif provider == 'mailgun':
+            import requests as req
+            api_key   = get_setting('mailgun_api_key', '').strip()
+            domain    = get_setting('mailgun_domain', '').strip()
+            smtp_from = get_setting('smtp_from', '').strip() or f'Protectora <mailgun@{domain}>'
+            if not api_key or not domain:
+                logger.warning('Mailgun: api_key o dominio no configurados')
+                return
+            resp = req.post(
+                f'https://api.mailgun.net/v3/{domain}/messages',
+                auth=('api', api_key),
+                data={'from': smtp_from, 'to': notify_email, 'subject': subject, 'text': body},
+                timeout=10
+            )
+            if resp.status_code != 200:
+                logger.warning('Mailgun error %s: %s', resp.status_code, resp.text[:200])
+            else:
+                logger.info('Email Mailgun enviado a %s', notify_email)
+
+        else:  # smtp (por defecto)
+            import smtplib
+            from email.message import EmailMessage
+            smtp_host = get_setting('smtp_host', '').strip()
+            smtp_port = int(get_setting('smtp_port', '587') or '587')
+            smtp_user = get_setting('smtp_user', '').strip()
+            smtp_pass = get_setting('smtp_password', '').strip()
+            smtp_from = get_setting('smtp_from', '').strip() or smtp_user
+            if not smtp_host or not smtp_user:
+                return  # no configurado, ignorar silenciosamente
+            msg = EmailMessage()
+            msg['Subject'] = subject
+            msg['From']    = smtp_from
+            msg['To']      = notify_email
+            msg.set_content(body)
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+            logger.info('Email SMTP enviado a %s', notify_email)
+
     except Exception as e:
         logger.warning('Error al enviar email de notificacion: %s', e)
 
@@ -243,6 +291,35 @@ def get_setting(key, default=None):
 def get_placeholder():
     """Retorna el placeholder correcto para consultas SQL según la BD"""
     return '%s' if USE_POSTGRES else '?'
+
+
+@app.context_processor
+def inject_nav_badges():
+    """Inyecta contadores de pendientes en todas las plantillas del panel"""
+    if not session.get('user_id'):
+        return {}
+    try:
+        db = get_db()
+        unread_contacts = db.execute(
+            "SELECT COUNT(*) as c FROM contacts WHERE read = 0"
+        ).fetchone()['c']
+        pending_adoptions = db.execute(
+            "SELECT COUNT(*) as c FROM adoption_requests WHERE status = 'pendiente'"
+        ).fetchone()['c']
+        pending_visits = db.execute(
+            "SELECT COUNT(*) as c FROM visit_requests WHERE status = 'pendiente'"
+        ).fetchone()['c']
+        return {
+            'nav_unread_contacts':   unread_contacts,
+            'nav_pending_adoptions': pending_adoptions,
+            'nav_pending_visits':    pending_visits,
+        }
+    except Exception:
+        return {
+            'nav_unread_contacts':   0,
+            'nav_pending_adoptions': 0,
+            'nav_pending_visits':    0,
+        }
 
 
 def execute_query(db_or_cursor, query, params=None):
@@ -607,6 +684,10 @@ def init_db():
             ('smtp_password', ''),
             ('smtp_from', ''),
             ('notify_email', ''),
+            ('email_provider', 'smtp'),
+            ('sendgrid_api_key', ''),
+            ('mailgun_api_key', ''),
+            ('mailgun_domain', ''),
             # Página Nosotros
             ('about_title', 'Sobre Nosotros'),
             ('about_subtitle', 'Trabajamos cada día para dar una segunda oportunidad a los animales más vulnerables'),
@@ -1580,6 +1661,7 @@ def admin_settings():
             'donation_bizum', 'donation_iban', 'donation_paypal',
             'donation_teaming_url', 'donation_amazon_wishlist', 'donation_wallapop_url',
             'smtp_host', 'smtp_port', 'smtp_user', 'smtp_password', 'smtp_from', 'notify_email',
+            'email_provider', 'sendgrid_api_key', 'mailgun_api_key', 'mailgun_domain',
             'about_title', 'about_subtitle', 'about_mission', 'about_history', 'about_team',
             'about_founded_year', 'about_animals_rescued',
         ]
