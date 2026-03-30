@@ -272,6 +272,83 @@ def send_notification_email(subject, body):
         logger.warning('Error al enviar email de notificacion: %s', e)
 
 
+def send_html_email(to_email, subject, body_html, body_text=None):
+    """Envía un email HTML a una dirección usando el proveedor configurado (smtp/sendgrid/mailgun)"""
+    import re
+    if not body_text:
+        body_text = re.sub(r'<[^>]+>', ' ', body_html).strip()
+    try:
+        provider  = get_setting('email_provider', 'smtp').strip().lower()
+        smtp_from = get_setting('smtp_from', '').strip()
+
+        if provider == 'sendgrid':
+            import requests as req
+            api_key = get_setting('sendgrid_api_key', '').strip()
+            if not api_key or not smtp_from:
+                logger.warning('SendGrid: falta api_key o smtp_from')
+                return False
+            resp = req.post(
+                'https://api.sendgrid.com/v3/mail/send',
+                headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'},
+                json={
+                    'personalizations': [{'to': [{'email': to_email}]}],
+                    'from': {'email': smtp_from},
+                    'subject': subject,
+                    'content': [
+                        {'type': 'text/plain', 'value': body_text},
+                        {'type': 'text/html',  'value': body_html},
+                    ]
+                },
+                timeout=15
+            )
+            return resp.status_code in (200, 202)
+
+        elif provider == 'mailgun':
+            import requests as req
+            api_key = get_setting('mailgun_api_key', '').strip()
+            domain  = get_setting('mailgun_domain', '').strip()
+            if not api_key or not domain:
+                logger.warning('Mailgun: falta api_key o dominio')
+                return False
+            from_addr = smtp_from or f'Protectora <mailgun@{domain}>'
+            resp = req.post(
+                f'https://api.mailgun.net/v3/{domain}/messages',
+                auth=('api', api_key),
+                data={'from': from_addr, 'to': to_email,
+                      'subject': subject, 'text': body_text, 'html': body_html},
+                timeout=15
+            )
+            return resp.status_code == 200
+
+        else:  # smtp
+            import smtplib
+            from email.message import EmailMessage
+            smtp_host = get_setting('smtp_host', '').strip()
+            smtp_port = int(get_setting('smtp_port', '587') or '587')
+            smtp_user = get_setting('smtp_user', '').strip()
+            smtp_pass = get_setting('smtp_password', '').strip()
+            from_addr = smtp_from or smtp_user
+            if not smtp_host or not smtp_user:
+                logger.warning('SMTP: host o usuario no configurados')
+                return False
+            msg = EmailMessage()
+            msg['Subject'] = subject
+            msg['From']    = from_addr
+            msg['To']      = to_email
+            msg.set_content(body_text)
+            msg.add_alternative(body_html, subtype='html')
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+                server.ehlo()
+                server.starttls()
+                server.login(smtp_user, smtp_pass)
+                server.send_message(msg)
+            return True
+
+    except Exception as e:
+        logger.warning('Error al enviar email a %s: %s', to_email, e)
+        return False
+
+
 def get_setting(key, default=None):
     """Obtener un valor de configuración de site_settings"""
     try:
@@ -1607,6 +1684,47 @@ def export_newsletter_csv():
     response.headers['Content-Disposition'] = 'attachment; filename=newsletter_subscribers.csv'
     response.headers['Content-Type'] = 'text/csv; charset=utf-8'
     return response
+
+
+@app.route('/admin/newsletter/send', methods=['POST'])
+@login_required
+def send_newsletter_email():
+    """Enviar un newsletter HTML a todos los suscriptores activos"""
+    validate_csrf()
+    subject   = request.form.get('subject', '').strip()
+    body_html = request.form.get('body_html', '').strip()
+
+    if not subject or not body_html or body_html == '<p><br></p>':
+        flash('El asunto y el contenido son obligatorios.', 'error')
+        return redirect(url_for('list_newsletter_subscribers'))
+
+    db = get_db()
+    active_val = 'TRUE' if USE_POSTGRES else '1'
+    subscribers = db.execute(
+        f'SELECT email, name FROM newsletter_subscribers WHERE is_active = {active_val}'
+    ).fetchall()
+
+    if not subscribers:
+        flash('No hay suscriptores activos a quienes enviar el newsletter.', 'error')
+        return redirect(url_for('list_newsletter_subscribers'))
+
+    sent   = 0
+    errors = 0
+    for sub in subscribers:
+        ok = send_html_email(sub['email'], subject, body_html)
+        if ok:
+            sent += 1
+        else:
+            errors += 1
+
+    if errors == 0:
+        flash(f'Newsletter enviado correctamente a {sent} suscriptor{"es" if sent != 1 else ""}.', 'success')
+    elif sent > 0:
+        flash(f'Envío completado: {sent} enviados, {errors} con error.', 'warning')
+    else:
+        flash(f'No se pudo enviar el newsletter. Comprueba la configuración del correo.', 'error')
+
+    return redirect(url_for('list_newsletter_subscribers'))
 
 
 # ============================================

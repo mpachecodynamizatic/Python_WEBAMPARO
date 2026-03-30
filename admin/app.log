@@ -2786,3 +2786,69 @@ sqlite3.OperationalError: table adoption_requests has no column named age
 2026-03-28 16:32:48,394 [INFO] 127.0.0.1 - - [28/Mar/2026 16:32:48] "GET /admin/dashboard HTTP/1.1" 200 -
 2026-03-28 16:32:49,569 [INFO] 127.0.0.1 - - [28/Mar/2026 16:32:49] "GET /admin/adoptions HTTP/1.1" 200 -
 2026-03-28 16:32:51,304 [INFO] 127.0.0.1 - - [28/Mar/2026 16:32:51] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-30 11:45:47,841 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-30 11:45:47,844 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-30 11:45:48,021 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-30 11:45:48,273 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.200.204:5000
+2026-03-30 11:45:48,273 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-30 11:45:52,636 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:52] "[32mGET /admin HTTP/1.1[0m" 302 -
+2026-03-30 11:45:52,800 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:52] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-30 11:45:52,924 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:52] "GET /admin/login HTTP/1.1" 200 -
+2026-03-30 11:45:52,953 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:52] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-30 11:45:53,130 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:53] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-03-30 11:45:53,133 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:53] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-30 11:45:53,155 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:53] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-30 11:45:53,159 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:53] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-30 11:45:53,270 [INFO] 127.0.0.1 - - [30/Mar/2026 11:45:53] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-30 11:46:36,138 [INFO] 127.0.0.1 - - [30/Mar/2026 11:46:36] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-03-30 11:46:36,321 [INFO] 127.0.0.1 - - [30/Mar/2026 11:46:36] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-30 11:47:52,253 [INFO] 127.0.0.1 - - [30/Mar/2026 11:47:52] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-30 11:47:58,785 [INFO] 127.0.0.1 - - [30/Mar/2026 11:47:58] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-30 11:48:00,417 [INFO] 127.0.0.1 - - [30/Mar/2026 11:48:00] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-30 12:31:59,060 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-30 12:31:59,061 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-30 12:31:59,593 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-30 12:31:59,629 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.200.204:5000
+2026-03-30 12:31:59,629 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-30 12:32:01,590 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:01] "GET /admin HTTP/1.1" 200 -
+2026-03-30 12:32:05,877 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:05] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-30 12:32:11,575 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:11] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-03-30 12:32:13,600 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:13] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-30 12:32:14,971 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:14] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-30 12:32:15,957 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:15] "GET /admin/news HTTP/1.1" 200 -
+2026-03-30 12:32:16,677 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:16] "GET /admin/animals HTTP/1.1" 200 -
+2026-03-30 12:32:17,019 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:17] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-03-30 12:32:17,103 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:17] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-03-30 12:32:17,983 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:17] "GET /admin/contacts HTTP/1.1" 200 -
+2026-03-30 12:32:18,333 [INFO] 127.0.0.1 - - [30/Mar/2026 12:32:18] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-30 12:33:15,594 [INFO] 127.0.0.1 - - [30/Mar/2026 12:33:15] "[32mGET /admin/newsletter HTTP/1.1[0m" 302 -
+2026-03-30 12:33:15,612 [INFO] 127.0.0.1 - - [30/Mar/2026 12:33:15] "GET /admin/login HTTP/1.1" 200 -
+2026-03-30 12:43:02,611 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-03-30 12:43:02,613 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-03-30 12:43:02,780 [INFO] ✅ Base de datos inicializada correctamente
+2026-03-30 12:43:02,801 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.200.204:5000
+2026-03-30 12:43:02,802 [INFO] [33mPress CTRL+C to quit[0m
+2026-03-30 12:43:07,690 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:07] "[36mGET / HTTP/1.1[0m" 304 -
+2026-03-30 12:43:07,717 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:07] "GET /admin HTTP/1.1" 200 -
+2026-03-30 12:43:07,888 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:07] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-03-30 12:43:08,015 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:08] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-03-30 12:43:08,021 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:08] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-03-30 12:43:08,040 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:08] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-03-30 12:43:08,209 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:08] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-03-30 12:43:21,231 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:21] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-30 12:43:41,151 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:41] "[32mPOST /admin/newsletter/2/delete HTTP/1.1[0m" 302 -
+2026-03-30 12:43:41,453 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:41] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-30 12:43:43,743 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:43] "[32mPOST /admin/newsletter/1/delete HTTP/1.1[0m" 302 -
+2026-03-30 12:43:43,761 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:43] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-03-30 12:43:59,522 [INFO] 127.0.0.1 - - [30/Mar/2026 12:43:59] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-03-30 12:44:03,173 [INFO] 127.0.0.1 - - [30/Mar/2026 12:44:03] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-03-30 12:44:04,690 [INFO] 127.0.0.1 - - [30/Mar/2026 12:44:04] "GET /admin/dashboard HTTP/1.1" 200 -

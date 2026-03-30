@@ -3,9 +3,74 @@
 {% block title %}Newsletter - Suscriptores{% endblock %}
 {% block page_title %}Newsletter{% endblock %}
 
+{% block extra_css %}
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<style>
+#quill-newsletter { height: 300px; border-radius: 0 0 6px 6px; font-size: 1rem; }
+.ql-toolbar.ql-snow { border-radius: 6px 6px 0 0; }
+</style>
+{% endblock %}
+
 {% block content %}
+<!-- PANEL REDACTAR NEWSLETTER -->
+<details id="compose-panel" style="background:#fff; border:1px solid #f0e0cc; border-radius:10px;
+    margin-bottom:2rem; box-shadow:0 2px 8px rgba(0,0,0,0.06); overflow:hidden;">
+    <summary style="padding:1.25rem 1.5rem; cursor:pointer; font-size:1.05rem; font-weight:700;
+                    color:#F4A460; list-style:none; display:flex; align-items:center; gap:.75rem;
+                    user-select:none;">
+        <i class="fas fa-paper-plane"></i>
+        Redactar y enviar newsletter
+        <span style="margin-left:auto; font-size:.85rem; color:#aaa; font-weight:400;">
+            {{ subscribers|selectattr('is_active')|list|length }} suscriptores activos
+        </span>
+    </summary>
+
+    <div style="padding:1.5rem; border-top:1px solid #f5f5f5;">
+        {% set active_count = subscribers|selectattr('is_active')|list|length %}
+        {% if active_count == 0 %}
+        <div style="background:#fff3cd; border-radius:6px; padding:1rem; color:#856404; font-size:.9rem;">
+            <i class="fas fa-exclamation-triangle"></i>
+            No hay suscriptores activos. El newsletter no se enviará a nadie.
+        </div>
+        {% else %}
+        <form method="POST" action="{{ url_for('send_newsletter_email') }}"
+              id="newsletter-form"
+              onsubmit="return prepareAndConfirm(event)">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="body_html" id="body_html">
+
+            <div class="form-group" style="margin-bottom:1rem;">
+                <label for="subject" style="font-weight:600;">Asunto del email</label>
+                <input type="text" id="subject" name="subject" required
+                       placeholder="Ej: Novedades de la Protectora – Marzo 2026"
+                       style="width:100%; max-width:600px; padding:.6rem .85rem;
+                              border:1px solid #ddd; border-radius:6px; font-size:.95rem;">
+            </div>
+
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label style="font-weight:600; display:block; margin-bottom:.4rem;">Contenido</label>
+                <div id="quill-newsletter"></div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar a {{ active_count }} suscriptor{{ 'es' if active_count != 1 }}
+                </button>
+                <small style="color:#888;">
+                    <i class="fas fa-info-circle"></i>
+                    Se usará el proveedor de correo configurado en
+                    <a href="{{ url_for('admin_settings') }}" style="color:#F4A460;">Configuración</a>.
+                </small>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</details>
+
+<!-- CABECERA LISTA SUSCRIPTORES -->
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <h2><i class="fas fa-envelope"></i> Suscriptores del Newsletter
+    <h2><i class="fas fa-users"></i> Suscriptores
         <small style="font-size:0.7em; color:#999; font-weight:normal;">{{ subscribers|length }} registros</small>
     </h2>
     <a href="{{ url_for('export_newsletter_csv') }}" class="btn btn-primary">
@@ -100,4 +165,55 @@
     <p style="color:#999;">Los usuarios que se suscriban al newsletter aparecerán aquí.</p>
 </div>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script>
+var quill = new Quill('#quill-newsletter', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            [{ 'header': [2, 3, false] }],
+            ['bold', 'italic', 'underline'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'blockquote', 'image'],
+            ['clean']
+        ]
+    },
+    placeholder: 'Escribe aquí el contenido del newsletter...'
+});
+
+function prepareAndConfirm(e) {
+    var html = quill.root.innerHTML;
+    if (!html || html === '<p><br></p>') {
+        alert('El contenido del newsletter no puede estar vacío.');
+        e.preventDefault();
+        return false;
+    }
+    var subject = document.getElementById('subject').value.trim();
+    if (!subject) {
+        alert('El asunto es obligatorio.');
+        e.preventDefault();
+        return false;
+    }
+    var activeCount = parseInt('{{ subscribers|selectattr("is_active")|list|length }}') || 0;
+    if (!confirm('¿Enviar el newsletter a ' + activeCount + ' suscriptor' + (activeCount !== 1 ? 'es' : '') + '?\n\nAsunto: ' + subject)) {
+        e.preventDefault();
+        return false;
+    }
+    document.getElementById('body_html').value = html;
+    return true;
+}
+
+// Abrir el panel si hay un flash de error relacionado con el envío
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% for cat, msg in messages %}
+{% if cat == 'error' or cat == 'warning' %}
+document.getElementById('compose-panel').open = true;
+{% endif %}
+{% endfor %}
+{% endwith %}
+</script>
 {% endblock %}
