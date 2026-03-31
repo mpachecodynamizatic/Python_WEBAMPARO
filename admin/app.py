@@ -1456,7 +1456,7 @@ def admin_animal_add_photo(animal_id):
         'SELECT id, photo_path, display_order FROM animal_photos WHERE animal_id = ? ORDER BY id DESC LIMIT 1',
         (animal_id,)
     ).fetchone()
-    return jsonify(dict(photo))
+    return jsonify({'success': True, 'photo': {'id': photo['id'], 'path': photo['photo_path'], 'order': photo['display_order']}})
 
 
 @app.route('/admin/animals/<int:animal_id>/photos/<int:photo_id>', methods=['DELETE'])
@@ -1475,7 +1475,7 @@ def admin_animal_delete_photo(animal_id, photo_id):
             os.remove(full_path)
     db.execute('DELETE FROM animal_photos WHERE id = ?', (photo_id,))
     db.commit()
-    return jsonify({'ok': True})
+    return jsonify({'success': True})
 
 
 @app.route('/admin/animals/<int:animal_id>/photos/reorder', methods=['POST'])
@@ -1492,7 +1492,7 @@ def admin_animal_reorder_photos(animal_id):
             (item['order'], item['id'], animal_id)
         )
     db.commit()
-    return jsonify({'ok': True})
+    return jsonify({'success': True})
 
 
 @app.route('/admin/animals/<int:animal_id>/photos/<int:photo_id>/set-primary', methods=['POST'])
@@ -1510,7 +1510,7 @@ def admin_animal_set_primary_photo(animal_id, photo_id):
         (photo['photo_path'], animal_id)
     )
     db.commit()
-    return jsonify({'ok': True})
+    return jsonify({'success': True})
 
 
 # ============================================
