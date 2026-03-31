@@ -2002,13 +2002,17 @@ def api_settings():
 
 @app.route('/api/animals')
 def api_animals():
-    """API para obtener animales"""
+    """API para obtener animales con fotos, salud y compatibilidad"""
     status = request.args.get('status', 'adoption')
     animal_type = request.args.get('type')
     limit = request.args.get('limit', type=int)
+    filter_kids      = request.args.get('kids')
+    filter_cats      = request.args.get('cats')
+    filter_dogs      = request.args.get('dogs')
+    filter_apartment = request.args.get('apartment')
+    filter_urgent    = request.args.get('urgent')
 
     db = get_db()
-    # Cuando se pide el listado de adopción, incluir también los reservados
     if status == 'adoption':
         query = 'SELECT * FROM animals WHERE status IN ("adoption", "reserved")'
         params = []
@@ -2018,23 +2022,53 @@ def api_animals():
     if animal_type:
         query += ' AND type = ?'
         params.append(animal_type)
-    query += ' ORDER BY created_at DESC'
+    if filter_kids:
+        query += ' AND good_with_kids = 1'
+    if filter_cats:
+        query += ' AND good_with_cats = 1'
+    if filter_dogs:
+        query += ' AND good_with_dogs = 1'
+    if filter_apartment:
+        query += ' AND apartment_ok = 1'
+    if filter_urgent:
+        query += ' AND urgent = 1'
+    query += ' ORDER BY urgent DESC, created_at DESC'
     if limit:
         query += ' LIMIT ?'
         params.append(limit)
 
     animals = db.execute(query, params).fetchall()
-    return jsonify({'animals': [dict(a) for a in animals]})
+    result = []
+    for a in animals:
+        animal_dict = dict(a)
+        photos = db.execute(
+            'SELECT id, photo_path, display_order FROM animal_photos WHERE animal_id = ? ORDER BY display_order',
+            (a['id'],)
+        ).fetchall()
+        animal_dict['photos'] = [dict(p) for p in photos]
+        result.append(animal_dict)
+    return jsonify({'animals': result})
 
 
 @app.route('/api/animals/<int:animal_id>')
 def api_animal_detail(animal_id):
-    """API para obtener un animal por ID"""
+    """API para obtener un animal por ID, incluyendo fotos y campos nuevos"""
     db = get_db()
     animal = db.execute('SELECT * FROM animals WHERE id = ?', (animal_id,)).fetchone()
     if not animal:
         return jsonify({'error': 'Animal no encontrado'}), 404
-    return jsonify(dict(animal))
+    animal_dict = dict(animal)
+    photos = db.execute(
+        'SELECT id, photo_path, display_order FROM animal_photos WHERE animal_id = ? ORDER BY display_order',
+        (animal_id,)
+    ).fetchall()
+    animal_dict['photos'] = [dict(p) for p in photos]
+    similar = db.execute(
+        'SELECT id, name, type, image FROM animals WHERE type = ? AND status IN ("adoption","reserved") AND id != ? LIMIT 3',
+        (animal['type'], animal_id)
+    ).fetchall()
+    animal_dict['similar'] = [dict(s) for s in similar]
+    return jsonify(animal_dict)
 
 @app.route('/api/news')
 def api_news():
