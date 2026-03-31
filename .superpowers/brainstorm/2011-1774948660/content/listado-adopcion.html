@@ -1,0 +1,115 @@
+<h2>Página de adopción — Tarjetas + filtros rediseñados</h2>
+<p class="subtitle">Las tarjetas enlazan a /animal/id en vez de abrir un modal. Filtros ampliados con compatibilidad.</p>
+
+<div class="mockup">
+  <div class="mockup-header">http://localhost:5000/pages/adopcion.html</div>
+  <div class="mockup-body" style="font-family:sans-serif;font-size:13px;color:#333">
+
+    <!-- Barra de filtros -->
+    <div style="background:#fff8f0;border-radius:10px;padding:1rem;margin-bottom:1.5rem;border:1px solid #f0dbc0">
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
+        <!-- Buscador -->
+        <input style="border:1px solid #ddd;border-radius:6px;padding:.4rem .75rem;font-size:.85rem;flex:1;min-width:120px" placeholder="🔍 Buscar por nombre...">
+        <!-- Tipo -->
+        <select style="border:1px solid #ddd;border-radius:6px;padding:.4rem .6rem;font-size:.85rem;background:white">
+          <option>Todos los tipos</option>
+          <option>🐶 Perros</option>
+          <option>🐱 Gatos</option>
+        </select>
+        <!-- Tamaño -->
+        <select style="border:1px solid #ddd;border-radius:6px;padding:.4rem .6rem;font-size:.85rem;background:white">
+          <option>Cualquier tamaño</option>
+          <option>Pequeño</option>
+          <option>Mediano</option>
+          <option>Grande</option>
+        </select>
+        <!-- Separador -->
+        <div style="height:24px;width:1px;background:#ddd"></div>
+        <!-- Filtros compatibilidad — NUEVO -->
+        <span style="font-size:.8rem;color:#888;font-weight:600">Compatible con:</span>
+        <label style="display:flex;align-items:center;gap:.3rem;font-size:.82rem;cursor:pointer;white-space:nowrap">
+          <input type="checkbox" style="accent-color:#F4A460"> 👶 Niños
+        </label>
+        <label style="display:flex;align-items:center;gap:.3rem;font-size:.82rem;cursor:pointer;white-space:nowrap">
+          <input type="checkbox" style="accent-color:#F4A460"> 🐱 Gatos
+        </label>
+        <label style="display:flex;align-items:center;gap:.3rem;font-size:.82rem;cursor:pointer;white-space:nowrap">
+          <input type="checkbox" style="accent-color:#F4A460"> 🐕 Perros
+        </label>
+        <label style="display:flex;align-items:center;gap:.3rem;font-size:.82rem;cursor:pointer;white-space:nowrap">
+          <input type="checkbox" style="accent-color:#F4A460"> 🏠 Piso
+        </label>
+      </div>
+    </div>
+
+    <!-- Grid de tarjetas -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem">
+
+      <!-- Tarjeta 1 — con badge urgente -->
+      <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);border:1px solid #eee;transition:transform .2s">
+        <div style="position:relative">
+          <div style="height:170px;background:#e8d5b7;display:flex;align-items:center;justify-content:center;font-size:50px">🐾</div>
+          <!-- Badge urgente -->
+          <span style="position:absolute;top:10px;left:10px;background:#e53935;color:white;padding:.2rem .6rem;border-radius:20px;font-size:.72rem;font-weight:700">⚠ Urgente</span>
+          <!-- Indicador múltiples fotos -->
+          <span style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.5);color:white;padding:.15rem .5rem;border-radius:20px;font-size:.72rem">📷 4</span>
+        </div>
+        <div style="padding:.9rem">
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:.4rem">
+            <strong style="font-size:1rem">Luna</strong>
+            <span style="font-size:.8rem;color:#888">3 años · Mediana</span>
+          </div>
+          <!-- Tags compatibilidad visibles en la tarjeta -->
+          <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <span style="background:#e3f2fd;color:#1565c0;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">👶 Niños</span>
+            <span style="background:#e3f2fd;color:#1565c0;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">🏠 Piso</span>
+            <span style="background:#e8f5e9;color:#2e7d32;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">✓ Vacunada</span>
+          </div>
+          <a style="display:block;text-align:center;background:#F4A460;color:white;padding:.5rem;border-radius:6px;text-decoration:none;font-weight:600;font-size:.85rem">Ver ficha completa →</a>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);border:1px solid #eee">
+        <div style="position:relative">
+          <div style="height:170px;background:#d5e8e8;display:flex;align-items:center;justify-content:center;font-size:50px">🐱</div>
+          <span style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.5);color:white;padding:.15rem .5rem;border-radius:20px;font-size:.72rem">📷 2</span>
+        </div>
+        <div style="padding:.9rem">
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:.4rem">
+            <strong style="font-size:1rem">Misi</strong>
+            <span style="font-size:.8rem;color:#888">2 años · Pequeña</span>
+          </div>
+          <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <span style="background:#e3f2fd;color:#1565c0;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">🐱 Con gatos</span>
+            <span style="background:#e8f5e9;color:#2e7d32;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">✓ Esterilizada</span>
+          </div>
+          <a style="display:block;text-align:center;background:#F4A460;color:white;padding:.5rem;border-radius:6px;text-decoration:none;font-weight:600;font-size:.85rem">Ver ficha completa →</a>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3 -->
+      <div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);border:1px solid #eee">
+        <div style="position:relative">
+          <div style="height:170px;background:#e8e0d5;display:flex;align-items:center;justify-content:center;font-size:50px">🐶</div>
+          <span style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,.5);color:white;padding:.15rem .5rem;border-radius:20px;font-size:.72rem">📷 6</span>
+        </div>
+        <div style="padding:.9rem">
+          <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:.4rem">
+            <strong style="font-size:1rem">Toby</strong>
+            <span style="font-size:.8rem;color:#888">5 años · Grande</span>
+          </div>
+          <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.75rem">
+            <span style="background:#e3f2fd;color:#1565c0;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">🐕 Con perros</span>
+            <span style="background:#fff8e1;color:#f57f17;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">⚡ Activo</span>
+            <span style="background:#e8f5e9;color:#2e7d32;padding:.15rem .45rem;border-radius:12px;font-size:.72rem">✓ Chip</span>
+          </div>
+          <a style="display:block;text-align:center;background:#F4A460;color:white;padding:.5rem;border-radius:6px;text-decoration:none;font-weight:600;font-size:.85rem">Ver ficha completa →</a>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:1rem;font-size:.8rem;color:#999;text-align:center">El clic en "Ver ficha completa" lleva a /animal/id — el modal actual desaparece</div>
+  </div>
+</div>

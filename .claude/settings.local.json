@@ -9,7 +9,10 @@
       "Bash(for file in *.html)",
       "Bash(do sed -i '/<meta name=\"\"api-base\"\" content=\"\"http:\\\\/\\\\/localhost:5000\"\">/d' \"$file\")",
       "Bash(done)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git:*)",
+      "Bash(bash \"C:/Users/mpacheco/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6/skills/brainstorming/scripts/start-server.sh\" --project-dir \"C:/Users/mpacheco/Documents/GITHUB/PYTHON/Python_WEBAMPARO\")",
+      "Bash(curl -s http://localhost:62405)"
     ]
   }
 }

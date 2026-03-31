@@ -61,12 +61,21 @@ Website for "Protectora de Animales Burjassot" (animal shelter). **Single-server
 
 ### Key Files
 
-- `admin/app.py` - **Single file containing ALL backend logic** (no blueprints, no modules)
+- `admin/app.py` - **Single file containing ALL backend logic** (no blueprints, no modules), ~2700 lines
 - `admin/protectora.db` - SQLite database (auto-created on first run with sample data)
-- `requirements.txt` - Flask==3.0.0, Flask-CORS==4.0.0, Werkzeug==3.0.1 (root level for deployment)
+- `admin/app.log` - Application log file (written automatically by Flask)
+- `requirements.txt` - Flask==3.0.0, Flask-CORS==4.0.0, Werkzeug==3.0.1, Pillow, Flask-Limiter, gunicorn, psycopg2-binary
 - `js/main.js` - Homepage: loads featured animals + news from API
 - `js/adopcion.js` - Adoption page: filters, search, animal cards with modals
+- `js/i18n.js` - Language switcher (Spanish ↔ Valencian), applied to nav/footer text nodes
+- `js/contact.js` - Contact form submission
 - `test_api.html` - Diagnostic tool for testing API endpoints
+
+### Optional Dependencies (graceful fallback if missing)
+
+- **Pillow** (`PIL`) - Auto-resize images to max 1200px and convert to JPEG on upload. Falls back to raw file save.
+- **Flask-Limiter** - Rate limiting on public form endpoints. Falls back to no-op stub if not installed.
+- **psycopg2-binary** - Required only in production (PostgreSQL). Not needed for local SQLite.
 
 ### Database: Dual Mode (SQLite / PostgreSQL)
 
@@ -163,29 +172,45 @@ if 'image' in request.files:
 
 ### Database Access
 
-```python
-def get_db():
-    db = sqlite3.connect(DATABASE)
-    db.row_factory = sqlite3.Row  # Returns dict-like rows
-    return db
+`get_db()` returns a `DatabaseWrapper` (not a raw sqlite3 connection). Always use `get_db()` — never open sqlite3 directly.
 
-# Usage
+```python
 db = get_db()
 animals = db.execute('SELECT * FROM animals WHERE status = ?', ('adoption',)).fetchall()
-db.commit()  # Don't forget for INSERT/UPDATE/DELETE
+db.commit()  # Required after INSERT/UPDATE/DELETE
+db.close()
 ```
+
+The wrapper translates `?` → `%s` automatically for PostgreSQL. Always write queries with `?` placeholders.
+
+### CSRF Protection
+
+Admin panel forms require a CSRF token. In Jinja2 templates, include `{{ csrf_token() }}` as a hidden field. The `validate_csrf()` helper is called in POST handlers to enforce it. Public API endpoints (`/api/*`) are exempt.
+
+### Rate Limiting
+
+Public form endpoints use `@limiter.limit("X per minute")`. Uses `Flask-Limiter` with in-memory storage (configure Redis in production). If `Flask-Limiter` is not installed, a no-op stub is used automatically.
 
 ## API Endpoints
 
 All endpoints return JSON. Frontend consumes these via fetch():
 
-| Method | Path | Query Params | Description |
-|--------|------|--------------|-------------|
-| GET | `/api/animals` | `?status=adoption&type=perro&limit=N` | List animals |
-| GET | `/api/animals/<id>` | - | Single animal details |
-| GET | `/api/news` | `?limit=N` | List published news |
-| GET | `/api/news/<id>` | - | Single news item |
-| POST | `/api/contact` | - | Submit contact form (JSON body) |
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/settings` | Public site settings (name, logo, colors) |
+| GET | `/api/animals` | List animals (`?status=adoption&type=perro&limit=N`) |
+| GET | `/api/animals/<id>` | Single animal details |
+| PATCH | `/api/animals/<id>/status` | Quick status update |
+| POST | `/api/animals/<id>/adopt` | Submit adoption request |
+| GET | `/api/news` | List published news (`?limit=N`) |
+| GET | `/api/news/<id>` | Single news item |
+| POST | `/api/contact` | Submit contact form |
+| POST | `/api/adoption-request` | Full adoption application |
+| POST | `/api/visit-request` | Schedule a shelter visit |
+| POST | `/api/collaborate` | Volunteer/collaborator signup |
+| POST | `/api/newsletter/subscribe` | Newsletter signup |
+| GET/POST | `/api/newsletter/unsubscribe/<token>` | Unsubscribe via token |
+| POST | `/api/upload` | File upload (requires auth) |
 
 Example:
 ```javascript
@@ -211,12 +236,27 @@ const animals = data.animals || [];
 - `id`, `name`, `email`, `phone`, `subject`, `message`
 - `read` (boolean), `created_at`
 
+### Additional tables
+- **users** - Admin users with `role` (admin/editor/viewer) and hashed passwords
+- **settings** - Key/value store for site config (name, colors, email, social links)
+- **newsletter_subscribers** - `email`, `active`, `unsubscribe_token`, `subscribed_at`
+- **collaborators** - Volunteer/collaborator signups with `status` (pending/approved/rejected)
+- **adoption_requests** - Full adoption applications linked to animal and contact info
+- **visits** - Shelter visit scheduling with `status` (pending/confirmed/cancelled)
+
 ## Admin Panel
 
 - URL: `http://localhost:5000/admin`
 - Default credentials: `admin` / `protectora2026`
 - Authentication: session-based with `@login_required` decorator
+- Role-based access: `@role_required('admin')` or `@role_required('admin', 'editor')` restricts routes by role
 - **Important**: Change default password before production deployment
+
+### Public Jinja2 Routes (not static HTML)
+
+Two public pages are rendered server-side via Jinja2 (not served as static HTML files):
+- `/nosotros` → `admin/templates/nosotros.html` (content from `settings` table)
+- `/animal/<id>` or `/animal/<id>/<slug>` → `admin/templates/animal_public.html` (SEO-friendly animal detail page)
 
 ## Browser Caching
 
@@ -243,6 +283,10 @@ All `.bat` files use **ASCII-only encoding**:
   - CSS variables: `--primary-color`, `--secondary-color`, `--accent-color`
 - Page-specific: `adopcion.css`, `dona.css`, `colabora.css`, `forms.css`
 - Admin panel has separate CSS in `admin/static/css/`
+
+## i18n (Spanish / Valencian)
+
+`js/i18n.js` provides a text-node replacement system for switching between Spanish (default) and Valencian. It reads text from DOM nodes and substitutes using a built-in dictionary — no `data-i18n` attributes needed in HTML. Applied automatically to nav links, header actions, and footer. Include this script on any page that needs language switching.
 
 ## Common Pitfalls
 

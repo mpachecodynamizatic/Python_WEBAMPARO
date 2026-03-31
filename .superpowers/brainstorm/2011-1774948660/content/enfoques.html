@@ -1,0 +1,40 @@
+<h2>3 enfoques para mejorar la ficha del animal</h2>
+<p class="subtitle">Mi recomendación es el Enfoque B — te explico por qué</p>
+
+<div class="options">
+  <div class="option" data-choice="mvp" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>MVP rápido — Solo campos nuevos</h3>
+      <p>Añadir checkboxes de salud (vacunado, esterilizado, chip, desparasitado) y tags de compatibilidad a la tabla <code>animals</code> existente. Mostrarlos como badges en el modal y en <code>/animal/&lt;id&gt;</code>. La foto sigue siendo una sola.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>A favor</h4><ul><li>Rápido de implementar (1–2 días)</li><li>Sin cambios de esquema complejos</li></ul></div>
+        <div class="cons"><h4>En contra</h4><ul><li>Sin galería: el impacto visual es limitado</li><li>Los tags no se pueden usar como filtros</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="ficha" onclick="toggleSelect(this)">
+    <div class="letter">B ★ Recomendado</div>
+    <div class="content">
+      <h3>Ficha completa — Galería + Tags + Salud</h3>
+      <p>Nueva tabla <code>animal_photos</code> para múltiples imágenes con carrusel. Campos estructurados de salud y compatibilidad en <code>animals</code>. Página pública <code>/animal/&lt;id&gt;</code> rediseñada con todo. Admin actualizado para subir varias fotos y marcar los nuevos campos.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>A favor</h4><ul><li>Impacto directo en conversión: más info = más confianza</li><li>Tags reutilizables como filtros en la lista de adopción</li><li>Arquitectura limpia y extensible</li></ul></div>
+        <div class="cons"><h4>En contra</h4><ul><li>3–5 días de trabajo</li><li>Requiere migración de BD</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="redesign" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Rediseño completo del listado + ficha</h3>
+      <p>Todo lo del Enfoque B más rediseño de las tarjetas de la página de adopción: preview de galería en hover, badges de compatibilidad visibles directamente en la tarjeta, nuevos filtros por tag. El modal actual se reemplaza por la página <code>/animal/&lt;id&gt;</code>.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>A favor</h4><ul><li>Mayor impacto UX end-to-end</li><li>El listado también mejora, no solo la ficha</li></ul></div>
+        <div class="cons"><h4>En contra</h4><ul><li>1–2 semanas de trabajo</li><li>Riesgo de regresiones en JS/CSS existente</li></ul></div>
+      </div>
+    </div>
+  </div>
+</div>

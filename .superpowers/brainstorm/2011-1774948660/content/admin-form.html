@@ -1,0 +1,83 @@
+<h2>Formulario de animal — Panel Admin</h2>
+<p class="subtitle">Mockup de los nuevos campos en el formulario de edición de animal</p>
+
+<div class="mockup">
+  <div class="mockup-header">Admin › Animales › Editar animal</div>
+  <div class="mockup-body" style="font-family:sans-serif;font-size:14px;color:#333">
+
+    <!-- Campos básicos existentes -->
+    <div style="background:#f8f9fa;border-radius:8px;padding:1rem;margin-bottom:1.5rem;border-left:4px solid #ccc">
+      <div style="font-size:11px;text-transform:uppercase;color:#999;margin-bottom:.5rem">Campos existentes (sin cambios)</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem">
+        <div><div class="mock-input" style="padding:.4rem .75rem;background:white;border:1px solid #ddd;border-radius:4px">Nombre</div></div>
+        <div><div class="mock-input" style="padding:.4rem .75rem;background:white;border:1px solid #ddd;border-radius:4px">Tipo (perro/gato)</div></div>
+        <div><div class="mock-input" style="padding:.4rem .75rem;background:white;border:1px solid #ddd;border-radius:4px">Edad / Tamaño</div></div>
+      </div>
+    </div>
+
+    <!-- Galería de fotos — NUEVO -->
+    <div style="background:#fff8f0;border-radius:8px;padding:1rem;margin-bottom:1.5rem;border-left:4px solid #F4A460">
+      <div style="font-size:11px;text-transform:uppercase;color:#F4A460;font-weight:700;margin-bottom:.75rem">✦ Nuevo — Galería de fotos</div>
+      <div style="display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap">
+        <!-- Foto principal -->
+        <div style="width:100px;height:80px;background:#e8d5b7;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#a06030;border:2px solid #F4A460;flex-direction:column;gap:4px">
+          <span style="font-size:20px">🐾</span>
+          <span>Principal</span>
+        </div>
+        <!-- Fotos adicionales -->
+        <div style="width:80px;height:80px;background:#f5ece0;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#a06030">foto 2</div>
+        <div style="width:80px;height:80px;background:#f5ece0;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#a06030">foto 3</div>
+        <!-- Añadir -->
+        <div style="width:80px;height:80px;background:white;border:2px dashed #F4A460;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#F4A460;cursor:pointer">+</div>
+      </div>
+      <div style="font-size:12px;color:#888">Arrastra para reordenar · Haz clic en una foto para eliminarla · Máx. 8 fotos · 10 MB cada una</div>
+    </div>
+
+    <!-- Estado de salud — NUEVO -->
+    <div style="background:#f0faf0;border-radius:8px;padding:1rem;margin-bottom:1.5rem;border-left:4px solid #4caf50">
+      <div style="font-size:11px;text-transform:uppercase;color:#4caf50;font-weight:700;margin-bottom:.75rem">✦ Nuevo — Estado sanitario</div>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" checked style="width:16px;height:16px;accent-color:#4caf50"> Vacunado
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" checked style="width:16px;height:16px;accent-color:#4caf50"> Esterilizado
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" checked style="width:16px;height:16px;accent-color:#4caf50"> Chip
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" style="width:16px;height:16px;accent-color:#4caf50"> Desparasitado
+        </label>
+      </div>
+    </div>
+
+    <!-- Compatibilidad — NUEVO -->
+    <div style="background:#f0f4ff;border-radius:8px;padding:1rem;margin-bottom:1.5rem;border-left:4px solid #5c6bc0">
+      <div style="font-size:11px;text-transform:uppercase;color:#5c6bc0;font-weight:700;margin-bottom:.75rem">✦ Nuevo — Compatibilidad</div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" checked style="width:16px;height:16px;accent-color:#5c6bc0"> 👶 Bueno con niños
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" style="width:16px;height:16px;accent-color:#5c6bc0"> 🐱 Convive con gatos
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" checked style="width:16px;height:16px;accent-color:#5c6bc0"> 🐕 Convive con perros
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" checked style="width:16px;height:16px;accent-color:#5c6bc0"> 🏠 Apto para piso
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="checkbox" style="width:16px;height:16px;accent-color:#5c6bc0"> ⚡ Muy activo
+        </label>
+      </div>
+    </div>
+
+    <!-- Botones -->
+    <div style="display:flex;gap:.75rem">
+      <div style="background:#F4A460;color:white;padding:.6rem 1.5rem;border-radius:6px;font-weight:600;cursor:pointer">Guardar cambios</div>
+      <div style="background:white;border:1px solid #ddd;padding:.6rem 1.5rem;border-radius:6px;cursor:pointer">Cancelar</div>
+    </div>
+  </div>
+</div>
