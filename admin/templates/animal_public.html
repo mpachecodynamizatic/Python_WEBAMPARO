@@ -255,12 +255,12 @@
                             {% if animal.good_with_kids %}<span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">👶 Bueno con niños</span>{% endif %}
                             {% if animal.good_with_cats %}
                             <span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐱 Convive con gatos</span>
-                            {% elif not animal.good_with_cats and (animal.good_with_kids or animal.good_with_dogs or animal.apartment_ok) %}
+                            {% elif not animal.good_with_cats and (animal.good_with_kids or animal.good_with_dogs or animal.apartment_ok or animal.high_energy) %}
                             <span style="background:#fce4ec;color:#880e4f;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐱 No con gatos</span>
                             {% endif %}
                             {% if animal.good_with_dogs %}
                             <span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐕 Convive con perros</span>
-                            {% elif not animal.good_with_dogs and (animal.good_with_kids or animal.good_with_cats or animal.apartment_ok) %}
+                            {% elif not animal.good_with_dogs and (animal.good_with_kids or animal.good_with_cats or animal.apartment_ok or animal.high_energy) %}
                             <span style="background:#fce4ec;color:#880e4f;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐕 No con perros</span>
                             {% endif %}
                             {% if animal.apartment_ok   %}<span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🏠 Apto para piso</span>{% endif %}
