@@ -89,7 +89,7 @@ def generate_csrf_token():
 
 def validate_csrf():
     token = session.get('_csrf_token')
-    form_token = request.form.get('_csrf_token')
+    form_token = request.form.get('_csrf_token') or request.headers.get('X-CSRFToken')
     if not token or token != form_token:
         abort(403)
 
@@ -1420,6 +1420,7 @@ def delete_animal(animal_id):
 @login_required
 def admin_animal_add_photo(animal_id):
     """Subir foto adicional al animal"""
+    validate_csrf()
     db = get_db()
     if not db.execute('SELECT id FROM animals WHERE id = ?', (animal_id,)).fetchone():
         return jsonify({'error': 'Animal no encontrado'}), 404
@@ -1447,22 +1448,25 @@ def admin_animal_add_photo(animal_id):
         'SELECT COALESCE(MAX(display_order), -1) + 1 as n FROM animal_photos WHERE animal_id = ?',
         (animal_id,)
     ).fetchone()['n']
-    db.execute(
-        'INSERT INTO animal_photos (animal_id, photo_path, display_order) VALUES (?, ?, ?)',
-        (animal_id, photo_path, next_order)
-    )
-    db.commit()
-    photo = db.execute(
-        'SELECT id, photo_path, display_order FROM animal_photos WHERE animal_id = ? ORDER BY id DESC LIMIT 1',
-        (animal_id,)
-    ).fetchone()
-    return jsonify({'success': True, 'photo': {'id': photo['id'], 'path': photo['photo_path'], 'order': photo['display_order']}})
+    try:
+        cursor = db.execute(
+            'INSERT INTO animal_photos (animal_id, photo_path, display_order) VALUES (?, ?, ?)',
+            (animal_id, photo_path, next_order)
+        )
+        new_id = cursor.lastrowid
+        db.commit()
+    except Exception:
+        if os.path.exists(saved):
+            os.remove(saved)
+        raise
+    return jsonify({'success': True, 'photo': {'id': new_id, 'path': photo_path, 'order': next_order}})
 
 
 @app.route('/admin/animals/<int:animal_id>/photos/<int:photo_id>', methods=['DELETE'])
 @login_required
 def admin_animal_delete_photo(animal_id, photo_id):
     """Eliminar foto del animal"""
+    validate_csrf()
     db = get_db()
     photo = db.execute(
         'SELECT * FROM animal_photos WHERE id = ? AND animal_id = ?', (photo_id, animal_id)
@@ -1473,7 +1477,7 @@ def admin_animal_delete_photo(animal_id, photo_id):
         full_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), photo['photo_path'])
         if os.path.exists(full_path):
             os.remove(full_path)
-    db.execute('DELETE FROM animal_photos WHERE id = ?', (photo_id,))
+    db.execute('DELETE FROM animal_photos WHERE id = ? AND animal_id = ?', (photo_id, animal_id))
     db.commit()
     return jsonify({'success': True})
 
@@ -1482,6 +1486,7 @@ def admin_animal_delete_photo(animal_id, photo_id):
 @login_required
 def admin_animal_reorder_photos(animal_id):
     """Reordenar fotos: JSON body = [{id, order}, ...]"""
+    validate_csrf()
     data = request.get_json(silent=True)
     if not data or not isinstance(data, list):
         return jsonify({'error': 'Datos inválidos'}), 400
@@ -1499,6 +1504,7 @@ def admin_animal_reorder_photos(animal_id):
 @login_required
 def admin_animal_set_primary_photo(animal_id, photo_id):
     """Establecer foto como imagen principal del animal (animals.image)"""
+    validate_csrf()
     db = get_db()
     photo = db.execute(
         'SELECT photo_path FROM animal_photos WHERE id = ? AND animal_id = ?', (photo_id, animal_id)
