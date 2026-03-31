@@ -27,6 +27,7 @@ let currentFilter = 'todos';
 let currentSize = 'todos';
 let searchQuery = '';
 let allAnimals = [];
+let compatFilters = { kids: false, cats: false, dogs: false, apt: false, urgent: false };
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function() {
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initFilters();
     initSizeFilters();
     initSearch();
+    initCompatFilters();
     loadAnimals();
 });
 
@@ -98,6 +100,25 @@ function initSearch() {
     }
 }
 
+function initCompatFilters() {
+    const map = {
+        'compat-kids':   'kids',
+        'compat-cats':   'cats',
+        'compat-dogs':   'dogs',
+        'compat-apt':    'apt',
+        'compat-urgent': 'urgent',
+    };
+    Object.entries(map).forEach(function([id, key]) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('change', function() {
+                compatFilters[key] = this.checked;
+                filterAndDisplayAnimals();
+            });
+        }
+    });
+}
+
 // Cargar animales desde la API
 async function loadAnimals() {
     const container = document.getElementById('animalsGrid');
@@ -144,11 +165,16 @@ function filterAndDisplayAnimals() {
     if (!container) return;
 
     // Filtrar animales
-    let filteredAnimals = allAnimals.filter(animal => {
-        const typeMatch = currentFilter === 'todos' || animal.type === currentFilter;
-        const sizeMatch = currentSize === 'todos' || animal.size === currentSize;
+    let filteredAnimals = allAnimals.filter(function(animal) {
+        const typeMatch   = currentFilter === 'todos' || animal.type === currentFilter;
+        const sizeMatch   = currentSize === 'todos' || animal.size === currentSize;
         const searchMatch = searchQuery === '' || animal.name.toLowerCase().includes(searchQuery);
-        return typeMatch && sizeMatch && searchMatch;
+        const kidsMatch   = !compatFilters.kids   || animal.good_with_kids;
+        const catsMatch   = !compatFilters.cats   || animal.good_with_cats;
+        const dogsMatch   = !compatFilters.dogs   || animal.good_with_dogs;
+        const aptMatch    = !compatFilters.apt    || animal.apartment_ok;
+        const urgentMatch = !compatFilters.urgent || animal.urgent;
+        return typeMatch && sizeMatch && searchMatch && kidsMatch && catsMatch && dogsMatch && aptMatch && urgentMatch;
     });
 
     // Limpiar contenedor
@@ -185,32 +211,54 @@ function createAnimalCardDetailed(animal) {
     card.className = 'animal-card';
     card.setAttribute('data-id', animal.id);
 
-    const typeIcon = animal.type === 'perro' ? 'fa-dog' : 'fa-cat';
-    const genderIcon = animal.gender === 'Macho' ? 'fa-mars' : 'fa-venus';
-    const typeCapitalized = animal.type.charAt(0).toUpperCase() + animal.type.slice(1);
-
-    const imgSrc = getAnimalImage(animal);
     const type = (animal.type === 'gato') ? 'gato' : 'perro';
+    const imgSrc = getAnimalImage(animal);
     const fallbackSrc = `../images/animales/${type}.svg`;
     const isReserved = animal.status === 'reserved';
+    const photoCount = (animal.photos || []).length;
+    const animalUrl  = `/animal/${animal.id}/${animal.name.toLowerCase().replace(/\s+/g, '-')}`;
+
+    // Compatibility tags (max 3 visible)
+    const tags = [];
+    if (animal.good_with_kids) tags.push('👶 Niños');
+    if (animal.good_with_cats) tags.push('🐱 Gatos');
+    if (animal.good_with_dogs) tags.push('🐕 Perros');
+    if (animal.apartment_ok)   tags.push('🏠 Piso');
+    if (animal.high_energy)    tags.push('⚡ Activo');
+    const visibleTags = tags.slice(0, 3);
+
+    // Health badges (max 2 visible)
+    const healthTags = [];
+    if (animal.vaccinated) healthTags.push('✓ Vacunado');
+    if (animal.sterilized) healthTags.push('✓ Esterilizado');
+    if (animal.chipped)    healthTags.push('✓ Chip');
+
+    const tagsHtml = visibleTags.map(t =>
+        `<span class="animal-compat-tag">${t}</span>`
+    ).join('');
+    const healthHtml = healthTags.slice(0, 2).map(t =>
+        `<span class="animal-health-tag">${t}</span>`
+    ).join('');
 
     card.innerHTML = `
-        <img src="${imgSrc}" alt="${animal.name}" class="animal-image"
-             onerror="this.onerror=null; this.src='${fallbackSrc}'">
+        <div style="position:relative;">
+            <img src="${imgSrc}" alt="${animal.name}" class="animal-image"
+                 onerror="this.onerror=null;this.src='${fallbackSrc}'">
+            ${animal.urgent ? '<span class="animal-urgent-badge">⚠ Urgente</span>' : ''}
+            ${isReserved    ? '<span class="animal-reserved-badge"><i class="fas fa-lock"></i> Reservado</span>' : ''}
+            ${photoCount > 0 ? `<span class="animal-photo-count">📷 ${photoCount + 1}</span>` : ''}
+        </div>
         <div class="animal-info">
-            <span class="animal-type">
-                <i class="fas ${typeIcon}"></i> ${typeCapitalized}
-            </span>
-            ${isReserved ? '<span style="display:inline-block;background:#FFB347;color:white;padding:.15rem .6rem;border-radius:8px;font-size:.78rem;font-weight:600;margin-left:.4rem;"><i class="fas fa-lock"></i> Reservado</span>' : ''}
             <h3 class="animal-name">${animal.name}</h3>
             <div class="animal-details">
                 <p><i class="fas fa-birthday-cake"></i> ${animal.age || 'Edad desconocida'}</p>
-                <p><i class="fas ${genderIcon}"></i> ${animal.gender || 'No especificado'}</p>
-                ${animal.size ? `<p><i class="fas fa-ruler-vertical"></i> ${animal.size}</p>` : ''}
+                <p><i class="fas fa-ruler-vertical"></i> ${animal.size || '—'}</p>
             </div>
-            <p>${animal.description || 'Sin descripción'}</p>
-            <a href="javascript:void(0)" class="btn btn-primary btn-small" onclick="showAnimalDetails(${animal.id})">
-                <i class="fas fa-info-circle"></i> Más información
+            <div class="animal-tags-row">
+                ${tagsHtml}${healthHtml}
+            </div>
+            <a href="${animalUrl}" class="btn btn-primary btn-small" style="margin-top:.75rem;display:inline-block;">
+                <i class="fas fa-info-circle"></i> Ver ficha completa
             </a>
         </div>
     `;

@@ -324,3 +324,62 @@
         font-size: 0.9rem;
     }
 }
+
+/* Badges en tarjetas de adopción */
+.animal-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+    margin: .5rem 0;
+}
+.animal-compat-tag {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: .15rem .45rem;
+    border-radius: 12px;
+    font-size: .72rem;
+    font-weight: 500;
+}
+.animal-health-tag {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: .15rem .45rem;
+    border-radius: 12px;
+    font-size: .72rem;
+    font-weight: 500;
+}
+.animal-urgent-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e53935;
+    color: white;
+    padding: .2rem .6rem;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 700;
+}
+.animal-reserved-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #FFB347;
+    color: white;
+    padding: .2rem .6rem;
+    border-radius: 20px;
+    font-size: .72rem;
+    font-weight: 600;
+}
+.animal-photo-count {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0,0,0,.5);
+    color: white;
+    padding: .15rem .5rem;
+    border-radius: 20px;
+    font-size: .72rem;
+}
+.compat-filters { display: flex; flex-wrap: wrap; }
+.compat-check { display: flex; align-items: center; gap: .35rem; cursor: pointer; font-size: .85rem; }
+.compat-check input { width: 15px; height: 15px; accent-color: #F4A460; cursor: pointer; }
