@@ -1411,6 +1411,16 @@ def delete_animal(animal_id):
             old_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), animal['image'])
             if os.path.exists(old_path):
                 os.remove(old_path)
+        # Delete gallery photos from disk before removing the animal row
+        gallery_photos = db.execute(
+            'SELECT photo_path FROM animal_photos WHERE animal_id = ?', (animal_id,)
+        ).fetchall()
+        for p in gallery_photos:
+            if p['photo_path'] and p['photo_path'].startswith('uploads/'):
+                gpath = os.path.join(os.path.dirname(os.path.dirname(__file__)), p['photo_path'])
+                if os.path.exists(gpath):
+                    os.remove(gpath)
+        db.execute('DELETE FROM animal_photos WHERE animal_id = ?', (animal_id,))
         db.execute('DELETE FROM animals WHERE id = ?', (animal_id,))
         db.commit()
         flash(f'Animal "{animal["name"]}" eliminado.', 'success')
@@ -1496,6 +1506,8 @@ def admin_animal_reorder_photos(animal_id):
         return jsonify({'error': 'Datos inválidos'}), 400
     db = get_db()
     for item in data:
+        if not isinstance(item, dict) or 'id' not in item or 'order' not in item:
+            continue
         db.execute(
             'UPDATE animal_photos SET display_order = ? WHERE id = ? AND animal_id = ?',
             (item['order'], item['id'], animal_id)

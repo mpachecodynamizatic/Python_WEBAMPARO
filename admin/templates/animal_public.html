@@ -199,7 +199,7 @@
                 <div class="animal-hero-info">
                     <h1>{{ animal.name }}</h1>
 
-                    {% set status_map = {'adoption': ('En adopción', 'adoption'), 'reserved': ('Reservado', 'reserved'), 'fostered': ('En acogida', 'fostered'), 'adopted': ('Adoptado', 'adopted')} %}
+                    {% set status_map = {'adoption': ('En adopción', 'adoption'), 'reserved': ('Reservado', 'reserved'), 'foster': ('En acogida', 'foster'), 'adopted': ('Adoptado', 'adopted')} %}
                     {% set status_info = status_map.get(animal.status, (animal.status, 'adoption')) %}
                     <span class="status-badge status-{{ status_info[1] }}">
                         <i class="fas fa-circle" style="font-size:.55rem; vertical-align:middle;"></i>
@@ -280,12 +280,12 @@
                         <a href="#adoptar" class="btn btn-primary">
                             <i class="fas fa-heart"></i> Solicitar adopción
                         </a>
-                        {% elif animal.status == 'fostered' %}
+                        {% elif animal.status == 'foster' %}
                         <a href="/pages/acogida.html" class="btn btn-primary">
                             <i class="fas fa-home"></i> Acoger temporalmente
                         </a>
                         {% endif %}
-                        {% if animal.status in ('adoption', 'reserved', 'fostered') %}
+                        {% if animal.status in ('adoption', 'reserved', 'foster') %}
                         <a href="#visita" class="btn" style="background:#fff3cd; color:#856404; border:1px solid #f0d070;">
                             <i class="fas fa-calendar-check"></i> Concertar visita
                         </a>
@@ -349,7 +349,7 @@
             {% endif %}
 
             <!-- Formulario de visita -->
-            {% if animal.status in ('adoption', 'reserved', 'fostered') %}
+            {% if animal.status in ('adoption', 'reserved', 'foster') %}
             <div class="adoption-form-box" id="visita"
                  style="border-color:#f0d070; background:#fffdf0; margin-top:2rem;">
                 <h2 style="color:#856404;">
