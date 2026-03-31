@@ -216,7 +216,8 @@ function createAnimalCardDetailed(animal) {
     const fallbackSrc = `../images/animales/${type}.svg`;
     const isReserved = animal.status === 'reserved';
     const photoCount = (animal.photos || []).length;
-    const animalUrl  = `/animal/${animal.id}/${animal.name.toLowerCase().replace(/\s+/g, '-')}`;
+    const animalSlug = animal.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const animalUrl  = `/animal/${animal.id}/${animalSlug}`;
 
     // Compatibility tags (max 3 visible)
     const tags = [];
@@ -345,7 +346,7 @@ function showAnimalDetails(animalId) {
 
         <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:.75rem; margin-bottom:1rem;">
             <h2 style="font-size: 2rem; margin:0; color: #333;">${animal.name}</h2>
-            <a href="${BASE_URL}/animal/${animal.id}" target="_blank"
+            <a href="/animal/${animal.id}/${(animal.name||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}" target="_blank"
                style="background:#f5f0ea; color:#F4A460; padding:.4rem 1rem; border-radius:8px; text-decoration:none; font-size:.88rem; font-weight:600; white-space:nowrap;">
                 <i class="fas fa-external-link-alt"></i> Ver ficha completa
             </a>
