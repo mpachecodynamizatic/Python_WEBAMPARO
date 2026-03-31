@@ -1413,6 +1413,107 @@ def delete_animal(animal_id):
     return redirect(url_for('list_animals'))
 
 # ============================================
+# GALERÍA DE FOTOS DE ANIMALES
+# ============================================
+
+@app.route('/admin/animals/<int:animal_id>/photos', methods=['POST'])
+@login_required
+def admin_animal_add_photo(animal_id):
+    """Subir foto adicional al animal"""
+    db = get_db()
+    if not db.execute('SELECT id FROM animals WHERE id = ?', (animal_id,)).fetchone():
+        return jsonify({'error': 'Animal no encontrado'}), 404
+    count = db.execute(
+        'SELECT COUNT(*) as c FROM animal_photos WHERE animal_id = ?', (animal_id,)
+    ).fetchone()['c']
+    if count >= 8:
+        return jsonify({'error': 'Máximo 8 fotos por animal'}), 400
+    if 'photo' not in request.files:
+        return jsonify({'error': 'No se envió ninguna foto'}), 400
+    file = request.files['photo']
+    if not file or not file.filename or not allowed_file(file.filename):
+        return jsonify({'error': 'Archivo no válido'}), 400
+    filename = secure_filename(file.filename)
+    if not filename:
+        return jsonify({'error': 'Nombre de archivo no válido'}), 400
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S_%f')
+    filename = f"{timestamp}_{filename}"
+    fotos_dir = os.path.join(app.config['UPLOAD_FOLDER'], 'fotos')
+    os.makedirs(fotos_dir, exist_ok=True)
+    filepath = os.path.join(fotos_dir, filename)
+    saved = save_image(file, filepath)
+    photo_path = 'uploads/fotos/' + os.path.basename(saved)
+    next_order = db.execute(
+        'SELECT COALESCE(MAX(display_order), -1) + 1 as n FROM animal_photos WHERE animal_id = ?',
+        (animal_id,)
+    ).fetchone()['n']
+    db.execute(
+        'INSERT INTO animal_photos (animal_id, photo_path, display_order) VALUES (?, ?, ?)',
+        (animal_id, photo_path, next_order)
+    )
+    db.commit()
+    photo = db.execute(
+        'SELECT id, photo_path, display_order FROM animal_photos WHERE animal_id = ? ORDER BY id DESC LIMIT 1',
+        (animal_id,)
+    ).fetchone()
+    return jsonify(dict(photo))
+
+
+@app.route('/admin/animals/<int:animal_id>/photos/<int:photo_id>', methods=['DELETE'])
+@login_required
+def admin_animal_delete_photo(animal_id, photo_id):
+    """Eliminar foto del animal"""
+    db = get_db()
+    photo = db.execute(
+        'SELECT * FROM animal_photos WHERE id = ? AND animal_id = ?', (photo_id, animal_id)
+    ).fetchone()
+    if not photo:
+        return jsonify({'error': 'Foto no encontrada'}), 404
+    if photo['photo_path'] and photo['photo_path'].startswith('uploads/'):
+        full_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), photo['photo_path'])
+        if os.path.exists(full_path):
+            os.remove(full_path)
+    db.execute('DELETE FROM animal_photos WHERE id = ?', (photo_id,))
+    db.commit()
+    return jsonify({'ok': True})
+
+
+@app.route('/admin/animals/<int:animal_id>/photos/reorder', methods=['POST'])
+@login_required
+def admin_animal_reorder_photos(animal_id):
+    """Reordenar fotos: JSON body = [{id, order}, ...]"""
+    data = request.get_json(silent=True)
+    if not data or not isinstance(data, list):
+        return jsonify({'error': 'Datos inválidos'}), 400
+    db = get_db()
+    for item in data:
+        db.execute(
+            'UPDATE animal_photos SET display_order = ? WHERE id = ? AND animal_id = ?',
+            (item['order'], item['id'], animal_id)
+        )
+    db.commit()
+    return jsonify({'ok': True})
+
+
+@app.route('/admin/animals/<int:animal_id>/photos/<int:photo_id>/set-primary', methods=['POST'])
+@login_required
+def admin_animal_set_primary_photo(animal_id, photo_id):
+    """Establecer foto como imagen principal del animal (animals.image)"""
+    db = get_db()
+    photo = db.execute(
+        'SELECT photo_path FROM animal_photos WHERE id = ? AND animal_id = ?', (photo_id, animal_id)
+    ).fetchone()
+    if not photo:
+        return jsonify({'error': 'Foto no encontrada'}), 404
+    db.execute(
+        'UPDATE animals SET image = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        (photo['photo_path'], animal_id)
+    )
+    db.commit()
+    return jsonify({'ok': True})
+
+
+# ============================================
 # GESTIÓN DE NOTICIAS
 # ============================================
 
