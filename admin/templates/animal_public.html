@@ -16,6 +16,7 @@
     <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/adopcion.css">
+    <link rel="stylesheet" href="/css/forms.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- JSON-LD structured data -->
     <script type="application/ld+json">
@@ -70,26 +71,55 @@
         }
         .info-item strong { display: block; font-size: .8rem; color: #F4A460; text-transform: uppercase; letter-spacing: .05em; }
         .info-item span   { font-size: 1rem; color: #333; }
+
+        /* Formularios de adopción y visita - usando estilos consistentes con forms.css */
         .adoption-form-box {
-            background: #fffbf5;
-            border: 1px solid #f0dbc0;
-            border-radius: 14px;
-            padding: 2rem;
+            background: var(--bg-white);
+            padding: var(--spacing-md);
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
             margin-top: 2rem;
         }
         .adoption-form-box h2 {
-            color: #F4A460;
-            margin: 0 0 1.25rem;
+            font-family: var(--font-heading);
+            color: var(--text-dark);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.8rem;
         }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+        .adoption-form-box h2 i {
+            color: var(--primary-color);
         }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
-        .alert { padding: .9rem 1.25rem; border-radius: 8px; margin-bottom: 1rem; font-weight: 600; }
-        .alert-success { background: #d5f5e3; color: #1a7a4a; }
-        .alert-error   { background: #fde8e8; color: #b91c1c; }
+        .adoption-form-box p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Alerta de mensajes */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+        .alert-success {
+            background: #D5F5E3;
+            color: #27AE60;
+            border: 2px solid #27AE60;
+        }
+        .alert-error {
+            background: #FADBD8;
+            color: #E74C3C;
+            border: 2px solid #E74C3C;
+        }
+
+        /* Botón grande para formularios */
+        .btn-large {
+            padding: 0.9rem 2rem;
+            font-size: 1.1rem;
+            width: 100%;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
@@ -350,9 +380,8 @@
 
             <!-- Formulario de visita -->
             {% if animal.status in ('adoption', 'reserved', 'foster') %}
-            <div class="adoption-form-box" id="visita"
-                 style="border-color:#f0d070; background:#fffdf0; margin-top:2rem;">
-                <h2 style="color:#856404;">
+            <div class="adoption-form-box" id="visita" style="margin-top:2rem;">
+                <h2>
                     <i class="fas fa-calendar-check"></i> Concertar una visita con {{ animal.name }}
                 </h2>
                 <p style="color:#777; margin-bottom:1.5rem;">
@@ -403,8 +432,7 @@
                                    placeholder="Ej: vendremos dos personas, tengo niños…">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-large" id="visitBtn"
-                            style="background:#F4A460; color:white; margin-top:.5rem;">
+                    <button type="submit" class="btn btn-primary btn-large" id="visitBtn" style="margin-top:.5rem;">
                         <i class="fas fa-calendar-check"></i> Solicitar visita
                     </button>
                 </form>
