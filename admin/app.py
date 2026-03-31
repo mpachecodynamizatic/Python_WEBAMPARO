@@ -1264,6 +1264,16 @@ def new_animal():
         gender = request.form.get('gender')
         size = request.form.get('size')
         description = request.form.get('description')
+        vaccinated     = 1 if request.form.get('vaccinated')     else 0
+        sterilized     = 1 if request.form.get('sterilized')     else 0
+        chipped        = 1 if request.form.get('chipped')        else 0
+        dewormed       = 1 if request.form.get('dewormed')       else 0
+        good_with_kids = 1 if request.form.get('good_with_kids') else 0
+        good_with_cats = 1 if request.form.get('good_with_cats') else 0
+        good_with_dogs = 1 if request.form.get('good_with_dogs') else 0
+        apartment_ok   = 1 if request.form.get('apartment_ok')   else 0
+        high_energy    = 1 if request.form.get('high_energy')    else 0
+        urgent         = 1 if request.form.get('urgent')         else 0
 
         # Manejar subida de imagen (new_animal)
         image_path = None
@@ -1290,9 +1300,15 @@ def new_animal():
 
         db = get_db()
         db.execute('''
-            INSERT INTO animals (name, type, age, gender, size, description, image)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ''', (name, animal_type, age, gender, size, description, image_path))
+            INSERT INTO animals (name, type, age, gender, size, description, image,
+                                 vaccinated, sterilized, chipped, dewormed,
+                                 good_with_kids, good_with_cats, good_with_dogs,
+                                 apartment_ok, high_energy, urgent)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ''', (name, animal_type, age, gender, size, description, image_path,
+              vaccinated, sterilized, chipped, dewormed,
+              good_with_kids, good_with_cats, good_with_dogs,
+              apartment_ok, high_energy, urgent))
         db.commit()
 
         flash(f'Animal "{name}" añadido correctamente.', 'success')
@@ -1315,6 +1331,16 @@ def edit_animal(animal_id):
         size = request.form.get('size')
         description = request.form.get('description')
         status = request.form.get('status')
+        vaccinated     = 1 if request.form.get('vaccinated')     else 0
+        sterilized     = 1 if request.form.get('sterilized')     else 0
+        chipped        = 1 if request.form.get('chipped')        else 0
+        dewormed       = 1 if request.form.get('dewormed')       else 0
+        good_with_kids = 1 if request.form.get('good_with_kids') else 0
+        good_with_cats = 1 if request.form.get('good_with_cats') else 0
+        good_with_dogs = 1 if request.form.get('good_with_dogs') else 0
+        apartment_ok   = 1 if request.form.get('apartment_ok')   else 0
+        high_energy    = 1 if request.form.get('high_energy')    else 0
+        urgent         = 1 if request.form.get('urgent')         else 0
 
         # Obtener imagen actual
         current_animal = db.execute('SELECT image FROM animals WHERE id = ?', (animal_id,)).fetchone()
@@ -1351,9 +1377,17 @@ def edit_animal(animal_id):
         # Actualizar
         db.execute('''
             UPDATE animals
-            SET name=?, type=?, age=?, gender=?, size=?, description=?, status=?, image=?, updated_at=CURRENT_TIMESTAMP
+            SET name=?, type=?, age=?, gender=?, size=?, description=?, status=?, image=?,
+                vaccinated=?, sterilized=?, chipped=?, dewormed=?,
+                good_with_kids=?, good_with_cats=?, good_with_dogs=?,
+                apartment_ok=?, high_energy=?, urgent=?,
+                updated_at=CURRENT_TIMESTAMP
             WHERE id=?
-        ''', (name, animal_type, age, gender, size, description, status, image_path, animal_id))
+        ''', (name, animal_type, age, gender, size, description, status, image_path,
+              vaccinated, sterilized, chipped, dewormed,
+              good_with_kids, good_with_cats, good_with_dogs,
+              apartment_ok, high_energy, urgent,
+              animal_id))
         db.commit()
 
         flash(f'Animal "{name}" actualizado correctamente.', 'success')
