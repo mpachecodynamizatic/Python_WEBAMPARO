@@ -167,14 +167,31 @@
         <div class="container">
             <!-- Ficha principal -->
             <div class="animal-detail-hero">
-                <!-- Imagen -->
+                <!-- Galería de fotos -->
                 <div>
-                    {% if animal.image and animal.image.startswith('uploads/') %}
-                    <img src="/{{ animal.image }}" alt="{{ animal.name }}" class="animal-hero-img"
-                         onerror="this.onerror=null; this.src='/images/animales/{{ 'gato' if animal.type == 'gato' else 'perro' }}.svg'">
-                    {% else %}
-                    <img src="/images/animales/{{ 'gato' if animal.type == 'gato' else 'perro' }}.svg"
-                         alt="{{ animal.name }}" class="animal-hero-img">
+                    {% set main_src = ('/'+animal.image) if (animal.image and animal.image.startswith('uploads/')) else ('/images/animales/' + ('gato' if animal.type == 'gato' else 'perro') + '.svg') %}
+
+                    <!-- Foto principal -->
+                    <img id="mainPhoto" src="{{ main_src }}" alt="{{ animal.name }}" class="animal-hero-img"
+                         style="cursor:{% if extra_photos %}pointer{% else %}default{% endif %};"
+                         onerror="this.onerror=null;this.src='/images/animales/{{ 'gato' if animal.type == 'gato' else 'perro' }}.svg'"
+                         {% if extra_photos %}onclick="openLightbox(this.src)"{% endif %}>
+
+                    <!-- Thumbnails (solo si hay fotos adicionales) -->
+                    {% if extra_photos %}
+                    <div style="display:flex;gap:.5rem;margin-top:.6rem;overflow-x:auto;padding-bottom:.25rem;">
+                        <!-- Thumbnail de foto principal -->
+                        <img src="{{ main_src }}"
+                             style="width:60px;height:60px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid #F4A460;flex-shrink:0;"
+                             onclick="switchPhoto(this)"
+                             onerror="this.onerror=null;this.style.display='none'">
+                        {% for photo in extra_photos %}
+                        <img src="/{{ photo.photo_path }}"
+                             style="width:60px;height:60px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;flex-shrink:0;"
+                             onclick="switchPhoto(this)"
+                             onerror="this.onerror=null;this.style.display='none'">
+                        {% endfor %}
+                    </div>
                     {% endif %}
                 </div>
 
@@ -216,6 +233,42 @@
                         {% endif %}
                     </div>
 
+                    <!-- Estado sanitario -->
+                    {% if animal.vaccinated or animal.sterilized or animal.chipped or animal.dewormed %}
+                    <div style="margin-top:1rem;">
+                        <div style="font-size:11px;text-transform:uppercase;color:#999;font-weight:700;margin-bottom:.5rem;">Estado sanitario</div>
+                        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                            {% if animal.vaccinated  %}<span style="background:#e8f5e9;color:#2e7d32;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;font-weight:600;">✓ Vacunado/a</span>{% endif %}
+                            {% if animal.sterilized  %}<span style="background:#e8f5e9;color:#2e7d32;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;font-weight:600;">✓ Esterilizado/a</span>{% endif %}
+                            {% if animal.chipped     %}<span style="background:#e8f5e9;color:#2e7d32;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;font-weight:600;">✓ Con chip</span>{% endif %}
+                            {% if animal.dewormed    %}<span style="background:#e8f5e9;color:#2e7d32;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;font-weight:600;">✓ Desparasitado/a</span>{% endif %}
+                            {% if not animal.vaccinated %}<span style="background:#fff8e1;color:#f57f17;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">⏳ Pendiente vacunar</span>{% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Compatibilidad -->
+                    {% if animal.good_with_kids or animal.good_with_cats or animal.good_with_dogs or animal.apartment_ok or animal.high_energy %}
+                    <div style="margin-top:.85rem;">
+                        <div style="font-size:11px;text-transform:uppercase;color:#999;font-weight:700;margin-bottom:.5rem;">Compatibilidad</div>
+                        <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                            {% if animal.good_with_kids %}<span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">👶 Bueno con niños</span>{% endif %}
+                            {% if animal.good_with_cats %}
+                            <span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐱 Convive con gatos</span>
+                            {% elif not animal.good_with_cats and (animal.good_with_kids or animal.good_with_dogs or animal.apartment_ok) %}
+                            <span style="background:#fce4ec;color:#880e4f;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐱 No con gatos</span>
+                            {% endif %}
+                            {% if animal.good_with_dogs %}
+                            <span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐕 Convive con perros</span>
+                            {% elif not animal.good_with_dogs and (animal.good_with_kids or animal.good_with_cats or animal.apartment_ok) %}
+                            <span style="background:#fce4ec;color:#880e4f;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🐕 No con perros</span>
+                            {% endif %}
+                            {% if animal.apartment_ok   %}<span style="background:#e3f2fd;color:#1565c0;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">🏠 Apto para piso</span>{% endif %}
+                            {% if animal.high_energy    %}<span style="background:#fff8e1;color:#f57f17;padding:.2rem .55rem;border-radius:20px;font-size:.8rem;">⚡ Muy activo</span>{% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
                     {% if animal.description %}
                     <div style="margin-top:1rem; color:#555; line-height:1.75; font-size:1rem;">
                         {{ animal.description }}
@@ -240,6 +293,10 @@
                         <a href="/pages/adopcion.html" class="btn btn-secondary" style="background:#eee; color:#555; border:none;">
                             <i class="fas fa-arrow-left"></i> Ver todos los animales
                         </a>
+                        <button type="button" onclick="shareAnimal('{{ animal.name }}', '{{ request.url }}')"
+                                class="btn" style="background:white;border:1px solid #ddd;color:#666;">
+                            <i class="fas fa-share-alt"></i> Compartir
+                        </button>
                     </div>
                 </div>
             </div>
@@ -353,6 +410,24 @@
                 </form>
             </div>
             {% endif %}
+            <!-- Animales similares -->
+            {% if similar %}
+            <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid #eee;">
+                <h3 style="color:#333;margin-bottom:1.25rem;">También podrían interesarte</h3>
+                <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                    {% for s in similar %}
+                    {% set s_img = ('/'+s.image) if (s.image and s.image.startswith('uploads/')) else ('/images/animales/'+('gato' if s.type == 'gato' else 'perro')+'.svg') %}
+                    <a href="/animal/{{ s.id }}/{{ s.name | lower | replace(' ','-') }}"
+                       style="width:150px;background:#f9f9f9;border-radius:12px;overflow:hidden;border:1px solid #eee;text-decoration:none;color:#333;display:block;">
+                        <img src="{{ s_img }}" alt="{{ s.name }}"
+                             style="width:150px;height:100px;object-fit:cover;display:block;"
+                             onerror="this.onerror=null;this.src='/images/animales/{{ 'gato' if s.type == 'gato' else 'perro' }}.svg'">
+                        <div style="padding:.6rem .75rem;font-size:.85rem;font-weight:600;">{{ s.name }}</div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
     </section>
 
@@ -386,6 +461,33 @@
         </div>
     </footer>
 
+    <!-- Lightbox sencillo -->
+    <div id="lightbox" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;align-items:center;justify-content:center;cursor:pointer;" onclick="this.style.display='none'">
+        <img id="lightbox-img" style="max-width:90vw;max-height:90vh;border-radius:8px;">
+    </div>
+    <script>
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').style.display = 'flex';
+    }
+    function switchPhoto(thumb) {
+        document.getElementById('mainPhoto').src = thumb.src;
+        document.querySelectorAll('[onclick*="switchPhoto"]').forEach(function(el) {
+            el.style.borderColor = 'transparent';
+        });
+        thumb.style.borderColor = '#F4A460';
+    }
+    async function shareAnimal(name, url) {
+        if (navigator.share) {
+            try { await navigator.share({ title: name + ' busca hogar', url: url }); } catch(e) {}
+        } else {
+            try {
+                await navigator.clipboard.writeText(url);
+                alert('Enlace copiado al portapapeles');
+            } catch(e) {}
+        }
+    }
+    </script>
     <script src="/js/i18n.js"></script>
     <script>
         // Adoption form submission

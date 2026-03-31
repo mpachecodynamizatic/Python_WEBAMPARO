@@ -2792,8 +2792,16 @@ def public_animal_page(animal_id, slug=None):
     correct_slug = re.sub(r'[^a-z0-9]+', '-', (animal['name'] or '').lower()).strip('-')
     if slug != correct_slug:
         return redirect(url_for('public_animal_page', animal_id=animal_id, slug=correct_slug), 301)
+    extra_photos = db.execute(
+        'SELECT id, photo_path, display_order FROM animal_photos WHERE animal_id = ? ORDER BY display_order',
+        (animal_id,)
+    ).fetchall()
+    similar = db.execute(
+        'SELECT id, name, type, image FROM animals WHERE type = ? AND status IN ("adoption","reserved") AND id != ? LIMIT 3',
+        (animal['type'], animal_id)
+    ).fetchall()
     settings = {r['key']: r['value'] for r in db.execute('SELECT key, value FROM site_settings').fetchall()}
-    return render_template('animal_public.html', animal=animal, settings=settings)
+    return render_template('animal_public.html', animal=animal, extra_photos=extra_photos, similar=similar, settings=settings)
 
 
 # ============================================
