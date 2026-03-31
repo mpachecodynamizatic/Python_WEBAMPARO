@@ -245,6 +245,7 @@
 {% if animal %}
 <script>
 const ANIMAL_ID = {{ animal.id }};
+const ANIMAL_TYPE = "{{ animal.type }}";
 const CSRF_TOKEN = document.querySelector('input[name="_csrf_token"]').value;
 
 async function uploadPhoto(input) {
@@ -276,7 +277,7 @@ function addThumbToGallery(id, path, order) {
     thumb.dataset.photoId = id;
     thumb.dataset.order = order;
     thumb.innerHTML = `
-        <img src="/${path}" onerror="this.onerror=null;this.src='/images/animales/perro.svg'">
+        <img src="/${path}" onerror="this.onerror=null;this.src='/images/animales/${ANIMAL_TYPE}.svg'">
         <div class="photo-actions">
             <button type="button" class="btn-star-photo" title="Establecer como portada" onclick="setPhotoAsPrimary(${id})">★</button>
             <button type="button" class="btn-up-photo"   onclick="movePhoto(${id}, -1)">↑</button>
@@ -331,7 +332,7 @@ function movePhoto(photoId, direction) {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN},
         body: JSON.stringify(updated)
-    });
+    }).then(r => { if (!r.ok) console.warn('Reorder failed'); });
 }
 </script>
 {% endif %}
