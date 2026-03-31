@@ -724,6 +724,45 @@ def init_db():
             )
         ''')
 
+        # Tabla de fotos adicionales de animales
+        cursor.execute(f'''
+            CREATE TABLE IF NOT EXISTS animal_photos (
+                id {auto_id},
+                animal_id INTEGER NOT NULL,
+                photo_path TEXT NOT NULL,
+                display_order INTEGER DEFAULT 0,
+                caption TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (animal_id) REFERENCES animals(id)
+            )
+        ''')
+
+        # Migración: columnas de salud, compatibilidad y urgencia en animals
+        health_compat_cols = [
+            ('vaccinated',     'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('sterilized',     'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('chipped',        'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('dewormed',       'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('good_with_kids', 'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('good_with_cats', 'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('good_with_dogs', 'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('apartment_ok',   'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('high_energy',    'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+            ('urgent',         'BOOLEAN DEFAULT 0',     'BOOLEAN DEFAULT FALSE'),
+        ]
+        if not USE_POSTGRES:
+            for col, sqlite_def, _ in health_compat_cols:
+                try:
+                    cursor.execute(f'ALTER TABLE animals ADD COLUMN {col} {sqlite_def}')
+                except Exception:
+                    pass  # columna ya existe
+        else:
+            for col, _, pg_def in health_compat_cols:
+                try:
+                    cursor.execute(f'ALTER TABLE animals ADD COLUMN IF NOT EXISTS {col} {pg_def}')
+                except Exception:
+                    pass
+
         # Crear usuario admin por defecto
         placeholder = get_placeholder()
         try:
