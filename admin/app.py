@@ -1394,7 +1394,11 @@ def edit_animal(animal_id):
         return redirect(url_for('list_animals'))
 
     animal = db.execute('SELECT * FROM animals WHERE id = ?', (animal_id,)).fetchone()
-    return render_template('animal_form.html', animal=animal)
+    extra_photos = db.execute(
+        'SELECT id, photo_path, display_order FROM animal_photos WHERE animal_id = ? ORDER BY display_order',
+        (animal_id,)
+    ).fetchall()
+    return render_template('animal_form.html', animal=animal, extra_photos=extra_photos)
 
 @app.route('/admin/animals/<int:animal_id>/delete', methods=['POST'])
 @login_required

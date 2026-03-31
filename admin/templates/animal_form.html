@@ -4,8 +4,104 @@
 {% block page_title %}{% if animal %}Editar{% else %}Nuevo{% endif %} Animal{% endblock %}
 
 {% block content %}
-<form method="POST" enctype="multipart/form-data">
+<style>
+.section-block {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #dee2e6;
+}
+.section-block.health  { background: #f0faf0; border-left-color: #4caf50; }
+.section-block.compat  { background: #f0f4ff; border-left-color: #5c6bc0; }
+.section-block.gallery { background: #fff8f0; border-left-color: #F4A460; }
+.section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: .75rem;
+    letter-spacing: .05em;
+}
+.section-block.health  .section-label { color: #4caf50; }
+.section-block.compat  .section-label { color: #5c6bc0; }
+.section-block.gallery .section-label { color: #F4A460; }
+.check-grid {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+.check-grid label {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    cursor: pointer;
+    font-size: .92rem;
+}
+.check-grid input[type=checkbox] { width: 16px; height: 16px; cursor: pointer; }
+/* Galería */
+#photo-gallery {
+    display: flex;
+    gap: .6rem;
+    flex-wrap: wrap;
+    margin-bottom: .75rem;
+}
+.photo-thumb {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: visible;
+}
+.photo-thumb img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+.photo-thumb .photo-actions {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: flex;
+    gap: 2px;
+}
+.photo-thumb .photo-actions button {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+.btn-del-photo  { background: #e53935; color: white; }
+.btn-star-photo { background: #F4A460; color: white; }
+.btn-up-photo, .btn-down-photo { background: #5c6bc0; color: white; font-size: 10px; }
+.photo-add-btn {
+    width: 90px;
+    height: 90px;
+    border: 2px dashed #F4A460;
+    border-radius: 8px;
+    background: white;
+    color: #F4A460;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.photo-add-btn:hover { background: #fff8f0; }
+#photo-upload-input { display: none; }
+</style>
+
+<form method="POST" enctype="multipart/form-data" id="animalForm">
     <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
+    <!-- Campos básicos -->
     <div class="form-group">
         <label for="name">Nombre del animal *</label>
         <input type="text" id="name" name="name" value="{% if animal %}{{ animal.name }}{% endif %}" required>
@@ -20,7 +116,6 @@
                 <option value="gato" {% if animal and animal.type == 'gato' %}selected{% endif %}>Gato</option>
             </select>
         </div>
-
         <div class="form-group">
             <label for="gender">Género *</label>
             <select id="gender" name="gender" required>
@@ -36,7 +131,6 @@
             <label for="age">Edad</label>
             <input type="text" id="age" name="age" value="{% if animal %}{{ animal.age }}{% endif %}" placeholder="Ej: 2 años">
         </div>
-
         <div class="form-group">
             <label for="size">Tamaño</label>
             <select id="size" name="size">
@@ -54,48 +148,191 @@
         <select id="status" name="status">
             <option value="adoption" {% if animal.status == 'adoption' %}selected{% endif %}>En adopción</option>
             <option value="reserved" {% if animal.status == 'reserved' %}selected{% endif %}>Reservado</option>
-            <option value="adopted" {% if animal.status == 'adopted' %}selected{% endif %}>Adoptado</option>
-            <option value="foster" {% if animal.status == 'foster' %}selected{% endif %}>En acogida</option>
+            <option value="adopted"  {% if animal.status == 'adopted'  %}selected{% endif %}>Adoptado</option>
+            <option value="foster"   {% if animal.status == 'foster'   %}selected{% endif %}>En acogida</option>
         </select>
     </div>
     {% endif %}
 
     <div class="form-group">
-        <label for="description">Descripción</label>
-        <textarea id="description" name="description" placeholder="Cuéntanos sobre el animal...">{% if animal %}{{ animal.description }}{% endif %}</textarea>
+        <label for="description">Descripción / Historia</label>
+        <textarea id="description" name="description" placeholder="Cuéntanos sobre el animal, de dónde viene, su carácter…">{% if animal %}{{ animal.description }}{% endif %}</textarea>
     </div>
 
+    <!-- Foto principal -->
     <div class="form-group">
-        <label for="image">Foto del animal</label>
+        <label for="image">Foto principal</label>
         <input type="file" id="image" name="image" accept="image/*">
         {% if animal and animal.image %}
-        <div style="margin-top: 1rem;">
+        <div style="margin-top: .75rem;">
             {% if animal.image.startswith('data:image/') %}
-            {# Imagen en base64 (almacenada en BD) #}
-            <img src="{{ animal.image }}" alt="{{ animal.name }}"
-                 style="max-width: 200px; border-radius: 8px;">
+            <img src="{{ animal.image }}" alt="{{ animal.name }}" style="max-width:200px;border-radius:8px;">
             {% else %}
-            {# Imagen en disco #}
-            <img src="/{{ animal.image }}" alt="{{ animal.name }}"
-                 style="max-width: 200px; border-radius: 8px;"
-                 onerror="this.onerror=null; this.src='/images/animales/{{ animal.type }}.svg'">
+            <img src="/{{ animal.image }}" alt="{{ animal.name }}" style="max-width:200px;border-radius:8px;"
+                 onerror="this.onerror=null;this.src='/images/animales/{{ animal.type }}.svg'">
             {% endif %}
         </div>
         {% elif animal %}
-        <div style="margin-top: 1rem;">
-            <img src="/images/animales/{{ animal.type }}.svg" alt="{{ animal.name }}"
-                 style="max-width: 200px; border-radius: 8px;">
+        <div style="margin-top:.75rem;">
+            <img src="/images/animales/{{ animal.type }}.svg" alt="{{ animal.name }}" style="max-width:200px;border-radius:8px;">
         </div>
         {% endif %}
     </div>
 
+    <!-- Galería de fotos adicionales (solo al editar) -->
+    {% if animal %}
+    <div class="section-block gallery">
+        <div class="section-label">Galería de fotos adicionales (máx. 8)</div>
+        <div id="photo-gallery">
+            {% for photo in extra_photos %}
+            <div class="photo-thumb" data-photo-id="{{ photo.id }}" data-order="{{ photo.display_order }}">
+                <img src="/{{ photo.photo_path }}" alt="Foto {{ loop.index }}"
+                     onerror="this.onerror=null;this.src='/images/animales/{{ animal.type }}.svg'">
+                <div class="photo-actions">
+                    <button type="button" class="btn-star-photo" title="Establecer como portada"
+                            onclick="setPhotoAsPrimary({{ photo.id }})">★</button>
+                    <button type="button" class="btn-up-photo"   title="Subir"
+                            onclick="movePhoto({{ photo.id }}, -1)">↑</button>
+                    <button type="button" class="btn-down-photo" title="Bajar"
+                            onclick="movePhoto({{ photo.id }},  1)">↓</button>
+                    <button type="button" class="btn-del-photo"  title="Eliminar"
+                            onclick="deletePhoto({{ photo.id }})">✕</button>
+                </div>
+            </div>
+            {% endfor %}
+            <button type="button" class="photo-add-btn" id="addPhotoBtn" title="Añadir foto"
+                    onclick="document.getElementById('photo-upload-input').click()">+</button>
+        </div>
+        <input type="file" id="photo-upload-input" accept="image/*" onchange="uploadPhoto(this)">
+        <div id="gallery-msg" style="font-size:.82rem;color:#888;margin-top:.3rem;">
+            Haz clic en ★ para establecer una foto como portada · ↑↓ para reordenar
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Estado sanitario -->
+    <div class="section-block health">
+        <div class="section-label">Estado sanitario</div>
+        <div class="check-grid">
+            <label><input type="checkbox" name="vaccinated"  {% if animal and animal.vaccinated  %}checked{% endif %}> Vacunado/a</label>
+            <label><input type="checkbox" name="sterilized"  {% if animal and animal.sterilized  %}checked{% endif %}> Esterilizado/a</label>
+            <label><input type="checkbox" name="chipped"     {% if animal and animal.chipped     %}checked{% endif %}> Con chip</label>
+            <label><input type="checkbox" name="dewormed"    {% if animal and animal.dewormed    %}checked{% endif %}> Desparasitado/a</label>
+        </div>
+    </div>
+
+    <!-- Compatibilidad -->
+    <div class="section-block compat">
+        <div class="section-label">Compatibilidad</div>
+        <div class="check-grid">
+            <label><input type="checkbox" name="good_with_kids" {% if animal and animal.good_with_kids %}checked{% endif %}> 👶 Bueno con niños</label>
+            <label><input type="checkbox" name="good_with_cats" {% if animal and animal.good_with_cats %}checked{% endif %}> 🐱 Convive con gatos</label>
+            <label><input type="checkbox" name="good_with_dogs" {% if animal and animal.good_with_dogs %}checked{% endif %}> 🐕 Convive con perros</label>
+            <label><input type="checkbox" name="apartment_ok"   {% if animal and animal.apartment_ok   %}checked{% endif %}> 🏠 Apto para piso</label>
+            <label><input type="checkbox" name="high_energy"    {% if animal and animal.high_energy    %}checked{% endif %}> ⚡ Muy activo</label>
+            <label><input type="checkbox" name="urgent"         {% if animal and animal.urgent         %}checked{% endif %}> ⚠️ URGENTE</label>
+        </div>
+    </div>
+
     <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-        <button type="submit" class="btn btn-primary">
-            <i class="fas fa-save"></i> Guardar
-        </button>
-        <a href="{{ url_for('list_animals') }}" class="btn" style="background: #95a5a6; color: white;">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+        <a href="{{ url_for('list_animals') }}" class="btn" style="background:#95a5a6;color:white;">
             <i class="fas fa-times"></i> Cancelar
         </a>
     </div>
 </form>
+
+{% if animal %}
+<script>
+const ANIMAL_ID = {{ animal.id }};
+const CSRF_TOKEN = document.querySelector('input[name="_csrf_token"]').value;
+
+async function uploadPhoto(input) {
+    if (!input.files || !input.files[0]) return;
+    const formData = new FormData();
+    formData.append('photo', input.files[0]);
+    formData.append('_csrf_token', CSRF_TOKEN);
+    input.value = '';
+    const msg = document.getElementById('gallery-msg');
+    msg.textContent = 'Subiendo foto…';
+    try {
+        const resp = await fetch(`/admin/animals/${ANIMAL_ID}/photos`, {
+            method: 'POST', body: formData
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Error');
+        addThumbToGallery(data.photo.id, data.photo.path, data.photo.order);
+        msg.textContent = 'Foto añadida correctamente.';
+    } catch (e) {
+        msg.textContent = 'Error al subir: ' + e.message;
+    }
+}
+
+function addThumbToGallery(id, path, order) {
+    const gallery = document.getElementById('photo-gallery');
+    const addBtn  = document.getElementById('addPhotoBtn');
+    const thumb = document.createElement('div');
+    thumb.className = 'photo-thumb';
+    thumb.dataset.photoId = id;
+    thumb.dataset.order = order;
+    thumb.innerHTML = `
+        <img src="/${path}" onerror="this.onerror=null;this.src='/images/animales/perro.svg'">
+        <div class="photo-actions">
+            <button type="button" class="btn-star-photo" title="Establecer como portada" onclick="setPhotoAsPrimary(${id})">★</button>
+            <button type="button" class="btn-up-photo"   onclick="movePhoto(${id}, -1)">↑</button>
+            <button type="button" class="btn-down-photo" onclick="movePhoto(${id},  1)">↓</button>
+            <button type="button" class="btn-del-photo"  onclick="deletePhoto(${id})">✕</button>
+        </div>`;
+    gallery.insertBefore(thumb, addBtn);
+}
+
+async function deletePhoto(photoId) {
+    if (!confirm('¿Eliminar esta foto?')) return;
+    const resp = await fetch(`/admin/animals/${ANIMAL_ID}/photos/${photoId}`, {
+        method: 'DELETE',
+        headers: {'X-CSRFToken': CSRF_TOKEN}
+    });
+    if (resp.ok) {
+        document.querySelector(`.photo-thumb[data-photo-id="${photoId}"]`)?.remove();
+    } else {
+        alert('Error al eliminar la foto');
+    }
+}
+
+async function setPhotoAsPrimary(photoId) {
+    const resp = await fetch(`/admin/animals/${ANIMAL_ID}/photos/${photoId}/set-primary`, {
+        method: 'POST',
+        headers: {'X-CSRFToken': CSRF_TOKEN}
+    });
+    if (resp.ok) {
+        document.getElementById('gallery-msg').textContent = 'Foto establecida como portada. Guarda el formulario para confirmar.';
+    } else {
+        alert('Error al establecer la portada');
+    }
+}
+
+function movePhoto(photoId, direction) {
+    const thumbs = Array.from(document.querySelectorAll('.photo-thumb'));
+    const idx = thumbs.findIndex(t => parseInt(t.dataset.photoId) === photoId);
+    if (idx === -1) return;
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= thumbs.length) return;
+    const gallery = document.getElementById('photo-gallery');
+    const addBtn  = document.getElementById('addPhotoBtn');
+    if (direction === -1) {
+        gallery.insertBefore(thumbs[idx], thumbs[targetIdx]);
+    } else {
+        gallery.insertBefore(thumbs[targetIdx], thumbs[idx]);
+    }
+    const updated = Array.from(document.querySelectorAll('.photo-thumb')).map((t, i) => ({
+        id: parseInt(t.dataset.photoId), order: i
+    }));
+    fetch(`/admin/animals/${ANIMAL_ID}/photos/reorder`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'X-CSRFToken': CSRF_TOKEN},
+        body: JSON.stringify(updated)
+    });
+}
+</script>
+{% endif %}
 {% endblock %}
