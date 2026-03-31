@@ -107,6 +107,7 @@ La respuesta incluye los nuevos campos:
 | `POST` | `/admin/animals/<id>/photos` | Subir foto adicional (form-data, campo `photo`) |
 | `DELETE` | `/admin/animals/<id>/photos/<photo_id>` | Eliminar foto |
 | `POST` | `/admin/animals/<id>/photos/reorder` | Reordenar (JSON: `[{id, order}]`) |
+| `POST` | `/admin/animals/<id>/photos/<photo_id>/set-primary` | Copiar esta foto a `animals.image` y marcarla como portada |
 
 Todos requieren `@login_required`. Siguen el patrón de `save_image()` existente (Pillow resize a 1200px, JPEG).
 
@@ -119,7 +120,7 @@ El template `admin/templates/animal_form.html` se amplía con tres bloques nuevo
 **Bloque galería:**
 - Grid de thumbnails de las fotos actuales
 - Botón "+" para subir fotos adicionales (AJAX, sin recargar)
-- Drag-and-drop para reordenar (o botones ↑↓ como fallback)
+- Botones ↑↓ para reordenar (sin librerías de drag-and-drop, evita nuevas dependencias JS)
 - Botón eliminar en cada foto (✕)
 - La foto principal sigue siendo `animals.image`; se puede cambiar haciendo clic en "Establecer como principal"
 
@@ -145,7 +146,7 @@ Renderizada por Jinja2 en `admin/templates/animal_public.html`. Layout de dos co
 **Columna derecha — información:**
 - Nombre, tipo, género, edad, tamaño, tiempo en la protectora
 - Sección "Estado sanitario": badges verdes para los campos TRUE, badge amarillo "Pendiente" para FALSE
-- Sección "Compatibilidad": badges azules para TRUE, badges rosados "No" para FALSE explícito
+- Sección "Compatibilidad": solo se muestran badges azules para los campos TRUE. Los campos FALSE no generan badge — la ausencia de badge es suficiente. Excepción: si `good_with_cats = FALSE` y `good_with_dogs = FALSE` se muestra "🐱 No con gatos" / "🐕 No con perros" en rosado, ya que es información relevante que el adoptante necesita conocer explícitamente.
 - Campo "Su historia" (el `description` existente)
 - CTAs: "Quiero adoptar" (abre formulario de solicitud), "Solicitar visita" (enlaza a `/pages/acogida.html`), "Compartir" (Web Share API con fallback a copiar URL)
 
