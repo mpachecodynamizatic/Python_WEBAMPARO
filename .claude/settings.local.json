@@ -12,7 +12,10 @@
       "Bash(grep:*)",
       "Bash(git:*)",
       "Bash(bash \"C:/Users/mpacheco/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.6/skills/brainstorming/scripts/start-server.sh\" --project-dir \"C:/Users/mpacheco/Documents/GITHUB/PYTHON/Python_WEBAMPARO\")",
-      "Bash(curl -s http://localhost:62405)"
+      "Bash(curl -s http://localhost:62405)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(docker --version)",
+      "PowerShell(docker --version)"
     ]
   }
 }

@@ -3061,3 +3061,105 @@ sqlite3.OperationalError: table adoption_requests has no column named age
 2026-03-31 15:22:41,967 [INFO] 127.0.0.1 - - [31/Mar/2026 15:22:41] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
 2026-03-31 15:22:43,764 [INFO] 127.0.0.1 - - [31/Mar/2026 15:22:43] "GET /admin/animals/13/edit HTTP/1.1" 200 -
 2026-03-31 15:22:43,847 [INFO] 127.0.0.1 - - [31/Mar/2026 15:22:43] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-08-07 09:28:00,972 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-08-07 09:28:00,976 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-08-07 09:28:01,232 [INFO] ✅ Base de datos inicializada correctamente
+2026-08-07 09:28:01,373 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.68.66:5000
+2026-08-07 09:28:01,373 [INFO] [33mPress CTRL+C to quit[0m
+2026-08-07 09:28:05,762 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:05] "[32mGET /admin HTTP/1.1[0m" 302 -
+2026-08-07 09:28:05,832 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:05] "GET / HTTP/1.1" 200 -
+2026-08-07 09:28:05,975 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:05] "GET /admin/login HTTP/1.1" 200 -
+2026-08-07 09:28:06,090 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:06] "GET /css/styles.css HTTP/1.1" 200 -
+2026-08-07 09:28:06,167 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:06] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-08-07 09:28:06,183 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-08-07 09:28:06,224 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:06] "GET /js/i18n.js HTTP/1.1" 200 -
+2026-08-07 09:28:06,439 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:06] "GET /js/main.js?v=5 HTTP/1.1" 200 -
+2026-08-07 09:28:06,450 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:06] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-08-07 09:28:07,212 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:07] "GET /images/favicon.svg HTTP/1.1" 200 -
+2026-08-07 09:28:12,717 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:12] "POST /admin/login HTTP/1.1" 200 -
+2026-08-07 09:28:17,686 [INFO] 127.0.0.1 - - [07/Aug/2026 09:28:17] "POST /admin/login HTTP/1.1" 200 -
+2026-08-07 09:29:40,477 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:40] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-08-07 09:29:40,553 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:40] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-08-07 09:29:46,747 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:46] "GET /admin/animals HTTP/1.1" 200 -
+2026-08-07 09:29:47,012 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:47] "GET /images/animales/perro.svg HTTP/1.1" 200 -
+2026-08-07 09:29:47,101 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:47] "GET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1" 200 -
+2026-08-07 09:29:47,106 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:47] "GET /images/animales/gato.svg HTTP/1.1" 200 -
+2026-08-07 09:29:47,111 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:47] "GET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1" 200 -
+2026-08-07 09:29:48,105 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:48] "GET /admin/news HTTP/1.1" 200 -
+2026-08-07 09:29:48,887 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:48] "GET /admin/contacts HTTP/1.1" 200 -
+2026-08-07 09:29:49,579 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:49] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-08-07 09:29:50,140 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:50] "GET /admin/collaborators HTTP/1.1" 200 -
+2026-08-07 09:29:51,049 [INFO] 127.0.0.1 - - [07/Aug/2026 09:29:51] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-08-07 09:30:17,191 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:17] "GET / HTTP/1.1" 200 -
+2026-08-07 09:30:17,459 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:17] "GET /css/styles.css HTTP/1.1" 200 -
+2026-08-07 09:30:17,518 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:17] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-08-07 09:30:17,524 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:17] "GET /js/main.js?v=5 HTTP/1.1" 200 -
+2026-08-07 09:30:17,531 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:17] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-08-07 09:30:17,534 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:17] "GET /js/i18n.js HTTP/1.1" 200 -
+2026-08-07 09:30:17,782 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:17] "GET /images/favicon.svg HTTP/1.1" 200 -
+2026-08-07 09:30:33,689 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:33] "[36mGET / HTTP/1.1[0m" 304 -
+2026-08-07 09:30:33,993 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:33] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-08-07 09:30:34,041 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:34] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-08-07 09:30:34,045 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:34] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-08-07 09:30:34,050 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:34] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-08-07 09:30:34,306 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:34] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-08-07 09:30:39,386 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "GET /pages/adopcion.html HTTP/1.1" 200 -
+2026-08-07 09:30:39,492 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-08-07 09:30:39,647 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "GET /css/adopcion.css HTTP/1.1" 200 -
+2026-08-07 09:30:39,739 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-08-07 09:30:39,742 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-08-07 09:30:39,746 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "[33mGET /images/logos/sponsor1.png HTTP/1.1[0m" 404 -
+2026-08-07 09:30:39,748 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "[33mGET /images/logos/sponsor2.png HTTP/1.1[0m" 404 -
+2026-08-07 09:30:39,804 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "[33mGET /images/logos/sponsor3.png HTTP/1.1[0m" 404 -
+2026-08-07 09:30:39,965 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:39] "GET /js/main.js HTTP/1.1" 200 -
+2026-08-07 09:30:40,103 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:40] "GET /js/adopcion.js?v=4 HTTP/1.1" 200 -
+2026-08-07 09:30:40,434 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:40] "GET /api/animals?status=adoption HTTP/1.1" 200 -
+2026-08-07 09:30:40,693 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:40] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-08-07 09:30:40,752 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:40] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-08-07 09:30:40,754 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:40] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-08-07 09:30:40,759 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:40] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-08-07 09:30:47,528 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:47] "GET /animal/3/misi HTTP/1.1" 200 -
+2026-08-07 09:30:47,784 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:47] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-08-07 09:30:47,877 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:47] "[36mGET /css/adopcion.css HTTP/1.1[0m" 304 -
+2026-08-07 09:30:47,886 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:47] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-08-07 09:30:47,890 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:47] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-08-07 09:30:47,895 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:47] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-08-07 09:30:47,909 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:47] "GET /css/forms.css HTTP/1.1" 200 -
+2026-08-07 09:30:48,094 [INFO] 127.0.0.1 - - [07/Aug/2026 09:30:48] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-08-07 09:31:00,623 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:00] "GET /admin/adoptions HTTP/1.1" 200 -
+2026-08-07 09:31:01,142 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:01] "GET /admin/visits HTTP/1.1" 200 -
+2026-08-07 09:31:17,200 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:17] "GET /admin/contacts HTTP/1.1" 200 -
+2026-08-07 09:31:19,379 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:19] "GET /admin/adoptions?status=pendiente HTTP/1.1" 200 -
+2026-08-07 09:31:21,222 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:21] "GET /admin/visits HTTP/1.1" 200 -
+2026-08-07 09:31:25,617 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:25] "GET /admin/news HTTP/1.1" 200 -
+2026-08-07 09:31:30,636 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:30] "GET /admin/newsletter HTTP/1.1" 200 -
+2026-08-07 09:31:34,056 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:34] "GET /admin/animals HTTP/1.1" 200 -
+2026-08-07 09:31:34,354 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:34] "[36mGET /images/animales/perro.svg HTTP/1.1[0m" 304 -
+2026-08-07 09:31:34,421 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:34] "[36mGET /images/animales/gato.svg HTTP/1.1[0m" 304 -
+2026-08-07 09:31:34,428 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:34] "[36mGET /uploads/fotos/20260327_165742_perro.jpeg HTTP/1.1[0m" 304 -
+2026-08-07 09:31:34,431 [INFO] 127.0.0.1 - - [07/Aug/2026 09:31:34] "[36mGET /uploads/fotos/20260327_193634_gato1.jpg HTTP/1.1[0m" 304 -
+2026-08-11 11:36:05,968 [WARNING] Flask-Limiter no instalado. Rate limiting desactivado. Ejecuta: pip install Flask-Limiter
+2026-08-11 11:36:05,974 [INFO] 📁 Usando SQLite (desarrollo local)
+2026-08-11 11:36:06,286 [INFO] ✅ Base de datos inicializada correctamente
+2026-08-11 11:36:06,443 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.49:5000
+2026-08-11 11:36:06,443 [INFO] [33mPress CTRL+C to quit[0m
+2026-08-11 11:36:10,673 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:10] "[32mGET /admin HTTP/1.1[0m" 302 -
+2026-08-11 11:36:10,808 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:10] "[36mGET / HTTP/1.1[0m" 304 -
+2026-08-11 11:36:11,009 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:11] "[36mGET /css/styles.css HTTP/1.1[0m" 304 -
+2026-08-11 11:36:11,028 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:11] "GET /admin/login HTTP/1.1" 200 -
+2026-08-11 11:36:11,154 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:11] "[33mGET /images/logos/logo.png HTTP/1.1[0m" 404 -
+2026-08-11 11:36:11,160 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:11] "[33mGET /images/hero-bg.jpg HTTP/1.1[0m" 404 -
+2026-08-11 11:36:11,174 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:11] "[36mGET /js/i18n.js HTTP/1.1[0m" 304 -
+2026-08-11 11:36:11,195 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:11] "[36mGET /js/main.js?v=5 HTTP/1.1[0m" 304 -
+2026-08-11 11:36:11,332 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-08-11 11:36:27,432 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:27] "POST /admin/login HTTP/1.1" 200 -
+2026-08-11 11:36:39,302 [INFO] 127.0.0.1 - - [11/Aug/2026 11:36:39] "POST /admin/login HTTP/1.1" 200 -
+2026-08-11 11:37:18,986 [INFO] 127.0.0.1 - - [11/Aug/2026 11:37:18] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2026-08-11 11:37:19,170 [INFO] 127.0.0.1 - - [11/Aug/2026 11:37:19] "GET /admin/dashboard HTTP/1.1" 200 -
+2026-08-11 11:37:21,256 [INFO] 127.0.0.1 - - [11/Aug/2026 11:37:21] "GET /admin/dashboard HTTP/1.1" 200 -
